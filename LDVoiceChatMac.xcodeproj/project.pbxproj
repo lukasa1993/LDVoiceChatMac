@@ -7,16 +7,63 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8000F59E16D629C300B1D5E5 /* MessagePackPacker.m in Sources */ = {isa = PBXBuildFile; fileRef = 8000F57D16D629C300B1D5E5 /* MessagePackPacker.m */; };
+		8000F59F16D629C300B1D5E5 /* MessagePackParser+Streaming.m in Sources */ = {isa = PBXBuildFile; fileRef = 8000F57F16D629C300B1D5E5 /* MessagePackParser+Streaming.m */; };
+		8000F5A016D629C300B1D5E5 /* MessagePackParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8000F58116D629C300B1D5E5 /* MessagePackParser.m */; };
+		8000F5A116D629C300B1D5E5 /* objectc.c in Sources */ = {isa = PBXBuildFile; fileRef = 8000F59216D629C300B1D5E5 /* objectc.c */; };
+		8000F5A216D629C300B1D5E5 /* unpack.c in Sources */ = {isa = PBXBuildFile; fileRef = 8000F59316D629C300B1D5E5 /* unpack.c */; };
+		8000F5A316D629C300B1D5E5 /* version.c in Sources */ = {isa = PBXBuildFile; fileRef = 8000F59416D629C300B1D5E5 /* version.c */; };
+		8000F5A416D629C300B1D5E5 /* vrefbuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 8000F59516D629C300B1D5E5 /* vrefbuffer.c */; };
+		8000F5A516D629C300B1D5E5 /* zone.c in Sources */ = {isa = PBXBuildFile; fileRef = 8000F59616D629C300B1D5E5 /* zone.c */; };
+		8000F5A616D629C300B1D5E5 /* NSArray+MessagePack.m in Sources */ = {isa = PBXBuildFile; fileRef = 8000F59816D629C300B1D5E5 /* NSArray+MessagePack.m */; };
+		8000F5A716D629C300B1D5E5 /* NSData+MessagePack.m in Sources */ = {isa = PBXBuildFile; fileRef = 8000F59A16D629C300B1D5E5 /* NSData+MessagePack.m */; };
+		8000F5A816D629C300B1D5E5 /* NSDictionary+MessagePack.m in Sources */ = {isa = PBXBuildFile; fileRef = 8000F59C16D629C300B1D5E5 /* NSDictionary+MessagePack.m */; };
+		8000F5A916D629C300B1D5E5 /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = 8000F59D16D629C300B1D5E5 /* readme.md */; };
 		80315D2A16D5182400D8060F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80315D2916D5182400D8060F /* Cocoa.framework */; };
 		80315D3416D5182400D8060F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 80315D3216D5182400D8060F /* InfoPlist.strings */; };
 		80315D3616D5182400D8060F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 80315D3516D5182400D8060F /* main.m */; };
 		80315D3A16D5182400D8060F /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 80315D3816D5182400D8060F /* Credits.rtf */; };
-		80315D3D16D5182400D8060F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 80315D3C16D5182400D8060F /* AppDelegate.m */; };
 		80315D4016D5182500D8060F /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 80315D3E16D5182400D8060F /* MainMenu.xib */; };
 		80315D4716D519CF00D8060F /* Settings.xib in Resources */ = {isa = PBXBuildFile; fileRef = 80315D4616D519CF00D8060F /* Settings.xib */; };
+		804A0E1816D63CF30006016E /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 804A0E1716D63CF30006016E /* AppDelegate.mm */; };
+		804A0E1B16D643D80006016E /* LDNetworkLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 804A0E1A16D643D80006016E /* LDNetworkLayer.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8000F57B16D629C300B1D5E5 /* MessagePack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessagePack.h; sourceTree = "<group>"; };
+		8000F57C16D629C300B1D5E5 /* MessagePackPacker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessagePackPacker.h; sourceTree = "<group>"; };
+		8000F57D16D629C300B1D5E5 /* MessagePackPacker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessagePackPacker.m; sourceTree = "<group>"; };
+		8000F57E16D629C300B1D5E5 /* MessagePackParser+Streaming.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MessagePackParser+Streaming.h"; sourceTree = "<group>"; };
+		8000F57F16D629C300B1D5E5 /* MessagePackParser+Streaming.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MessagePackParser+Streaming.m"; sourceTree = "<group>"; };
+		8000F58016D629C300B1D5E5 /* MessagePackParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessagePackParser.h; sourceTree = "<group>"; };
+		8000F58116D629C300B1D5E5 /* MessagePackParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessagePackParser.m; sourceTree = "<group>"; };
+		8000F58416D629C300B1D5E5 /* object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = object.h; sourceTree = "<group>"; };
+		8000F58516D629C300B1D5E5 /* pack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pack.h; sourceTree = "<group>"; };
+		8000F58616D629C300B1D5E5 /* pack_define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pack_define.h; sourceTree = "<group>"; };
+		8000F58716D629C300B1D5E5 /* pack_template.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pack_template.h; sourceTree = "<group>"; };
+		8000F58816D629C300B1D5E5 /* sbuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sbuffer.h; sourceTree = "<group>"; };
+		8000F58916D629C300B1D5E5 /* sysdep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sysdep.h; sourceTree = "<group>"; };
+		8000F58A16D629C300B1D5E5 /* unpack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unpack.h; sourceTree = "<group>"; };
+		8000F58B16D629C300B1D5E5 /* unpack_define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unpack_define.h; sourceTree = "<group>"; };
+		8000F58C16D629C300B1D5E5 /* unpack_template.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unpack_template.h; sourceTree = "<group>"; };
+		8000F58D16D629C300B1D5E5 /* version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = version.h; sourceTree = "<group>"; };
+		8000F58E16D629C300B1D5E5 /* vrefbuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vrefbuffer.h; sourceTree = "<group>"; };
+		8000F58F16D629C300B1D5E5 /* zbuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zbuffer.h; sourceTree = "<group>"; };
+		8000F59016D629C300B1D5E5 /* zone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zone.h; sourceTree = "<group>"; };
+		8000F59116D629C300B1D5E5 /* msgpack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msgpack.h; sourceTree = "<group>"; };
+		8000F59216D629C300B1D5E5 /* objectc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = objectc.c; sourceTree = "<group>"; };
+		8000F59316D629C300B1D5E5 /* unpack.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unpack.c; sourceTree = "<group>"; };
+		8000F59416D629C300B1D5E5 /* version.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = version.c; sourceTree = "<group>"; };
+		8000F59516D629C300B1D5E5 /* vrefbuffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vrefbuffer.c; sourceTree = "<group>"; };
+		8000F59616D629C300B1D5E5 /* zone.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zone.c; sourceTree = "<group>"; };
+		8000F59716D629C300B1D5E5 /* NSArray+MessagePack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+MessagePack.h"; sourceTree = "<group>"; };
+		8000F59816D629C300B1D5E5 /* NSArray+MessagePack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+MessagePack.m"; sourceTree = "<group>"; };
+		8000F59916D629C300B1D5E5 /* NSData+MessagePack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+MessagePack.h"; sourceTree = "<group>"; };
+		8000F59A16D629C300B1D5E5 /* NSData+MessagePack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+MessagePack.m"; sourceTree = "<group>"; };
+		8000F59B16D629C300B1D5E5 /* NSDictionary+MessagePack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+MessagePack.h"; sourceTree = "<group>"; };
+		8000F59C16D629C300B1D5E5 /* NSDictionary+MessagePack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+MessagePack.m"; sourceTree = "<group>"; };
+		8000F59D16D629C300B1D5E5 /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme.md; sourceTree = "<group>"; };
+		8000F5AA16D6308000B1D5E5 /* Net.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Net.h; sourceTree = "<group>"; };
 		80315D2616D5182400D8060F /* LDVoiceChatMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LDVoiceChatMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		80315D2916D5182400D8060F /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		80315D2C16D5182400D8060F /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -28,9 +75,11 @@
 		80315D3716D5182400D8060F /* LDVoiceChatMac-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LDVoiceChatMac-Prefix.pch"; sourceTree = "<group>"; };
 		80315D3916D5182400D8060F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		80315D3B16D5182400D8060F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		80315D3C16D5182400D8060F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		80315D3F16D5182500D8060F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		80315D4616D519CF00D8060F /* Settings.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Settings.xib; sourceTree = "<group>"; };
+		804A0E1716D63CF30006016E /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
+		804A0E1A16D643D80006016E /* LDNetworkLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LDNetworkLayer.mm; sourceTree = "<group>"; };
+		804A0E1C16D648130006016E /* LDNetworkLayer.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LDNetworkLayer.hh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +94,70 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8000F57916D629C300B1D5E5 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				8000F57A16D629C300B1D5E5 /* msgpack-objectivec-master */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		8000F57A16D629C300B1D5E5 /* msgpack-objectivec-master */ = {
+			isa = PBXGroup;
+			children = (
+				8000F57B16D629C300B1D5E5 /* MessagePack.h */,
+				8000F57C16D629C300B1D5E5 /* MessagePackPacker.h */,
+				8000F57D16D629C300B1D5E5 /* MessagePackPacker.m */,
+				8000F57E16D629C300B1D5E5 /* MessagePackParser+Streaming.h */,
+				8000F57F16D629C300B1D5E5 /* MessagePackParser+Streaming.m */,
+				8000F58016D629C300B1D5E5 /* MessagePackParser.h */,
+				8000F58116D629C300B1D5E5 /* MessagePackParser.m */,
+				8000F58216D629C300B1D5E5 /* msgpack_src */,
+				8000F59716D629C300B1D5E5 /* NSArray+MessagePack.h */,
+				8000F59816D629C300B1D5E5 /* NSArray+MessagePack.m */,
+				8000F59916D629C300B1D5E5 /* NSData+MessagePack.h */,
+				8000F59A16D629C300B1D5E5 /* NSData+MessagePack.m */,
+				8000F59B16D629C300B1D5E5 /* NSDictionary+MessagePack.h */,
+				8000F59C16D629C300B1D5E5 /* NSDictionary+MessagePack.m */,
+				8000F59D16D629C300B1D5E5 /* readme.md */,
+			);
+			path = "msgpack-objectivec-master";
+			sourceTree = "<group>";
+		};
+		8000F58216D629C300B1D5E5 /* msgpack_src */ = {
+			isa = PBXGroup;
+			children = (
+				8000F58316D629C300B1D5E5 /* msgpack */,
+				8000F59116D629C300B1D5E5 /* msgpack.h */,
+				8000F59216D629C300B1D5E5 /* objectc.c */,
+				8000F59316D629C300B1D5E5 /* unpack.c */,
+				8000F59416D629C300B1D5E5 /* version.c */,
+				8000F59516D629C300B1D5E5 /* vrefbuffer.c */,
+				8000F59616D629C300B1D5E5 /* zone.c */,
+			);
+			path = msgpack_src;
+			sourceTree = "<group>";
+		};
+		8000F58316D629C300B1D5E5 /* msgpack */ = {
+			isa = PBXGroup;
+			children = (
+				8000F58416D629C300B1D5E5 /* object.h */,
+				8000F58516D629C300B1D5E5 /* pack.h */,
+				8000F58616D629C300B1D5E5 /* pack_define.h */,
+				8000F58716D629C300B1D5E5 /* pack_template.h */,
+				8000F58816D629C300B1D5E5 /* sbuffer.h */,
+				8000F58916D629C300B1D5E5 /* sysdep.h */,
+				8000F58A16D629C300B1D5E5 /* unpack.h */,
+				8000F58B16D629C300B1D5E5 /* unpack_define.h */,
+				8000F58C16D629C300B1D5E5 /* unpack_template.h */,
+				8000F58D16D629C300B1D5E5 /* version.h */,
+				8000F58E16D629C300B1D5E5 /* vrefbuffer.h */,
+				8000F58F16D629C300B1D5E5 /* zbuffer.h */,
+				8000F59016D629C300B1D5E5 /* zone.h */,
+			);
+			path = msgpack;
+			sourceTree = "<group>";
+		};
 		80315D1D16D5182400D8060F = {
 			isa = PBXGroup;
 			children = (
@@ -84,8 +197,12 @@
 		80315D2F16D5182400D8060F /* LDVoiceChatMac */ = {
 			isa = PBXGroup;
 			children = (
+				8000F57916D629C300B1D5E5 /* lib */,
 				80315D3B16D5182400D8060F /* AppDelegate.h */,
-				80315D3C16D5182400D8060F /* AppDelegate.m */,
+				804A0E1716D63CF30006016E /* AppDelegate.mm */,
+				804A0E1C16D648130006016E /* LDNetworkLayer.hh */,
+				804A0E1A16D643D80006016E /* LDNetworkLayer.mm */,
+				8000F5AA16D6308000B1D5E5 /* Net.h */,
 				80315D3E16D5182400D8060F /* MainMenu.xib */,
 				80315D4616D519CF00D8060F /* Settings.xib */,
 				80315D3016D5182400D8060F /* Supporting Files */,
@@ -160,6 +277,7 @@
 				80315D3A16D5182400D8060F /* Credits.rtf in Resources */,
 				80315D4016D5182500D8060F /* MainMenu.xib in Resources */,
 				80315D4716D519CF00D8060F /* Settings.xib in Resources */,
+				8000F5A916D629C300B1D5E5 /* readme.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -171,7 +289,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				80315D3616D5182400D8060F /* main.m in Sources */,
-				80315D3D16D5182400D8060F /* AppDelegate.m in Sources */,
+				8000F59E16D629C300B1D5E5 /* MessagePackPacker.m in Sources */,
+				8000F59F16D629C300B1D5E5 /* MessagePackParser+Streaming.m in Sources */,
+				8000F5A016D629C300B1D5E5 /* MessagePackParser.m in Sources */,
+				8000F5A116D629C300B1D5E5 /* objectc.c in Sources */,
+				8000F5A216D629C300B1D5E5 /* unpack.c in Sources */,
+				8000F5A316D629C300B1D5E5 /* version.c in Sources */,
+				8000F5A416D629C300B1D5E5 /* vrefbuffer.c in Sources */,
+				8000F5A516D629C300B1D5E5 /* zone.c in Sources */,
+				8000F5A616D629C300B1D5E5 /* NSArray+MessagePack.m in Sources */,
+				8000F5A716D629C300B1D5E5 /* NSData+MessagePack.m in Sources */,
+				8000F5A816D629C300B1D5E5 /* NSDictionary+MessagePack.m in Sources */,
+				804A0E1816D63CF30006016E /* AppDelegate.mm in Sources */,
+				804A0E1B16D643D80006016E /* LDNetworkLayer.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -305,6 +435,7 @@
 				80315D4516D5182500D8060F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
