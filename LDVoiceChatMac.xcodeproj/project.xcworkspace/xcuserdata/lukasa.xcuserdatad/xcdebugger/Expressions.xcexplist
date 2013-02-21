@@ -3,10 +3,24 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "-[LDEventManager init]:LDEventManager.m">
+      </ContextState>
+      <ContextState
          contextName = "-[AppDelegate applicationDidFinishLaunching:]:AppDelegate.m">
          <PersistentStrings>
             <PersistentString
                value = "[data length]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[LDEventManager awakeFromNib]:LDEventManager.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[LDEventManager callSettings:]:LDEventManager.mm">
+         <PersistentStrings>
+            <PersistentString
+               value = "[userDefaults objectForKey:@&quot;host&quot;]">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

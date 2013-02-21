@@ -7,8 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "LDVoiceChatWindowController.h"
-#import "LDNetworkLayer.hh"
+
 
 @implementation AppDelegate
 
@@ -20,7 +19,16 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     // Insert code here to initialize your application
-    [[LDNetworkLayer networkLayer] startCommunication];
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    if (![userDefaults objectForKey:@"host"]) {
+        [userDefaults setObject:@"localhost" forKey:@"host"];
+    }
+    
+    if (![userDefaults objectForKey:@"port"]) {
+        [userDefaults setObject:@"4444" forKey:@"port"];
+    }
+    
+    eventManager = [LDEventManager eventManager];
 }
 
 @end

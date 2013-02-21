@@ -24,9 +24,29 @@
 		80315D3616D5182400D8060F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 80315D3516D5182400D8060F /* main.m */; };
 		80315D3A16D5182400D8060F /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 80315D3816D5182400D8060F /* Credits.rtf */; };
 		80315D4016D5182500D8060F /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 80315D3E16D5182400D8060F /* MainMenu.xib */; };
-		80315D4716D519CF00D8060F /* Settings.xib in Resources */ = {isa = PBXBuildFile; fileRef = 80315D4616D519CF00D8060F /* Settings.xib */; };
+		8049912A16D64C4C007382A7 /* LDNetworkLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8049912916D64C4C007382A7 /* LDNetworkLayer.mm */; };
+		8049917516D66301007382A7 /* LDEventManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8049917416D66301007382A7 /* LDEventManager.mm */; };
+		8049917816D671A9007382A7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 80315D3516D5182400D8060F /* main.m */; };
+		8049917916D671A9007382A7 /* MessagePackPacker.m in Sources */ = {isa = PBXBuildFile; fileRef = 8000F57D16D629C300B1D5E5 /* MessagePackPacker.m */; };
+		8049917A16D671A9007382A7 /* MessagePackParser+Streaming.m in Sources */ = {isa = PBXBuildFile; fileRef = 8000F57F16D629C300B1D5E5 /* MessagePackParser+Streaming.m */; };
+		8049917B16D671A9007382A7 /* MessagePackParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8000F58116D629C300B1D5E5 /* MessagePackParser.m */; };
+		8049917C16D671A9007382A7 /* objectc.c in Sources */ = {isa = PBXBuildFile; fileRef = 8000F59216D629C300B1D5E5 /* objectc.c */; };
+		8049917D16D671A9007382A7 /* unpack.c in Sources */ = {isa = PBXBuildFile; fileRef = 8000F59316D629C300B1D5E5 /* unpack.c */; };
+		8049917E16D671A9007382A7 /* version.c in Sources */ = {isa = PBXBuildFile; fileRef = 8000F59416D629C300B1D5E5 /* version.c */; };
+		8049917F16D671A9007382A7 /* vrefbuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 8000F59516D629C300B1D5E5 /* vrefbuffer.c */; };
+		8049918016D671A9007382A7 /* zone.c in Sources */ = {isa = PBXBuildFile; fileRef = 8000F59616D629C300B1D5E5 /* zone.c */; };
+		8049918116D671A9007382A7 /* NSArray+MessagePack.m in Sources */ = {isa = PBXBuildFile; fileRef = 8000F59816D629C300B1D5E5 /* NSArray+MessagePack.m */; };
+		8049918216D671A9007382A7 /* NSData+MessagePack.m in Sources */ = {isa = PBXBuildFile; fileRef = 8000F59A16D629C300B1D5E5 /* NSData+MessagePack.m */; };
+		8049918316D671A9007382A7 /* NSDictionary+MessagePack.m in Sources */ = {isa = PBXBuildFile; fileRef = 8000F59C16D629C300B1D5E5 /* NSDictionary+MessagePack.m */; };
+		8049918416D671A9007382A7 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 804A0E1716D63CF30006016E /* AppDelegate.mm */; };
+		8049918516D671A9007382A7 /* LDNetworkLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8049912916D64C4C007382A7 /* LDNetworkLayer.mm */; };
+		8049918616D671A9007382A7 /* LDEventManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8049917416D66301007382A7 /* LDEventManager.mm */; };
+		8049918816D671A9007382A7 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80315D2916D5182400D8060F /* Cocoa.framework */; };
+		8049918A16D671A9007382A7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 80315D3216D5182400D8060F /* InfoPlist.strings */; };
+		8049918B16D671A9007382A7 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 80315D3816D5182400D8060F /* Credits.rtf */; };
+		8049918C16D671A9007382A7 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 80315D3E16D5182400D8060F /* MainMenu.xib */; };
+		8049918D16D671A9007382A7 /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = 8000F59D16D629C300B1D5E5 /* readme.md */; };
 		804A0E1816D63CF30006016E /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 804A0E1716D63CF30006016E /* AppDelegate.mm */; };
-		804A0E1B16D643D80006016E /* LDNetworkLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 804A0E1A16D643D80006016E /* LDNetworkLayer.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -76,10 +96,14 @@
 		80315D3916D5182400D8060F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		80315D3B16D5182400D8060F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		80315D3F16D5182500D8060F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		80315D4616D519CF00D8060F /* Settings.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Settings.xib; sourceTree = "<group>"; };
+		8049912816D64C4C007382A7 /* LDNetworkLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LDNetworkLayer.h; sourceTree = "<group>"; };
+		8049912916D64C4C007382A7 /* LDNetworkLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LDNetworkLayer.mm; sourceTree = "<group>"; };
+		8049914716D64F2F007382A7 /* LDVoiceChatMac copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "LDVoiceChatMac copy-Info.plist"; path = "/Users/lukasa/Xcode projects/LDVoiceChatMac/LDVoiceChatMac copy-Info.plist"; sourceTree = "<absolute>"; };
+		8049917116D65765007382A7 /* LDEventManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LDEventManager.h; sourceTree = "<group>"; };
+		8049917416D66301007382A7 /* LDEventManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LDEventManager.mm; sourceTree = "<group>"; };
+		8049919116D671A9007382A7 /* LDVoiceChatMac copy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LDVoiceChatMac copy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8049919216D671A9007382A7 /* LDVoiceChatMac copy2-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "LDVoiceChatMac copy2-Info.plist"; path = "/Users/lukasa/Xcode projects/LDVoiceChatMac/LDVoiceChatMac copy2-Info.plist"; sourceTree = "<absolute>"; };
 		804A0E1716D63CF30006016E /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
-		804A0E1A16D643D80006016E /* LDNetworkLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LDNetworkLayer.mm; sourceTree = "<group>"; };
-		804A0E1C16D648130006016E /* LDNetworkLayer.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LDNetworkLayer.hh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +112,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				80315D2A16D5182400D8060F /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8049918716D671A9007382A7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8049918816D671A9007382A7 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -164,6 +196,8 @@
 				80315D2F16D5182400D8060F /* LDVoiceChatMac */,
 				80315D2816D5182400D8060F /* Frameworks */,
 				80315D2716D5182400D8060F /* Products */,
+				8049914716D64F2F007382A7 /* LDVoiceChatMac copy-Info.plist */,
+				8049919216D671A9007382A7 /* LDVoiceChatMac copy2-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -171,6 +205,7 @@
 			isa = PBXGroup;
 			children = (
 				80315D2616D5182400D8060F /* LDVoiceChatMac.app */,
+				8049919116D671A9007382A7 /* LDVoiceChatMac copy.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -200,11 +235,12 @@
 				8000F57916D629C300B1D5E5 /* lib */,
 				80315D3B16D5182400D8060F /* AppDelegate.h */,
 				804A0E1716D63CF30006016E /* AppDelegate.mm */,
-				804A0E1C16D648130006016E /* LDNetworkLayer.hh */,
-				804A0E1A16D643D80006016E /* LDNetworkLayer.mm */,
+				8049912816D64C4C007382A7 /* LDNetworkLayer.h */,
+				8049912916D64C4C007382A7 /* LDNetworkLayer.mm */,
+				8049917116D65765007382A7 /* LDEventManager.h */,
+				8049917416D66301007382A7 /* LDEventManager.mm */,
 				8000F5AA16D6308000B1D5E5 /* Net.h */,
 				80315D3E16D5182400D8060F /* MainMenu.xib */,
-				80315D4616D519CF00D8060F /* Settings.xib */,
 				80315D3016D5182400D8060F /* Supporting Files */,
 			);
 			path = LDVoiceChatMac;
@@ -242,6 +278,23 @@
 			productReference = 80315D2616D5182400D8060F /* LDVoiceChatMac.app */;
 			productType = "com.apple.product-type.application";
 		};
+		8049917616D671A9007382A7 /* LDVoiceChatMac copy */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8049918E16D671A9007382A7 /* Build configuration list for PBXNativeTarget "LDVoiceChatMac copy" */;
+			buildPhases = (
+				8049917716D671A9007382A7 /* Sources */,
+				8049918716D671A9007382A7 /* Frameworks */,
+				8049918916D671A9007382A7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "LDVoiceChatMac copy";
+			productName = LDVoiceChatMac;
+			productReference = 8049919116D671A9007382A7 /* LDVoiceChatMac copy.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -264,6 +317,7 @@
 			projectRoot = "";
 			targets = (
 				80315D2516D5182400D8060F /* LDVoiceChatMac */,
+				8049917616D671A9007382A7 /* LDVoiceChatMac copy */,
 			);
 		};
 /* End PBXProject section */
@@ -276,8 +330,18 @@
 				80315D3416D5182400D8060F /* InfoPlist.strings in Resources */,
 				80315D3A16D5182400D8060F /* Credits.rtf in Resources */,
 				80315D4016D5182500D8060F /* MainMenu.xib in Resources */,
-				80315D4716D519CF00D8060F /* Settings.xib in Resources */,
 				8000F5A916D629C300B1D5E5 /* readme.md in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8049918916D671A9007382A7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8049918A16D671A9007382A7 /* InfoPlist.strings in Resources */,
+				8049918B16D671A9007382A7 /* Credits.rtf in Resources */,
+				8049918C16D671A9007382A7 /* MainMenu.xib in Resources */,
+				8049918D16D671A9007382A7 /* readme.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,7 +365,30 @@
 				8000F5A716D629C300B1D5E5 /* NSData+MessagePack.m in Sources */,
 				8000F5A816D629C300B1D5E5 /* NSDictionary+MessagePack.m in Sources */,
 				804A0E1816D63CF30006016E /* AppDelegate.mm in Sources */,
-				804A0E1B16D643D80006016E /* LDNetworkLayer.mm in Sources */,
+				8049912A16D64C4C007382A7 /* LDNetworkLayer.mm in Sources */,
+				8049917516D66301007382A7 /* LDEventManager.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8049917716D671A9007382A7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8049917816D671A9007382A7 /* main.m in Sources */,
+				8049917916D671A9007382A7 /* MessagePackPacker.m in Sources */,
+				8049917A16D671A9007382A7 /* MessagePackParser+Streaming.m in Sources */,
+				8049917B16D671A9007382A7 /* MessagePackParser.m in Sources */,
+				8049917C16D671A9007382A7 /* objectc.c in Sources */,
+				8049917D16D671A9007382A7 /* unpack.c in Sources */,
+				8049917E16D671A9007382A7 /* version.c in Sources */,
+				8049917F16D671A9007382A7 /* vrefbuffer.c in Sources */,
+				8049918016D671A9007382A7 /* zone.c in Sources */,
+				8049918116D671A9007382A7 /* NSArray+MessagePack.m in Sources */,
+				8049918216D671A9007382A7 /* NSData+MessagePack.m in Sources */,
+				8049918316D671A9007382A7 /* NSDictionary+MessagePack.m in Sources */,
+				8049918416D671A9007382A7 /* AppDelegate.mm in Sources */,
+				8049918516D671A9007382A7 /* LDNetworkLayer.mm in Sources */,
+				8049918616D671A9007382A7 /* LDEventManager.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -416,6 +503,30 @@
 			};
 			name = Release;
 		};
+		8049918F16D671A9007382A7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "LDVoiceChatMac/LDVoiceChatMac-Prefix.pch";
+				INFOPLIST_FILE = "LDVoiceChatMac copy2-Info.plist";
+				PRODUCT_NAME = "LDVoiceChatMac copy";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		8049919016D671A9007382A7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "LDVoiceChatMac/LDVoiceChatMac-Prefix.pch";
+				INFOPLIST_FILE = "LDVoiceChatMac copy2-Info.plist";
+				PRODUCT_NAME = "LDVoiceChatMac copy";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -433,6 +544,15 @@
 			buildConfigurations = (
 				80315D4416D5182500D8060F /* Debug */,
 				80315D4516D5182500D8060F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8049918E16D671A9007382A7 /* Build configuration list for PBXNativeTarget "LDVoiceChatMac copy" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8049918F16D671A9007382A7 /* Debug */,
+				8049919016D671A9007382A7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

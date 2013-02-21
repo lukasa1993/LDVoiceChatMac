@@ -54,7 +54,7 @@ namespace net
 #else
 
 	#include <unistd.h>
-	void wait( float seconds ) { usleep( (int) ( seconds * 1000000.0f ) ); }
+	inline void wait( float seconds ) { usleep( (int) ( seconds * 1000000.0f ) ); }
 
 #endif
 

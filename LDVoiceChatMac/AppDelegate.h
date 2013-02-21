@@ -7,8 +7,12 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "LDEventManager.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
+{
+    LDEventManager* eventManager;
+}
 
 @property (assign) IBOutlet NSWindow *window;
 
