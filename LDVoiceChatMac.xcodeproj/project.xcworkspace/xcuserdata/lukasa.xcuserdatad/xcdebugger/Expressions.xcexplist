@@ -3,6 +3,14 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "encodedAudio(RawAudioData):LDAudioHandler.mm">
+         <PersistentStrings>
+            <PersistentString
+               value = "FRAMES">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "-[LDEventManager init]:LDEventManager.m">
       </ContextState>
       <ContextState
@@ -15,6 +23,9 @@
       </ContextState>
       <ContextState
          contextName = "-[LDEventManager awakeFromNib]:LDEventManager.m">
+      </ContextState>
+      <ContextState
+         contextName = "startAudioHandler(AudioHandlerStruct*):LDAudioHandler.mm">
       </ContextState>
       <ContextState
          contextName = "-[LDEventManager callSettings:]:LDEventManager.mm">

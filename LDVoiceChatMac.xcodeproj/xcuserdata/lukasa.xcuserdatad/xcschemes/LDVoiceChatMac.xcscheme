@@ -14,8 +14,8 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "80315D2516D5182400D8060F"
-               BuildableName = "LDVoiceChatMac.app"
+               BlueprintIdentifier = "805DD8AF16DF5CBA0001D7A1"
+               BuildableName = "LDVoiceChatMac copy.app"
                BlueprintName = "LDVoiceChatMac"
                ReferencedContainer = "container:LDVoiceChatMac.xcodeproj">
             </BuildableReference>
@@ -32,8 +32,8 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "80315D2516D5182400D8060F"
-            BuildableName = "LDVoiceChatMac.app"
+            BlueprintIdentifier = "805DD8AF16DF5CBA0001D7A1"
+            BuildableName = "LDVoiceChatMac copy.app"
             BlueprintName = "LDVoiceChatMac"
             ReferencedContainer = "container:LDVoiceChatMac.xcodeproj">
          </BuildableReference>
@@ -51,8 +51,8 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "80315D2516D5182400D8060F"
-            BuildableName = "LDVoiceChatMac.app"
+            BlueprintIdentifier = "805DD8AF16DF5CBA0001D7A1"
+            BuildableName = "LDVoiceChatMac copy.app"
             BlueprintName = "LDVoiceChatMac"
             ReferencedContainer = "container:LDVoiceChatMac.xcodeproj">
          </BuildableReference>
@@ -69,8 +69,8 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "80315D2516D5182400D8060F"
-            BuildableName = "LDVoiceChatMac.app"
+            BlueprintIdentifier = "805DD8AF16DF5CBA0001D7A1"
+            BuildableName = "LDVoiceChatMac copy.app"
             BlueprintName = "LDVoiceChatMac"
             ReferencedContainer = "container:LDVoiceChatMac.xcodeproj">
          </BuildableReference>

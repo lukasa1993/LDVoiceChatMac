@@ -235,7 +235,7 @@ namespace net
 			return socket != 0;
 		}
 	
-		bool Send( const Address & destination, const void * data, int size )
+		bool Send( const Address & destination, const void * data, size_t size )
 		{
 			assert( data );
 			assert( size > 0 );
@@ -248,12 +248,12 @@ namespace net
 			address.sin_addr.s_addr = htonl( destination.GetAddress() );
 			address.sin_port = htons( (unsigned short) destination.GetPort() );
 
-			int sent_bytes = sendto( socket, (const char*)data, size, 0, (sockaddr*)&address, sizeof(sockaddr_in) );
+			size_t sent_bytes = sendto( socket, (const char*) data, size, 0, (sockaddr*)&address, sizeof(sockaddr_in) );
 
 			return sent_bytes == size;
 		}
 	
-		int Receive( Address & sender, void * data, int size )
+		size_t Receive( Address & sender, void * data, size_t size )
 		{
 			assert( data );
 			assert( size > 0 );
@@ -268,7 +268,7 @@ namespace net
 			sockaddr_in from;
 			socklen_t fromLength = sizeof( from );
 
-			int received_bytes = recvfrom( socket, (char*)data, size, 0, (sockaddr*)&from, &fromLength );
+			size_t received_bytes = recvfrom( socket, (char*)data, size, 0, (sockaddr*)&from, &fromLength );
 
 			if ( received_bytes <= 0 )
 				return 0;

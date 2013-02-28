@@ -4,11 +4,6 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>LDVoiceChatMac copy.xcscheme</key>
-		<dict>
-			<key>orderHint</key>
-			<integer>1</integer>
-		</dict>
 		<key>LDVoiceChatMac.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -17,6 +12,11 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>801A527116D76D5900ED0012</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>80315D2516D5182400D8060F</key>
 		<dict>
 			<key>primary</key>
@@ -28,6 +28,21 @@
 			<true/>
 		</dict>
 		<key>8049917616D671A9007382A7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>805DD88716DF4F810001D7A1</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>805DD8AF16DF5CBA0001D7A1</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8093923D16D786DE00414EF1</key>
 		<dict>
 			<key>primary</key>
 			<true/>
