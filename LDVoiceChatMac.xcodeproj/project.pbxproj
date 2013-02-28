@@ -73,7 +73,6 @@
 		80315D2C16D5182400D8060F /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		80315D2D16D5182400D8060F /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		80315D2E16D5182400D8060F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		80315D3116D5182400D8060F /* LDVoiceChatMac-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "LDVoiceChatMac-Info.plist"; sourceTree = "<group>"; };
 		80315D3316D5182400D8060F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		80315D3516D5182400D8060F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		80315D3716D5182400D8060F /* LDVoiceChatMac-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LDVoiceChatMac-Prefix.pch"; sourceTree = "<group>"; };
@@ -87,8 +86,8 @@
 		805DD8A816DF50980001D7A1 /* LDAudioInput.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = LDAudioInput.c; sourceTree = "<group>"; };
 		805DD8AC16DF55B80001D7A1 /* LDAudioOutput.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = LDAudioOutput.c; sourceTree = "<group>"; };
 		805DD8AE16DF59EF0001D7A1 /* LDAudioDefaults.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LDAudioDefaults.h; sourceTree = "<group>"; };
-		805DD8CE16DF5CBA0001D7A1 /* LDVoiceChatMac copy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LDVoiceChatMac copy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		805DD8CF16DF5CBA0001D7A1 /* LDVoiceChatMac copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "LDVoiceChatMac copy-Info.plist"; path = "/Users/lukasa/Xcode projects/LDVoiceChatMac/LDVoiceChatMac copy-Info.plist"; sourceTree = "<absolute>"; };
+		805DD8CE16DF5CBA0001D7A1 /* LDVoiceChatMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LDVoiceChatMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		805DD8CF16DF5CBA0001D7A1 /* LDVoiceChatMac-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "LDVoiceChatMac-Info.plist"; path = "/Users/lukasa/Xcode projects/LDVoiceChatMac/LDVoiceChatMac-Info.plist"; sourceTree = "<absolute>"; };
 		8093932316D7A5B300414EF1 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		8093932516D7A5B900414EF1 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		8093932716D7A5BF00414EF1 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
@@ -197,14 +196,13 @@
 				80315D2F16D5182400D8060F /* LDVoiceChatMac */,
 				80315D2816D5182400D8060F /* Frameworks */,
 				80315D2716D5182400D8060F /* Products */,
-				805DD8CF16DF5CBA0001D7A1 /* LDVoiceChatMac copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
 		80315D2716D5182400D8060F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				805DD8CE16DF5CBA0001D7A1 /* LDVoiceChatMac copy.app */,
+				805DD8CE16DF5CBA0001D7A1 /* LDVoiceChatMac.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -257,7 +255,7 @@
 		80315D3016D5182400D8060F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				80315D3116D5182400D8060F /* LDVoiceChatMac-Info.plist */,
+				805DD8CF16DF5CBA0001D7A1 /* LDVoiceChatMac-Info.plist */,
 				80315D3216D5182400D8060F /* InfoPlist.strings */,
 				80315D3516D5182400D8060F /* main.m */,
 				80315D3716D5182400D8060F /* LDVoiceChatMac-Prefix.pch */,
@@ -311,7 +309,7 @@
 			);
 			name = LDVoiceChatMac;
 			productName = LDVoiceChatMac;
-			productReference = 805DD8CE16DF5CBA0001D7A1 /* LDVoiceChatMac copy.app */;
+			productReference = 805DD8CE16DF5CBA0001D7A1 /* LDVoiceChatMac.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -472,12 +470,12 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LDVoiceChatMac/LDVoiceChatMac-Prefix.pch";
-				INFOPLIST_FILE = "LDVoiceChatMac copy-Info.plist";
+				INFOPLIST_FILE = "LDVoiceChatMac-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
 				);
-				PRODUCT_NAME = "LDVoiceChatMac copy";
+				PRODUCT_NAME = LDVoiceChatMac;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -488,12 +486,12 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LDVoiceChatMac/LDVoiceChatMac-Prefix.pch";
-				INFOPLIST_FILE = "LDVoiceChatMac copy-Info.plist";
+				INFOPLIST_FILE = "LDVoiceChatMac-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
 				);
-				PRODUCT_NAME = "LDVoiceChatMac copy";
+				PRODUCT_NAME = LDVoiceChatMac;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
