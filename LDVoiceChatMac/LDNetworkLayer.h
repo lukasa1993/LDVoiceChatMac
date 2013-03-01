@@ -25,7 +25,6 @@ using namespace net;
 @interface LDNetworkLayer : NSObject
 {
     Socket socket;
-    Address server;
     
     id<LDNetworkDataProtocol> delegate;
     

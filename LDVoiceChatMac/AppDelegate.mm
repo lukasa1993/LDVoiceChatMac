@@ -29,8 +29,6 @@
     userDefaults       = [NSUserDefaults standardUserDefaults];
     self.userListArray = [NSMutableArray array];
     networkLayer       = [LDNetworkLayer networkLayer];
-    audioInputHandler  = LD_InitAudioInputHandler();
-    audioOutputHandler = LD_InitAudioOutputHandler();
     
     [networkLayer setDelegate:self];
     
@@ -67,6 +65,13 @@
 
 - (IBAction)settingsChanged:(id)sender
 {
+    if ([[hostField stringValue] isEqualToString:@"localhost"]) {
+        [hostField setStringValue:@"127.0.0.1"];
+    }
+    
+    NSString *ip = [[NSHost hostWithName:[hostField stringValue]] address];
+    [hostField setStringValue:ip];
+    
     [userDefaults setObject:[hostField stringValue] forKey:@"host"];
     [userDefaults setObject:[portField stringValue] forKey:@"port"];
     [settingsWindow setIsVisible:NO];
@@ -152,31 +157,32 @@
 - (void)speakingThread
 {
     while (speaking) {
-        EncodedAudioArr* audio     = LD_RecordAndEncodeAudio(audioInputHandler);
-        LD_Buffer*       buffer    = EncodedAudioArrToBuffer(audio);
-        NSMutableData*   finalData = [NSMutableData data];
-        NSDictionary*    dict      = [NSDictionary dictionaryWithObjectsAndKeys:
-                                      @"voice", @"action",
-                                      [userDefaults objectForKey:@"name"], @"name",
-                                      [NSNumber numberWithInt:buffer->bufferLength], @"audioDataLength",
-                                      nil];
-        
-        [finalData appendData:[dict messagePack]];
-        [finalData appendBytes:buffer->buffer length:buffer->bufferLength];
-        
-        free(buffer->buffer);
-        free(buffer);
-        [networkLayer sendNSDataToServer:finalData];
+//        EncodedAudioArr* audio     = LD_RecordAndEncodeAudio(audioInputHandler);
+//        LD_Buffer*       buffer    = EncodedAudioArrToBuffer(audio);
+//        NSMutableData*   finalData = [NSMutableData data];
+//        NSDictionary*    dict      = [NSDictionary dictionaryWithObjectsAndKeys:
+//                                      @"voice", @"action",
+//                                      [userDefaults objectForKey:@"name"], @"name",
+//                                      [NSNumber numberWithInt:buffer->bufferLength], @"audioDataLength",
+//                                      nil];
+//        
+//        [finalData appendData:[dict messagePack]];
+//        [finalData appendBytes:buffer->buffer length:buffer->bufferLength];
+//        
+//        [networkLayer sendNSDataToServer:finalData];
+//        
+//        free(buffer->buffer);
+//        free(buffer);
     }
 }
 
 - (void)voiceThread:(NSData*)audio
 {
-    LD_Buffer* buffer    = (LD_Buffer*) malloc(sizeof(LD_Buffer));
-    buffer->buffer       = (unsigned char*)[audio bytes];
-    buffer->bufferLength = (int) [audio length];
-    EncodedAudioArr* arr = BufferToEncodedAudioArr(buffer);
-    LD_DecodeAndPlayAudio(audioOutputHandler, arr);
+//    LD_Buffer* buffer    = (LD_Buffer*) malloc(sizeof(LD_Buffer));
+//    buffer->buffer       = (unsigned char*)[audio bytes];
+//    buffer->bufferLength = (int) [audio length];
+//    EncodedAudioArr* arr = BufferToEncodedAudioArr(buffer);
+//    LD_DecodeAndPlayAudio(audioOutputHandler, arr);
 }
 
 @end

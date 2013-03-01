@@ -30,10 +30,15 @@
             printf( "failed to create socket!\n" );
         }
         
-        server = Address(127, 0, 0, 1, 4444);
     }
     
     return self;
+}
+
+-(Address)targetAddress
+{
+    NSArray* hostArr = [host componentsSeparatedByString:@"."];
+    return Address([hostArr[0] intValue], [hostArr[1] intValue], [hostArr[2] intValue], [hostArr[3] intValue], port);
 }
 
 -(void)startCommunication
@@ -64,7 +69,6 @@
     host = [[NSUserDefaults standardUserDefaults] objectForKey:@"host"];
     port = [[[NSUserDefaults standardUserDefaults] objectForKey:@"port"] intValue];
     
-    server = Address(127, 0, 0, 1, port);
     
     [serverLitenerThread cancel];
     serverLitenerThread = nil;
@@ -74,12 +78,13 @@
 
 -(void)listenServer
 {
+    Address server = [self targetAddress];
     while ( true )
     {
         NSInteger bytes_read;
         NSMutableData* receivedData = [NSMutableData data];
+        unsigned char* buffer = (unsigned char*) malloc(MAX_BUFF);
         do {
-            unsigned char* buffer = (unsigned char*) malloc(MAX_BUFF);
             bytes_read = socket.Receive(server,  buffer, MAX_BUFF);
             
             if (bytes_read > 0) {
@@ -105,12 +110,15 @@
             
             [delegate incomingVoiceData: [receivedData subdataWithRange:NSMakeRange(dictLength, audioDataLength)]];
         }
+        
+        [receivedData dealloc];
+        free(buffer);
     }
 }
 
 -(void)sendNSDataToServer:(NSData*)data
 {
-    socket.Send( Address(192, 168, 1, 108, 4444), [data bytes], (int) [data length] );
+    socket.Send( [self targetAddress], [data bytes], (int) [data length] );
     NSLog(@"Packet Sent: %li", (unsigned long) [data length]);
 }
 

@@ -35,6 +35,8 @@ LD_Buffer* EncodedAudioArrToBuffer(EncodedAudioArr* encodedData)
         pointerPlase += sizeof(int);
         memcpy(bufferStruct->buffer + pointerPlase, encodedAudioData, encodedAudioDataLength);
         pointerPlase += encodedAudioDataLength;
+        
+        free(encodedAudioData);
     }
     
     free(encodedData->data);
@@ -70,7 +72,7 @@ EncodedAudioArr* BufferToEncodedAudioArr(LD_Buffer* buffer)
         
     }
 
-    free(buffer->buffer);
+//    free(buffer->buffer);
     free(buffer);
     return arr;
 }

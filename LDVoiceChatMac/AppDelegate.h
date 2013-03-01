@@ -34,9 +34,7 @@ NSTableViewDataSource, NSTableViewDelegate, LDNetworkDataProtocol>
     NSThread* speakingThread;
     
     LDNetworkLayer *networkLayer;
-    
-    AudioHandlerStruct *audioInputHandler;
-    AudioHandlerStruct *audioOutputHandler;
+
 }
 
 @property (assign) IBOutlet NSWindow *window;

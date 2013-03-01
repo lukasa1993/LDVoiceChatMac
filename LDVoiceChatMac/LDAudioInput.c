@@ -8,56 +8,6 @@
 
 #import "LDAudioDefaults.h"
 
-static int recordCallback(const void *inputBuffer, void *outputBuffer,
-                          unsigned long framesPerBuffer,
-                          const PaStreamCallbackTimeInfo* timeInfo,
-                          PaStreamCallbackFlags statusFlags,
-                          void *userData)
-{
-    RawAudioData *data = (RawAudioData*)userData;
-    const float *rptr = (const float*)inputBuffer;
-    float *wptr = &data->recordedSamples[data->frameIndex * CHANELS];
-    long framesToCalc;
-    long i;
-    int finished;
-    unsigned long framesLeft = data->maxFrameIndex - data->frameIndex;
-    
-    (void) outputBuffer; /* Prevent unused variable warnings. */
-    (void) timeInfo;
-    (void) statusFlags;
-    (void) userData;
-    
-    if( framesLeft < framesPerBuffer )
-    {
-        framesToCalc = framesLeft;
-        finished = paComplete;
-    }
-    else
-    {
-        framesToCalc = framesPerBuffer;
-        finished = paContinue;
-    }
-    
-    if( inputBuffer == NULL )
-    {
-        for( i=0; i<framesToCalc; i++ )
-        {
-            *wptr++ = 0.0f;  /* left */
-            if( CHANELS == 2 ) *wptr++ = 0.0f;  /* right */
-        }
-    }
-    else
-    {
-        for( i=0; i<framesToCalc; i++ )
-        {
-            *wptr++ = *rptr++;  /* left */
-            if( CHANELS == 2 ) *wptr++ = *rptr++;  /* right */
-        }
-    }
-    data->frameIndex += framesToCalc;
-    return finished;
-}
-
 EncodedAudioArr* encodeAudio(RawAudioData* data)
 {
     int              error = 0;
@@ -89,61 +39,4 @@ EncodedAudioArr* encodeAudio(RawAudioData* data)
 //    free(data->recordedSamples);
 //    free(data);
     return arr;
-}
-
-RawAudioData* recordRawAudio(AudioHandlerStruct* audioInputHandler)
-{
-    if (audioInputHandler->audioData != NULL) {
-        free(((RawAudioData*)audioInputHandler->audioData)->recordedSamples);
-        free(audioInputHandler->audioData);
-    }
-    audioInputHandler->audioData = (RawAudioData*) malloc(sizeof(RawAudioData));
-    RawAudioData* data    = (RawAudioData*) audioInputHandler->audioData;
-    data->frameIndex      = 0;
-    data->maxFrameIndex   = FRAME_SIZE; // FRAME_SIZE = second * rate
-    data->bytesNeeded     = data->maxFrameIndex * CHANELS * sizeof(float);
-    data->recordedSamples = (float *) malloc(data->bytesNeeded);
-    for(int i=0; i < (data->maxFrameIndex * CHANELS); i++) {
-        data->recordedSamples[i] = 0;
-    }
-    
-    audioInputHandler->paError = Pa_OpenStream(
-                                           &audioInputHandler->stream,
-                                           &audioInputHandler->inputParameters,
-                                           NULL,
-                                           SAMPLE_RATE,
-                                           FRAMES,
-                                           paClipOff,
-                                           recordCallback,
-                                           data );
-    
-    audioInputHandler->paError = Pa_StartStream(audioInputHandler->stream);
-    
-    Pa_Sleep(SECONDS * 1000);
-    return data;
-}
-
-AudioHandlerStruct* LD_InitAudioInputHandler()
-{
-    AudioHandlerStruct* audioInputHandler = (AudioHandlerStruct*) malloc(sizeof(AudioHandlerStruct));
-    audioInputHandler->paError = Pa_Initialize();
-    audioInputHandler->inputParameters.device                    = Pa_GetDefaultInputDevice();
-    audioInputHandler->inputParameters.channelCount              = CHANELS;
-    audioInputHandler->inputParameters.sampleFormat              = paFloat32;
-    audioInputHandler->inputParameters.suggestedLatency          =
-    Pa_GetDeviceInfo(audioInputHandler->inputParameters.device)->defaultLowInputLatency;
-    audioInputHandler->inputParameters.hostApiSpecificStreamInfo = NULL;
-    
-    return audioInputHandler;
-}
-
-void LD_DestroyAudioInputHandler(AudioHandlerStruct* audioInputHandler)
-{
-    Pa_CloseStream(audioInputHandler->stream);
-    free(audioInputHandler);
-}
-
-EncodedAudioArr* LD_RecordAndEncodeAudio(AudioHandlerStruct* audioInputHandler)
-{
-    return encodeAudio(recordRawAudio(audioInputHandler));
 }

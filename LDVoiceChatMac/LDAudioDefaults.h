@@ -13,6 +13,8 @@
 #include <stdio.h>
 #include "portaudio.h"
 #include "opus.h"
+#include "pa_ringbuffer.h"
+#include "pa_util.h"
 
 #define SAMPLE_RATE    (24000)
 #define MAX_FRAME_SAMP (5760)
@@ -28,16 +30,16 @@ typedef struct
     int     maxFrameIndex;
     int     bytesNeeded;
     float*  recordedSamples;
+    PaUtilRingBuffer    ringBuffer;
 } RawAudioData;
 
 typedef struct
 {
-    PaStreamParameters inputParameters;
-    PaStreamParameters outputParameters;
-    PaStream*          stream;
-    PaError            paError;
-    
-    void* audioData;
+    unsigned         frameIndex;
+    int              threadSyncFlag;
+    float*           ringBufferData;
+    PaUtilRingBuffer ringBuffer;
+    void*            threadHandle;
 } AudioHandlerStruct;
 
 typedef struct
@@ -53,11 +55,5 @@ typedef struct
     int dataLength;
 } EncodedAudioArr;
 
-
-//EncodedAudioArr* LD_RecordAndEncodeAudio();
-//void LD_DestroyAudioInputHandler();
-//
-//void LD_DecodeAndPlayAudio(EncodedAudioArr* arr);
-//void LD_DestroyAudioOutputHandler();
 
 #endif
