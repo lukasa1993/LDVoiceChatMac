@@ -110,7 +110,7 @@
 
 -(void)sendNSDataToServer:(NSData*)data
 {
-    socket.Send( Address(127, 0, 0, 1, 4444), [data bytes], (int) [data length] );
+    socket.Send( Address(192, 168, 1, 108, 4444), [data bytes], (int) [data length] );
     NSLog(@"Packet Sent: %li", (unsigned long) [data length]);
 }
 

@@ -8,8 +8,6 @@
 
 #import "LDAudioDefaults.h"
 
-AudioHandlerStruct* audioOutputHandler;
-
 static int playCallback(const void *inputBuffer, void *outputBuffer,
                         unsigned long framesPerBuffer,
                         const PaStreamCallbackTimeInfo* timeInfo,
@@ -57,7 +55,7 @@ static int playCallback(const void *inputBuffer, void *outputBuffer,
     return finished;
 }
 
-void playDecodedAudio(RawAudioData* decoded)
+void playDecodedAudio(AudioHandlerStruct* audioOutputHandler, RawAudioData* decoded)
 {
     decoded->frameIndex = 0;
     audioOutputHandler->paError = Pa_OpenStream(
@@ -74,17 +72,17 @@ void playDecodedAudio(RawAudioData* decoded)
     
     Pa_Sleep(SECONDS * 1000);
     
+    free(decoded->recordedSamples);
+    free(decoded);
     //    Pa_CloseStream(handlerStruct->stream);
 }
 
 RawAudioData* decodeAudio(EncodedAudioArr* encoded)
 {
-    int            error = 0;
-    OpusDecoder*   dec;
-    RawAudioData*  decoded;
+    int           error      = 0;
+    OpusDecoder*  dec        = opus_decoder_create(SAMPLE_RATE, CHANELS, &error);
+    RawAudioData* decoded    = (RawAudioData*) malloc(sizeof(RawAudioData));
     
-    dec                      = opus_decoder_create(SAMPLE_RATE, CHANELS, &error);
-    decoded                  = (RawAudioData*) malloc(sizeof(RawAudioData));
     decoded->frameIndex      = 0;
     decoded->maxFrameIndex   = 0;
     decoded->bytesNeeded     = FRAME_SIZE * CHANELS * sizeof(float);
@@ -113,10 +111,9 @@ RawAudioData* decodeAudio(EncodedAudioArr* encoded)
     return decoded;
 }
 
-void LD_InitAudioOutputHandler()
+AudioHandlerStruct* LD_InitAudioOutputHandler()
 {
-    if (audioOutputHandler != NULL) return;
-    audioOutputHandler = (AudioHandlerStruct*) malloc(sizeof(AudioHandlerStruct));
+    AudioHandlerStruct* audioOutputHandler = (AudioHandlerStruct*) malloc(sizeof(AudioHandlerStruct));
     audioOutputHandler->paError = Pa_Initialize();
     
     audioOutputHandler->outputParameters.device                    = Pa_GetDefaultOutputDevice();
@@ -126,18 +123,18 @@ void LD_InitAudioOutputHandler()
     Pa_GetDeviceInfo(audioOutputHandler->outputParameters.device)->defaultLowOutputLatency;
     audioOutputHandler->outputParameters.hostApiSpecificStreamInfo = NULL;
     
+    return audioOutputHandler;
 }
 
-void LD_DestroyAudioOutputHandler()
+void LD_DestroyAudioOutputHandler(AudioHandlerStruct* audioOutputHandler)
 {
     Pa_CloseStream(audioOutputHandler->stream);
     free(audioOutputHandler);
 }
 
-void LD_DecodeAndPlayAudio(EncodedAudioArr* arr)
+void LD_DecodeAndPlayAudio(AudioHandlerStruct* audioOutputHandler, EncodedAudioArr* arr)
 {
-    LD_InitAudioOutputHandler();
-    playDecodedAudio(decodeAudio(arr));
+    playDecodedAudio(audioOutputHandler, decodeAudio(arr));
 }
 
 

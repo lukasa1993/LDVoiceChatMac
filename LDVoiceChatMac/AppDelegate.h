@@ -27,13 +27,16 @@ NSTableViewDataSource, NSTableViewDelegate, LDNetworkDataProtocol>
     NSTableView *userListColumn;
     NSUserDefaults *userDefaults;
     
-    NSArray* userList;
+    NSMutableArray *userListArray;
     
     BOOL speaking;
     
     NSThread* speakingThread;
     
     LDNetworkLayer *networkLayer;
+    
+    AudioHandlerStruct *audioInputHandler;
+    AudioHandlerStruct *audioOutputHandler;
 }
 
 @property (assign) IBOutlet NSWindow *window;
@@ -44,6 +47,8 @@ NSTableViewDataSource, NSTableViewDelegate, LDNetworkDataProtocol>
 @property (assign) IBOutlet NSButton *settingsChangedButton;
 @property (assign) IBOutlet NSWindow *settingsWindow;
 @property (assign) IBOutlet NSTableView *userListColumn;
+
+@property (strong) NSMutableArray *userListArray;
 
 - (IBAction)settingsChanged:(id)sender;
 - (IBAction)callSettings:(id)sender;

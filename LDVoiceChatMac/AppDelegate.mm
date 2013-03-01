@@ -16,6 +16,7 @@
 @synthesize settingsButton;
 @synthesize settingsWindow;
 @synthesize settingsChangedButton;
+@synthesize userListArray;
 
 - (void)dealloc
 {
@@ -25,10 +26,12 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     // Insert code here to initialize your application
-    userDefaults = [NSUserDefaults standardUserDefaults];
-    networkLayer = [LDNetworkLayer networkLayer];
-    userDefaults = [NSUserDefaults standardUserDefaults];
-        
+    userDefaults       = [NSUserDefaults standardUserDefaults];
+    self.userListArray = [NSMutableArray array];
+    networkLayer       = [LDNetworkLayer networkLayer];
+    audioInputHandler  = LD_InitAudioInputHandler();
+    audioOutputHandler = LD_InitAudioOutputHandler();
+    
     [networkLayer setDelegate:self];
     
     if (![userDefaults objectForKey:@"host"]) {
@@ -85,8 +88,14 @@
 
 - (void)userList:(NSArray*)_userList
 {
-    userList = _userList;
-    [userListColumn reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.userListArray count]) {
+            [self.userListArray removeAllObjects];
+        }
+        
+        [self.userListArray addObjectsFromArray:_userList];
+        [userListColumn reloadData];
+    });
 }
 
 - (void)communicationStarted
@@ -106,7 +115,7 @@
 {
     NSTableCellView *cellView = [tableView makeViewWithIdentifier:tableColumn.identifier
                                                             owner:self];
-    NSDictionary* user = [userList objectAtIndex:row];
+    NSDictionary* user = [userListArray objectAtIndex:row];
     
     cellView.textField.stringValue = [user objectForKey:@"name"];
     
@@ -115,7 +124,7 @@
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
-    return [userList count];
+    return [userListArray count];
 }
 
 - (void)initSpeakingThread
@@ -143,7 +152,7 @@
 - (void)speakingThread
 {
     while (speaking) {
-        EncodedAudioArr* audio     = LD_RecordAndEncodeAudio();
+        EncodedAudioArr* audio     = LD_RecordAndEncodeAudio(audioInputHandler);
         LD_Buffer*       buffer    = EncodedAudioArrToBuffer(audio);
         NSMutableData*   finalData = [NSMutableData data];
         NSDictionary*    dict      = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -153,8 +162,10 @@
                                       nil];
         
         [finalData appendData:[dict messagePack]];
-        [finalData appendBytes:buffer->buffer length:buffer->bufferLength];        
+        [finalData appendBytes:buffer->buffer length:buffer->bufferLength];
         
+        free(buffer->buffer);
+        free(buffer);
         [networkLayer sendNSDataToServer:finalData];
     }
 }
@@ -165,7 +176,7 @@
     buffer->buffer       = (unsigned char*)[audio bytes];
     buffer->bufferLength = (int) [audio length];
     EncodedAudioArr* arr = BufferToEncodedAudioArr(buffer);
-    LD_DecodeAndPlayAudio(arr);
+    LD_DecodeAndPlayAudio(audioOutputHandler, arr);
 }
 
 @end

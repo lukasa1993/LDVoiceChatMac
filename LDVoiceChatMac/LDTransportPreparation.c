@@ -70,6 +70,7 @@ EncodedAudioArr* BufferToEncodedAudioArr(LD_Buffer* buffer)
         
     }
 
+    free(buffer->buffer);
     free(buffer);
     return arr;
 }

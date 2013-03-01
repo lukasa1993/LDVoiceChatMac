@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "805DD8AF16DF5CBA0001D7A1"
+               BlueprintIdentifier = "807544B316DFA7FA0066AF5D"
                BuildableName = "LDVoiceChatMac.app"
-               BlueprintName = "LDVoiceChatMac"
+               BlueprintName = "LDVoiceChatMac copy"
                ReferencedContainer = "container:LDVoiceChatMac.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -32,9 +32,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "805DD8AF16DF5CBA0001D7A1"
+            BlueprintIdentifier = "807544B316DFA7FA0066AF5D"
             BuildableName = "LDVoiceChatMac.app"
-            BlueprintName = "LDVoiceChatMac"
+            BlueprintName = "LDVoiceChatMac copy"
             ReferencedContainer = "container:LDVoiceChatMac.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -51,9 +51,9 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "805DD8AF16DF5CBA0001D7A1"
+            BlueprintIdentifier = "807544B316DFA7FA0066AF5D"
             BuildableName = "LDVoiceChatMac.app"
-            BlueprintName = "LDVoiceChatMac"
+            BlueprintName = "LDVoiceChatMac copy"
             ReferencedContainer = "container:LDVoiceChatMac.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -69,9 +69,9 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "805DD8AF16DF5CBA0001D7A1"
+            BlueprintIdentifier = "807544B316DFA7FA0066AF5D"
             BuildableName = "LDVoiceChatMac.app"
-            BlueprintName = "LDVoiceChatMac"
+            BlueprintName = "LDVoiceChatMac copy"
             ReferencedContainer = "container:LDVoiceChatMac.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

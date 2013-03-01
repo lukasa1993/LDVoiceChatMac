@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>LDVoiceChatMac copy.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 		<key>LDVoiceChatMac.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -38,6 +43,11 @@
 			<true/>
 		</dict>
 		<key>805DD8AF16DF5CBA0001D7A1</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>807544B316DFA7FA0066AF5D</key>
 		<dict>
 			<key>primary</key>
 			<true/>

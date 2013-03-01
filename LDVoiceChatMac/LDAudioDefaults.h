@@ -36,6 +36,8 @@ typedef struct
     PaStreamParameters outputParameters;
     PaStream*          stream;
     PaError            paError;
+    
+    void* audioData;
 } AudioHandlerStruct;
 
 typedef struct
@@ -50,5 +52,12 @@ typedef struct
     int dataCount;
     int dataLength;
 } EncodedAudioArr;
+
+
+//EncodedAudioArr* LD_RecordAndEncodeAudio();
+//void LD_DestroyAudioInputHandler();
+//
+//void LD_DecodeAndPlayAudio(EncodedAudioArr* arr);
+//void LD_DestroyAudioOutputHandler();
 
 #endif
