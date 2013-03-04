@@ -34,7 +34,7 @@ using namespace net;
     NSInteger port;
 }
 
-@property (assign) id<LDNetworkDataProtocol> delegate;
+@property (strong) id<LDNetworkDataProtocol> delegate;
 
 +(id)networkLayer;
 

@@ -30,6 +30,8 @@
             printf( "failed to create socket!\n" );
         }
         
+        host = [[NSUserDefaults standardUserDefaults] objectForKey:@"host"];
+        port = [[[NSUserDefaults standardUserDefaults] objectForKey:@"port"] intValue];
     }
     
     return self;
@@ -111,8 +113,7 @@
             [delegate incomingVoiceData: [receivedData subdataWithRange:NSMakeRange(dictLength, audioDataLength)]];
         }
         
-        [receivedData dealloc];
-        free(buffer);
+//        free(buffer);
     }
 }
 
@@ -122,10 +123,5 @@
     NSLog(@"Packet Sent: %li", (unsigned long) [data length]);
 }
 
--(void)dealloc
-{
-    [super dealloc];
-    ShutdownSockets();
-}
 
 @end

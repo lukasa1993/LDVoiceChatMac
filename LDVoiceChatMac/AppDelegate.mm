@@ -17,18 +17,18 @@
 @synthesize settingsWindow;
 @synthesize settingsChangedButton;
 @synthesize userListArray;
-
-- (void)dealloc
-{
-    [super dealloc];
-}
+@synthesize incomingVoice;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     // Insert code here to initialize your application
     userDefaults       = [NSUserDefaults standardUserDefaults];
     self.userListArray = [NSMutableArray array];
+    self.incomingVoice = [NSMutableArray array];
     networkLayer       = [LDNetworkLayer networkLayer];
+    
+    audioInputHandler  = LD_InitAudioInputHandler();
+    audioOutputHandler = LD_InitAudioOutputHandler();
     
     [networkLayer setDelegate:self];
     
@@ -45,7 +45,7 @@
         [networkLayer startCommunication];
     }
     
-    [self startSpeaking];
+    [self startVoiceComunication];
 }
 
 
@@ -105,12 +105,14 @@
 
 - (void)communicationStarted
 {
-    [self startSpeaking];
+    //    [self startVoiceComunication];
 }
 
 - (void)incomingVoiceData:(NSData *)data
 {
-    [[[NSThread alloc] initWithTarget:self selector:@selector(voiceThread:) object:[NSData dataWithData:data]] start];
+    //    [[[NSThread alloc] initWithTarget:self selector:@selector(voiceThread:) object:[NSData dataWithData:data]] start];
+    //    [self voiceThread:data];
+    [incomingVoice addObject:[NSData dataWithData:data]];
 }
 
 // Netowork Callbacks  End ----------------------------------------------
@@ -132,24 +134,21 @@
     return [userListArray count];
 }
 
-- (void)initSpeakingThread
-{
-    if (!speakingThread || [speakingThread isCancelled]) {
-        speakingThread = [[NSThread alloc] initWithTarget:self selector:@selector(speakingThread) object:nil];
-    }
-}
 
-- (void)startSpeaking
+- (void)startVoiceComunication
 {
-    [self initSpeakingThread];
     speaking = YES;
-    [speakingThread start];
+    LD_StartRecordingStream(audioInputHandler);
+    LD_StartPlayebackStream(audioOutputHandler);
+    [NSThread detachNewThreadSelector:@selector(speakingThread) toTarget:self withObject:nil];
+    [NSThread detachNewThreadSelector:@selector(voiceThread)    toTarget:self withObject:nil];
 }
 
-- (void)stopSpeaking
+- (void)stopVoiceComunication
 {
     speaking = NO;
-    [speakingThread cancel];
+    LD_StopRecordingStream(audioInputHandler);
+    LD_StopPlayebackStream(audioOutputHandler);
 }
 
 // Thread Work -------------------------------
@@ -157,32 +156,58 @@
 - (void)speakingThread
 {
     while (speaking) {
-//        EncodedAudioArr* audio     = LD_RecordAndEncodeAudio(audioInputHandler);
-//        LD_Buffer*       buffer    = EncodedAudioArrToBuffer(audio);
-//        NSMutableData*   finalData = [NSMutableData data];
-//        NSDictionary*    dict      = [NSDictionary dictionaryWithObjectsAndKeys:
-//                                      @"voice", @"action",
-//                                      [userDefaults objectForKey:@"name"], @"name",
-//                                      [NSNumber numberWithInt:buffer->bufferLength], @"audioDataLength",
-//                                      nil];
-//        
-//        [finalData appendData:[dict messagePack]];
-//        [finalData appendBytes:buffer->buffer length:buffer->bufferLength];
-//        
-//        [networkLayer sendNSDataToServer:finalData];
-//        
-//        free(buffer->buffer);
-//        free(buffer);
+        wait(SECONDS);
+        RawAudioData*  data                = (RawAudioData*)audioInputHandler->userData;
+        LD_Buffer*     buffer              = EncodedAudioArrToBuffer(encodeAudio(data));
+        NSMutableData* finalData           = [NSMutableData data];
+        NSDictionary*  dict                = [NSDictionary dictionaryWithObjectsAndKeys:
+                                              @"voice", @"action",
+                                              [userDefaults objectForKey:@"name"], @"name",
+                                              [NSNumber numberWithInt:buffer->bufferLength], @"audioDataLength",
+                                              nil];
+        
+        [finalData appendData:[dict messagePack]];
+        [finalData appendBytes:buffer->buffer length:buffer->bufferLength];
+        
+        [networkLayer sendNSDataToServer:finalData];
+        free(buffer->buffer);
+        free(buffer);
     }
 }
 
-- (void)voiceThread:(NSData*)audio
+- (void)voiceThread
 {
-//    LD_Buffer* buffer    = (LD_Buffer*) malloc(sizeof(LD_Buffer));
-//    buffer->buffer       = (unsigned char*)[audio bytes];
-//    buffer->bufferLength = (int) [audio length];
-//    EncodedAudioArr* arr = BufferToEncodedAudioArr(buffer);
-//    LD_DecodeAndPlayAudio(audioOutputHandler, arr);
+    while (speaking) {
+        if ([incomingVoice count] == 0) {
+//            LD_StopPlayebackStream(audioOutputHandler);
+            wait(0.25f);
+            continue;
+        }
+//        LD_StopPlayebackStream(audioOutputHandler);
+        ((RawAudioData*)audioOutputHandler->userData)->frameIndex = 0;
+        ((RawAudioData*)audioOutputHandler->userData)->secondFrameIndex = 0;
+        
+        NSData* audio        = [incomingVoice objectAtIndex:0];
+        LD_Buffer* buffer    = (LD_Buffer*) malloc(sizeof(LD_Buffer));
+        buffer->buffer       = (unsigned char*)[audio bytes];
+        buffer->bufferLength = (int) [audio length];
+        EncodedAudioArr* arr = BufferToEncodedAudioArr(buffer);
+        
+        decodeAudio(audioOutputHandler, arr);
+        wait(SECONDS);
+        [incomingVoice removeObject:audio];
+    }
+    
 }
 
+
 @end
+
+
+
+
+
+
+
+
+

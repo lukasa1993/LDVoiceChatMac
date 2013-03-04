@@ -8,47 +8,51 @@
 
 #import <Cocoa/Cocoa.h>
 #import "LDNetworkLayer.h"
-#import "LDAudioDefaults.h"
+//#import "LDAudioDefaults.h"
 #import "LDTransportPreparation.c"
-#import "LDAudioInput.c"
-#import "LDAudioOutput.c"
+#import "LDAudioInput.h"
+#import "LDAudioOutput.h"
 
 @interface AppDelegate : NSViewController <NSApplicationDelegate, NSTextFieldDelegate,
 NSTableViewDataSource, NSTableViewDelegate, LDNetworkDataProtocol>
 {
-    NSButton *settingsButton;
-    NSButton *settingsChangedButton;
-    NSWindow *settingsWindow;
+    __weak NSButton *settingsButton;
+    __weak NSButton *settingsChangedButton;
+    __weak NSWindow *settingsWindow;
     
-    NSTextField *userNameField;
-    NSTextField *hostField;
-    NSTextField *portField;
+    __weak NSTextField *userNameField;
+    __weak NSTextField *hostField;
+    __weak NSTextField *portField;
     
-    NSTableView *userListColumn;
-    NSUserDefaults *userDefaults;
+    __weak NSTableView *userListColumn;
+    __weak NSUserDefaults *userDefaults;
     
     NSMutableArray *userListArray;
-    
+    NSMutableArray *incomingVoice;
+
     BOOL speaking;
     
-    NSThread* speakingThread;
-    
     LDNetworkLayer *networkLayer;
+    AudioHandlerStruct* audioInputHandler;
+    AudioHandlerStruct* audioOutputHandler;
 
 }
 
-@property (assign) IBOutlet NSWindow *window;
-@property (assign) IBOutlet NSTextField *userNameField;
-@property (assign) IBOutlet NSTextField *hostField;
-@property (assign) IBOutlet NSTextField *portField;
-@property (assign) IBOutlet NSButton *settingsButton;
-@property (assign) IBOutlet NSButton *settingsChangedButton;
-@property (assign) IBOutlet NSWindow *settingsWindow;
-@property (assign) IBOutlet NSTableView *userListColumn;
+@property (weak) IBOutlet NSWindow    *window;
+@property (weak) IBOutlet NSTextField *userNameField;
+@property (weak) IBOutlet NSTextField *hostField;
+@property (weak) IBOutlet NSTextField *portField;
+@property (weak) IBOutlet NSButton    *settingsButton;
+@property (weak) IBOutlet NSButton    *settingsChangedButton;
+@property (weak) IBOutlet NSWindow    *settingsWindow;
+@property (weak) IBOutlet NSTableView *userListColumn;
 
 @property (strong) NSMutableArray *userListArray;
+@property (strong) NSMutableArray *incomingVoice;
 
 - (IBAction)settingsChanged:(id)sender;
 - (IBAction)callSettings:(id)sender;
+
+void encodeAndSend(RawAudioData* data);
 
 @end

@@ -7,39 +7,38 @@
 //
 
 #ifndef LDVoiceChatMac_LDAudioDefaults_h
-#define LDVoiceChatMac_LDAudioDefaults_h 1
+#define LDVoiceChatMac_LDAudioDefaults_h
 
 #include <stdlib.h>
 #include <stdio.h>
 #include "portaudio.h"
 #include "opus.h"
-#include "pa_ringbuffer.h"
-#include "pa_util.h"
 
-#define SAMPLE_RATE    (24000)
-#define MAX_FRAME_SAMP (5760)
-#define MAX_PACKET     (4000)
-#define SECONDS        (0.5f)
-#define CHANELS        (1)
-#define FRAMES         (120)
-#define FRAME_SIZE     SECONDS * SAMPLE_RATE
+#define SAMPLE_RATE        (48000)
+#define MAX_FRAME_SAMP     (5760)
+#define MAX_PACKET         (4000)
+#define SECONDS            (0.25f)
+#define SECONDS_FOR_BUFFER (0.75f)
+#define CHANELS            (1)
+#define FRAMES             (480)
 
 typedef struct
 {
     int     frameIndex;
+    int     secondFrameIndex;
     int     maxFrameIndex;
     int     bytesNeeded;
     float*  recordedSamples;
-    PaUtilRingBuffer    ringBuffer;
 } RawAudioData;
 
 typedef struct
 {
-    unsigned         frameIndex;
-    int              threadSyncFlag;
-    float*           ringBufferData;
-    PaUtilRingBuffer ringBuffer;
-    void*            threadHandle;
+    PaStreamParameters inputParameters;
+    PaStreamParameters outputParameters;
+    PaStream*          stream;
+    PaError            paError;
+    
+    void*              userData;
 } AudioHandlerStruct;
 
 typedef struct
@@ -56,4 +55,23 @@ typedef struct
 } EncodedAudioArr;
 
 
+RawAudioData* initRawAudioData(float seconds);
+void nulifyRecordedSamples(float* recordedSamples, int length);
+
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
