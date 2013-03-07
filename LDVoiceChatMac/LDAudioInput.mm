@@ -15,55 +15,71 @@ static int recordCallback(const void *inputBuffer, void *outputBuffer,
                           void *userData)
 {
     RawAudioData *data = (RawAudioData*)userData;
-    const float *rptr  = (const float*)inputBuffer;
-    float *wptr = &data->recordedSamples[data->frameIndex * CHANELS];
-    long framesToCalc;
-    long i;
-    int finished;
-    unsigned long framesLeft = data->maxFrameIndex - data->frameIndex;
+    ring_buffer_size_t elementsWriteable = PaUtil_GetRingBufferWriteAvailable(&data->ringBuffer);
+    ring_buffer_size_t elementsToWrite = MIN(elementsWriteable, (ring_buffer_size_t)(framesPerBuffer * CHANELS));
+    const float* rptr = (const float*) inputBuffer;
+
+    PaUtil_WriteRingBuffer(&data->ringBuffer, rptr, elementsToWrite);
     
-    (void) outputBuffer; /* Prevent unused variable warnings. */
-    (void) timeInfo;
-    (void) statusFlags;
-    (void) userData;
-    
-    if( framesLeft < framesPerBuffer )
-    {
-        framesToCalc = framesLeft;
-        finished = paComplete;
-    }
-    else
-    {
-        framesToCalc = framesPerBuffer;
-        finished = paContinue;
-    }
-    
-    if( inputBuffer == NULL )
-    {
-        for(i = 0;i < framesToCalc;i++)
-        {
-            *wptr++ = 0.0f;  /* left */
-            if( CHANELS == 2 ) *wptr++ = 0.0f;  /* right */
-        }
-    }
-    else
-    {
-        for(i = 0;i < framesToCalc; i++ )
-        {
-            *wptr++ = *rptr++;  /* left */
-            if( CHANELS == 2 ) *wptr++ = *rptr++;  /* right */
-        }
-    }
-    data->frameIndex += framesToCalc;
-    
-    if (finished == paComplete) {
-        data->frameIndex   = 0;
-        data->secondFrameIndex = 0;
-        finished = paContinue;
-    }
-    
-    return finished;
+    return paContinue;
 }
+
+//static int recordCallback(const void *inputBuffer, void *outputBuffer,
+//                          unsigned long framesPerBuffer,
+//                          const PaStreamCallbackTimeInfo* timeInfo,
+//                          PaStreamCallbackFlags statusFlags,
+//                          void *userData)
+//{
+//    RawAudioData *data = (RawAudioData*)userData;
+//    const float *rptr  = (const float*)inputBuffer;
+//    float *wptr = &data->recordedSamples[data->frameIndex * CHANELS];
+//    long framesToCalc;
+//    long i;
+//    int finished;
+//    unsigned long framesLeft = data->maxFrameIndex - data->frameIndex;
+//
+//    (void) outputBuffer; /* Prevent unused variable warnings. */
+//    (void) timeInfo;
+//    (void) statusFlags;
+//    (void) userData;
+//
+//    if( framesLeft < framesPerBuffer )
+//    {
+//        framesToCalc = framesLeft;
+//        finished = paComplete;
+//    }
+//    else
+//    {
+//        framesToCalc = framesPerBuffer;
+//        finished = paContinue;
+//    }
+//
+//    if( inputBuffer == NULL )
+//    {
+//        for(i = 0;i < framesToCalc;i++)
+//        {
+//            *wptr++ = 0.0f;  /* left */
+//            if( CHANELS == 2 ) *wptr++ = 0.0f;  /* right */
+//        }
+//    }
+//    else
+//    {
+//        for(i = 0;i < framesToCalc; i++ )
+//        {
+//            *wptr++ = *rptr++;  /* left */
+//            if( CHANELS == 2 ) *wptr++ = *rptr++;  /* right */
+//        }
+//    }
+//    data->frameIndex += framesToCalc;
+//
+//    if (finished == paComplete) {
+//        data->frameIndex   = 0;
+//        data->secondFrameIndex = 0;
+//        finished = paContinue;
+//    }
+//
+//    return finished;
+//}
 
 AudioHandlerStruct* LD_InitAudioInputHandler()
 {
@@ -76,7 +92,7 @@ AudioHandlerStruct* LD_InitAudioInputHandler()
     Pa_GetDeviceInfo(audioInputHandler->inputParameters.device)->defaultHighInputLatency;
     audioInputHandler->inputParameters.hostApiSpecificStreamInfo = NULL;
     
-    audioInputHandler->userData = initRawAudioData(SECONDS_FOR_BUFFER);
+    audioInputHandler->userData = initRawAudioData();
     
     audioInputHandler->paError = Pa_OpenStream(&audioInputHandler->stream,
                                                &audioInputHandler->inputParameters,
@@ -109,18 +125,17 @@ EncodedAudioArr* encodeAudio(RawAudioData* data)
     enc             = opus_encoder_create(SAMPLE_RATE, CHANELS, OPUS_APPLICATION_VOIP, &error);
     arr             = (EncodedAudioArr*) malloc(sizeof(EncodedAudioArr));
     arr->dataLength = 0;
-    arr->dataCount  = (SAMPLE_RATE * SECONDS * CHANELS) / FRAMES;
+    arr->dataCount  = (data->audioArrayLength / FRAMES) - 1;
     arr->data       = (EncodedAudio*) malloc(arr->dataCount *  sizeof(EncodedAudio));
     
     for(int i = 0; i < arr->dataCount; i++){
         EncodedAudio *encodedData = &arr->data[i];
-        data->secondFrameIndex += FRAMES;
-        float* frame = data->recordedSamples + data->secondFrameIndex;
+        float* frame = data->audioArray + (FRAMES * i);
         
         encodedData->data       = (unsigned char*) malloc(MAX_PACKET * sizeof(unsigned char));
         encodedData->dataLength = opus_encode_float(enc, frame, FRAMES, encodedData->data, MAX_PACKET);
         arr->dataLength        += encodedData->dataLength;
-
+        
         if (!(encodedData->dataLength > 0 && encodedData->dataLength < MAX_PACKET)) {
             printf("Amis Dedasheveci Encode \n");
             break;
@@ -128,7 +143,8 @@ EncodedAudioArr* encodeAudio(RawAudioData* data)
     }
     
     opus_encoder_destroy(enc);
-//    nulifyRecordedSamples(data->recordedSamples + data->encodedIndex, arr->dataCount);
+    free(data->audioArray);
+    free(data);
     return arr;
 }
 

@@ -85,17 +85,18 @@
     {
         NSInteger bytes_read;
         NSMutableData* receivedData = [NSMutableData data];
-        unsigned char* buffer = (unsigned char*) malloc(MAX_BUFF);
+        void* buffer = malloc(MAX_BUFF);
         do {
             bytes_read = socket.Receive(server,  buffer, MAX_BUFF);
             
             if (bytes_read > 0) {
-                [receivedData appendData:[NSData dataWithBytes:buffer length:bytes_read]];
+                [receivedData appendBytes:buffer length:bytes_read];
                 NSLog(@"received packet from (%li bytes)", (long) bytes_read );
             } else {
                 wait(0.25f);
             }
         } while (!bytes_read);
+        free(buffer);
         
         if ([receivedData length] > 0) {
             NSLog(@"Total received packet from (%li bytes)", [receivedData length] );
@@ -112,8 +113,6 @@
             
             [delegate incomingVoiceData: [receivedData subdataWithRange:NSMakeRange(dictLength, audioDataLength)]];
         }
-        
-//        free(buffer);
     }
 }
 

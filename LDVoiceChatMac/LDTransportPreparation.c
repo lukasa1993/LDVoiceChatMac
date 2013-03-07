@@ -36,11 +36,11 @@ LD_Buffer* EncodedAudioArrToBuffer(EncodedAudioArr* encodedData)
         memcpy(bufferStruct->buffer + pointerPlase, encodedAudioData, encodedAudioDataLength);
         pointerPlase += encodedAudioDataLength;
         
-//        free(encodedAudioData);
+        free(encodedAudioData);
     }
     
-//    free(encodedData->data);
-//    free(encodedData);
+    free(encodedData->data);
+    free(encodedData);
     return bufferStruct;
 }
 
@@ -56,7 +56,7 @@ EncodedAudioArr* BufferToEncodedAudioArr(LD_Buffer* buffer)
     
     arr->dataLength = buffer->bufferLength - (sizeof(int) * (arr->dataCount + 1));
     arr->data       = (EncodedAudio*) malloc(arr->dataCount * sizeof(EncodedAudio));
-   
+    
     for (int i = 0; i < arr->dataCount; i++) {
         EncodedAudio*  encodedAudio = (EncodedAudio*) malloc(sizeof(EncodedAudio));
         encodedAudio->dataLength    = 0;
@@ -64,14 +64,14 @@ EncodedAudioArr* BufferToEncodedAudioArr(LD_Buffer* buffer)
         memcpy(&encodedAudio->dataLength, buffer->buffer + pointerPlase, sizeof(int));
         pointerPlase        += sizeof(int);
         encodedAudio->data   = (unsigned char*) malloc(encodedAudio->dataLength);
-
+        
         memcpy(encodedAudio->data, buffer->buffer + pointerPlase, encodedAudio->dataLength);
         pointerPlase        += encodedAudio->dataLength;
         
         arr->data[i] = *encodedAudio;
         
     }
-
+    
 //    free(buffer->buffer);
     free(buffer);
     return arr;

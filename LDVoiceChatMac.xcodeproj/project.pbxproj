@@ -35,6 +35,7 @@
 		80EEE3CB16E4997B00EAD0F2 /* LDAudioInput.mm in Sources */ = {isa = PBXBuildFile; fileRef = 80EEE3C816E4997B00EAD0F2 /* LDAudioInput.mm */; };
 		80EEE3CC16E4997B00EAD0F2 /* LDAudioOutput.mm in Sources */ = {isa = PBXBuildFile; fileRef = 80EEE3CA16E4997B00EAD0F2 /* LDAudioOutput.mm */; };
 		80EEE3CE16E4A03200EAD0F2 /* LDAudioDefaults.mm in Sources */ = {isa = PBXBuildFile; fileRef = 80EEE3CD16E4A03200EAD0F2 /* LDAudioDefaults.mm */; };
+		80EEE3F916E7870B00EAD0F2 /* LDSineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 80EEE3F816E7870B00EAD0F2 /* LDSineView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -125,6 +126,8 @@
 		80EEE3C916E4997B00EAD0F2 /* LDAudioOutput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LDAudioOutput.h; sourceTree = "<group>"; };
 		80EEE3CA16E4997B00EAD0F2 /* LDAudioOutput.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LDAudioOutput.mm; sourceTree = "<group>"; };
 		80EEE3CD16E4A03200EAD0F2 /* LDAudioDefaults.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LDAudioDefaults.mm; sourceTree = "<group>"; };
+		80EEE3F716E7870B00EAD0F2 /* LDSineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LDSineView.h; sourceTree = "<group>"; };
+		80EEE3F816E7870B00EAD0F2 /* LDSineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LDSineView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,6 +193,8 @@
 				80EEE3C916E4997B00EAD0F2 /* LDAudioOutput.h */,
 				80EEE3CA16E4997B00EAD0F2 /* LDAudioOutput.mm */,
 				805DD88516DE01E70001D7A1 /* LDTransportPreparation.c */,
+				80EEE3F716E7870B00EAD0F2 /* LDSineView.h */,
+				80EEE3F816E7870B00EAD0F2 /* LDSineView.m */,
 				8000F5AA16D6308000B1D5E5 /* Net.h */,
 				80315D3E16D5182400D8060F /* MainMenu.xib */,
 				80315D3016D5182400D8060F /* Supporting Files */,
@@ -392,6 +397,7 @@
 				80EEE3CB16E4997B00EAD0F2 /* LDAudioInput.mm in Sources */,
 				80EEE3CC16E4997B00EAD0F2 /* LDAudioOutput.mm in Sources */,
 				80EEE3CE16E4A03200EAD0F2 /* LDAudioDefaults.mm in Sources */,
+				80EEE3F916E7870B00EAD0F2 /* LDSineView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

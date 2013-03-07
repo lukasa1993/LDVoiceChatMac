@@ -13,15 +13,26 @@ void nulifyRecordedSamples(float* recordedSamples, int length)
     for(int i=0; i < length; i++) recordedSamples[i] = 0;
 }
 
-RawAudioData* initRawAudioData(float seconds)
+unsigned NextPowerOf2(unsigned val)
 {
-    RawAudioData* data     = (RawAudioData*) malloc(sizeof(RawAudioData));
-    data->frameIndex       = 0;
-    data->secondFrameIndex = 0;
-    data->maxFrameIndex    = seconds * SAMPLE_RATE;
-    data->bytesNeeded      = data->maxFrameIndex * CHANELS * sizeof(float);
-    data->recordedSamples  = (float *) malloc(data->bytesNeeded);
-    nulifyRecordedSamples(data->recordedSamples, data->maxFrameIndex * CHANELS);
+    val--;
+    val = (val >> 1) | val;
+    val = (val >> 2) | val;
+    val = (val >> 4) | val;
+    val = (val >> 8) | val;
+    val = (val >> 16) | val;
+    return ++val;
+}
+
+RawAudioData* initRawAudioData()
+{
+
+    RawAudioData* data         = (RawAudioData*) malloc(sizeof(RawAudioData));
+    data->audioArrayLength     = NextPowerOf2(SECONDS * SAMPLE_RATE * CHANELS);
+    data->audioArrayByteLength = data->audioArrayLength * sizeof(float);
+    data->audioArray           = (float *) malloc(data->audioArrayByteLength);
+    
+    PaUtil_InitializeRingBuffer(&data->ringBuffer, sizeof(float), data->audioArrayLength, data->audioArray);
     
     return data;
 }

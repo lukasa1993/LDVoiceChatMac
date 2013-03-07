@@ -13,6 +13,9 @@
 #import "LDAudioInput.h"
 #import "LDAudioOutput.h"
 
+#import "LDSineView.h"
+
+
 @interface AppDelegate : NSViewController <NSApplicationDelegate, NSTextFieldDelegate,
 NSTableViewDataSource, NSTableViewDelegate, LDNetworkDataProtocol>
 {
@@ -27,6 +30,8 @@ NSTableViewDataSource, NSTableViewDelegate, LDNetworkDataProtocol>
     __weak NSTableView *userListColumn;
     __weak NSUserDefaults *userDefaults;
     
+    __weak LDSineView* sineView;
+    
     NSMutableArray *userListArray;
     NSMutableArray *incomingVoice;
 
@@ -35,7 +40,7 @@ NSTableViewDataSource, NSTableViewDelegate, LDNetworkDataProtocol>
     LDNetworkLayer *networkLayer;
     AudioHandlerStruct* audioInputHandler;
     AudioHandlerStruct* audioOutputHandler;
-
+    
 }
 
 @property (weak) IBOutlet NSWindow    *window;
@@ -46,6 +51,7 @@ NSTableViewDataSource, NSTableViewDelegate, LDNetworkDataProtocol>
 @property (weak) IBOutlet NSButton    *settingsChangedButton;
 @property (weak) IBOutlet NSWindow    *settingsWindow;
 @property (weak) IBOutlet NSTableView *userListColumn;
+@property (weak) IBOutlet LDSineView* sineView;
 
 @property (strong) NSMutableArray *userListArray;
 @property (strong) NSMutableArray *incomingVoice;

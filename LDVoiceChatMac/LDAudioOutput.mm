@@ -15,46 +15,67 @@ static int playCallback(const void *inputBuffer, void *outputBuffer,
                         void *userData)
 {
     RawAudioData *data = (RawAudioData*)userData;
-    float *rptr = &data->recordedSamples[data->frameIndex * CHANELS];
-    float *wptr = (float*)outputBuffer;
-    unsigned int i;
-    int finished;
-    unsigned int framesLeft = data->maxFrameIndex - data->frameIndex;
+    ring_buffer_size_t elementsToPlay = PaUtil_GetRingBufferReadAvailable(&data->ringBuffer);
+    ring_buffer_size_t elementsToRead = MIN(elementsToPlay, (ring_buffer_size_t)(framesPerBuffer * CHANELS));
+    float* wptr = (float*)outputBuffer;
     
-    (void) inputBuffer; /* Prevent unused variable warnings. */
-    (void) timeInfo;
-    (void) statusFlags;
-    (void) userData;
-    
-    if(framesLeft < framesPerBuffer)
+    for(int i = 0;i < framesPerBuffer; i++)
     {
-        /* final buffer... */
-        for(i = 0; i < framesLeft; i++)
-        {
-            *wptr++ = *rptr++;  /* left */
-            if( CHANELS == 2 ) *wptr++ = *rptr++;  /* right */
-        }
-        for( ; i < framesPerBuffer; i++)
-        {
-            *wptr++ = 0;  /* left */
-            if( CHANELS == 2 ) *wptr++ = 0;  /* right */
-        }
-        data->frameIndex += framesLeft;
-        finished = paComplete;
-    }
-    else
-    {
-        for( i=0; i<framesPerBuffer; i++ )
-        {
-            *wptr++ = *rptr++;  /* left */
-            if( CHANELS == 2 ) *wptr++ = *rptr++;  /* right */
-        }
-        data->frameIndex += framesPerBuffer;
-        finished = paContinue;
+        *(wptr + i) = 0;
     }
     
-    return finished;
+    PaUtil_ReadRingBuffer(&data->ringBuffer, wptr, elementsToRead);
+    
+    return paContinue;
 }
+
+//static int playCallback(const void *inputBuffer, void *outputBuffer,
+//                        unsigned long framesPerBuffer,
+//                        const PaStreamCallbackTimeInfo* timeInfo,
+//                        PaStreamCallbackFlags statusFlags,
+//                        void *userData)
+//{
+//    RawAudioData *data = (RawAudioData*)userData;
+//    float *rptr = &data->recordedSamples[data->frameIndex * CHANELS];
+//    float *wptr = (float*)outputBuffer;
+//    unsigned int i;
+//    int finished;
+//    unsigned int framesLeft = data->maxFrameIndex - data->frameIndex;
+//
+//    (void) inputBuffer; /* Prevent unused variable warnings. */
+//    (void) timeInfo;
+//    (void) statusFlags;
+//    (void) userData;
+//
+//    if(framesLeft < framesPerBuffer)
+//    {
+//        /* final buffer... */
+//        for(i = 0; i < framesLeft; i++)
+//        {
+//            *wptr++ = *rptr++;  /* left */
+//            if( CHANELS == 2 ) *wptr++ = *rptr++;  /* right */
+//        }
+//        for( ; i < framesPerBuffer; i++)
+//        {
+//            *wptr++ = 0;  /* left */
+//            if( CHANELS == 2 ) *wptr++ = 0;  /* right */
+//        }
+//        data->frameIndex += framesLeft;
+//        finished = paComplete;
+//    }
+//    else
+//    {
+//        for( i=0; i<framesPerBuffer; i++ )
+//        {
+//            *wptr++ = *rptr++;  /* left */
+//            if( CHANELS == 2 ) *wptr++ = *rptr++;  /* right */
+//        }
+//        data->frameIndex += framesPerBuffer;
+//        finished = paContinue;
+//    }
+//
+//    return finished;
+//}
 
 AudioHandlerStruct* LD_InitAudioOutputHandler()
 {
@@ -66,7 +87,7 @@ AudioHandlerStruct* LD_InitAudioOutputHandler()
     Pa_GetDeviceInfo(audioOutputHandler->outputParameters.device)->defaultLowOutputLatency;
     audioOutputHandler->outputParameters.hostApiSpecificStreamInfo = NULL;
     
-    audioOutputHandler->userData = initRawAudioData(SECONDS_FOR_BUFFER);
+    audioOutputHandler->userData = initRawAudioData();
     
     audioOutputHandler->paError = Pa_OpenStream(
                                                 &audioOutputHandler->stream,
@@ -84,7 +105,9 @@ AudioHandlerStruct* LD_InitAudioOutputHandler()
 
 void LD_StartPlayebackStream(AudioHandlerStruct* audioOutputHandler)
 {
-    audioOutputHandler->paError = Pa_StartStream(audioOutputHandler->stream);
+    if (!Pa_IsStreamActive(audioOutputHandler->stream)) {
+        audioOutputHandler->paError = Pa_StartStream(audioOutputHandler->stream);
+    }
 }
 
 void LD_StopPlayebackStream(AudioHandlerStruct* audioOutputHandler)
@@ -94,11 +117,12 @@ void LD_StopPlayebackStream(AudioHandlerStruct* audioOutputHandler)
     }
 }
 
-void decodeAudio(AudioHandlerStruct* audioOutputHandler, EncodedAudioArr* encoded)
+RawAudioData* decodeAudio(AudioHandlerStruct* audioOutputHandler, EncodedAudioArr* encoded)
 {
-    int           error      = 0;
-    OpusDecoder*  dec        = opus_decoder_create(SAMPLE_RATE, CHANELS, &error);
-    RawAudioData* decoded    = (RawAudioData*) audioOutputHandler->userData;
+    int           error   = 0;
+    int           index   = 0;
+    OpusDecoder*  dec     = opus_decoder_create(SAMPLE_RATE, CHANELS, &error);
+    RawAudioData* decoded = initRawAudioData();
     
     for(int i = 0; i < encoded->dataCount; i++){
         EncodedAudio *data = &encoded->data[i];
@@ -106,20 +130,22 @@ void decodeAudio(AudioHandlerStruct* audioOutputHandler, EncodedAudioArr* encode
         int decompresed = opus_decode_float(dec,
                                             data->data,
                                             data->dataLength,
-                                            decoded->recordedSamples + decoded->secondFrameIndex,
+                                            decoded->audioArray + index,
                                             MAX_FRAME_SAMP,
                                             0);
         
         if (decompresed > 0 && decompresed <= MAX_FRAME_SAMP) {
-            decoded->secondFrameIndex += decompresed;
+            index += decompresed;
         } else {
             printf("Amis Dedasheveci Decode \n");
         }
     }
     
     opus_decoder_destroy(dec);
-    //    free(encoded->data);
-    //    free(encoded);
+    free(encoded->data);
+    free(encoded);
+    
+    return decoded;
 }
 
 

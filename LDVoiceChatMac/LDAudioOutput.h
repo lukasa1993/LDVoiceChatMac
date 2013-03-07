@@ -13,7 +13,7 @@
 
 AudioHandlerStruct* LD_InitAudioOutputHandler();
 
-void decodeAudio(AudioHandlerStruct* audioOutputHandler, EncodedAudioArr* encoded);
+RawAudioData* decodeAudio(AudioHandlerStruct* audioOutputHandler, EncodedAudioArr* encoded);
 void LD_StartPlayebackStream(AudioHandlerStruct* audioOutputHandler);
 void LD_StopPlayebackStream(AudioHandlerStruct* audioOutputHandler);
 void LD_AddToPlayback(AudioHandlerStruct* audioOutputHandler, RawAudioData* data);

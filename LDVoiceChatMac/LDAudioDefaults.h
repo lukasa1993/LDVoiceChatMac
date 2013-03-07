@@ -13,22 +13,24 @@
 #include <stdio.h>
 #include "portaudio.h"
 #include "opus.h"
+#include "pa_ringbuffer.h"
+#include "pa_util.h"
 
 #define SAMPLE_RATE        (48000)
 #define MAX_FRAME_SAMP     (5760)
 #define MAX_PACKET         (4000)
-#define SECONDS            (0.25f)
-#define SECONDS_FOR_BUFFER (0.75f)
+#define SECONDS            (0.5f)
+#define SENDER_DIVIZION    (1)
+#define RECEIVER_DIVIZION  (2)
 #define CHANELS            (1)
 #define FRAMES             (480)
 
 typedef struct
 {
-    int     frameIndex;
-    int     secondFrameIndex;
-    int     maxFrameIndex;
-    int     bytesNeeded;
-    float*  recordedSamples;
+    float*  audioArray;
+    int     audioArrayLength;
+    int     audioArrayByteLength;
+    PaUtilRingBuffer    ringBuffer;
 } RawAudioData;
 
 typedef struct
@@ -55,7 +57,7 @@ typedef struct
 } EncodedAudioArr;
 
 
-RawAudioData* initRawAudioData(float seconds);
+RawAudioData* initRawAudioData();
 void nulifyRecordedSamples(float* recordedSamples, int length);
 
 #endif
