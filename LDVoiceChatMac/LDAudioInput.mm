@@ -18,7 +18,7 @@ static int recordCallback(const void *inputBuffer, void *outputBuffer,
     ring_buffer_size_t elementsWriteable = PaUtil_GetRingBufferWriteAvailable(&data->ringBuffer);
     ring_buffer_size_t elementsToWrite = MIN(elementsWriteable, (ring_buffer_size_t)(framesPerBuffer * CHANELS));
     const float* rptr = (const float*) inputBuffer;
-
+    
     PaUtil_WriteRingBuffer(&data->ringBuffer, rptr, elementsToWrite);
     
     return paContinue;
@@ -95,13 +95,13 @@ AudioHandlerStruct* LD_InitAudioInputHandler()
     audioInputHandler->userData = initRawAudioData();
     
     audioInputHandler->paError = Pa_OpenStream(&audioInputHandler->stream,
-                                               &audioInputHandler->inputParameters,
-                                               NULL,
-                                               SAMPLE_RATE,
-                                               FRAMES,
-                                               paClipOff,
-                                               recordCallback,
-                                               audioInputHandler->userData);
+                                              &audioInputHandler->inputParameters,
+                                              NULL,
+                                              SAMPLE_RATE,
+                                              FRAMES,
+                                              paClipOff,
+                                              recordCallback,
+                                              audioInputHandler->userData);
     
     return audioInputHandler;
 }
@@ -116,25 +116,24 @@ void LD_StopRecordingStream(AudioHandlerStruct* audioInputHandler)
     audioInputHandler->paError = Pa_StopStream(audioInputHandler->stream);
 }
 
-EncodedAudioArr* encodeAudio(RawAudioData* data)
+EncodedAudioArr encodeAudio(RawAudioData* data)
 {
     int              error = 0;
     OpusEncoder*     enc;
-    EncodedAudioArr* arr;
+    EncodedAudioArr arr;
     
     enc             = opus_encoder_create(SAMPLE_RATE, CHANELS, OPUS_APPLICATION_VOIP, &error);
-    arr             = (EncodedAudioArr*) malloc(sizeof(EncodedAudioArr));
-    arr->dataLength = 0;
-    arr->dataCount  = (data->audioArrayLength / FRAMES) - 1;
-    arr->data       = (EncodedAudio*) malloc(arr->dataCount *  sizeof(EncodedAudio));
+    arr             = {0};
+    arr.dataCount  = (data->audioArrayLength / FRAMES);
+    arr.data       = (EncodedAudio*) malloc(arr.dataCount *  sizeof(EncodedAudio));
     
-    for(int i = 0; i < arr->dataCount; i++){
-        EncodedAudio *encodedData = &arr->data[i];
+    for(int i = 0; i < arr.dataCount; i++){
+        EncodedAudio *encodedData = &arr.data[i];
         float* frame = data->audioArray + (FRAMES * i);
         
         encodedData->data       = (unsigned char*) malloc(MAX_PACKET * sizeof(unsigned char));
         encodedData->dataLength = opus_encode_float(enc, frame, FRAMES, encodedData->data, MAX_PACKET);
-        arr->dataLength        += encodedData->dataLength;
+        arr.dataLength         += encodedData->dataLength;
         
         if (!(encodedData->dataLength > 0 && encodedData->dataLength < MAX_PACKET)) {
             printf("Amis Dedasheveci Encode \n");
@@ -144,7 +143,6 @@ EncodedAudioArr* encodeAudio(RawAudioData* data)
     
     opus_encoder_destroy(enc);
     free(data->audioArray);
-    free(data);
     return arr;
 }
 

@@ -14,7 +14,7 @@ static int playCallback(const void *inputBuffer, void *outputBuffer,
                         PaStreamCallbackFlags statusFlags,
                         void *userData)
 {
-    RawAudioData *data = (RawAudioData*)userData;
+    RawAudioData* data  = (RawAudioData*)userData;
     ring_buffer_size_t elementsToPlay = PaUtil_GetRingBufferReadAvailable(&data->ringBuffer);
     ring_buffer_size_t elementsToRead = MIN(elementsToPlay, (ring_buffer_size_t)(framesPerBuffer * CHANELS));
     float* wptr = (float*)outputBuffer;
@@ -79,7 +79,7 @@ static int playCallback(const void *inputBuffer, void *outputBuffer,
 
 AudioHandlerStruct* LD_InitAudioOutputHandler()
 {
-    AudioHandlerStruct* audioOutputHandler = (AudioHandlerStruct*) malloc(sizeof(AudioHandlerStruct));
+    AudioHandlerStruct* audioOutputHandler                        = (AudioHandlerStruct*) malloc(sizeof(AudioHandlerStruct));
     audioOutputHandler->outputParameters.device                    = Pa_GetDefaultOutputDevice();
     audioOutputHandler->outputParameters.channelCount              = CHANELS;
     audioOutputHandler->outputParameters.sampleFormat              = paFloat32;
@@ -90,14 +90,14 @@ AudioHandlerStruct* LD_InitAudioOutputHandler()
     audioOutputHandler->userData = initRawAudioData();
     
     audioOutputHandler->paError = Pa_OpenStream(
-                                                &audioOutputHandler->stream,
-                                                NULL,
-                                                &audioOutputHandler->outputParameters,
-                                                SAMPLE_RATE,
-                                                FRAMES,
-                                                paClipOff,
-                                                playCallback,
-                                                audioOutputHandler->userData);
+                                               &audioOutputHandler->stream,
+                                               NULL,
+                                               &audioOutputHandler->outputParameters,
+                                               SAMPLE_RATE,
+                                               FRAMES,
+                                               paClipOff,
+                                               playCallback,
+                                               audioOutputHandler->userData);
     
     
     return audioOutputHandler;
@@ -117,15 +117,15 @@ void LD_StopPlayebackStream(AudioHandlerStruct* audioOutputHandler)
     }
 }
 
-RawAudioData* decodeAudio(AudioHandlerStruct* audioOutputHandler, EncodedAudioArr* encoded)
+RawAudioData* decodeAudio(AudioHandlerStruct* audioOutputHandler, EncodedAudioArr encoded)
 {
     int           error   = 0;
     int           index   = 0;
     OpusDecoder*  dec     = opus_decoder_create(SAMPLE_RATE, CHANELS, &error);
-    RawAudioData* decoded = initRawAudioData();
+    RawAudioData*  decoded = initRawAudioData();
     
-    for(int i = 0; i < encoded->dataCount; i++){
-        EncodedAudio *data = &encoded->data[i];
+    for(int i = 0; i < encoded.dataCount; i++){
+        EncodedAudio *data = &encoded.data[i];
         
         int decompresed = opus_decode_float(dec,
                                             data->data,
@@ -139,11 +139,12 @@ RawAudioData* decodeAudio(AudioHandlerStruct* audioOutputHandler, EncodedAudioAr
         } else {
             printf("Amis Dedasheveci Decode \n");
         }
+        
+        free(data->data);
     }
     
     opus_decoder_destroy(dec);
-    free(encoded->data);
-    free(encoded);
+    free(encoded.data);
     
     return decoded;
 }

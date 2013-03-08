@@ -1,4 +1,4 @@
-    //
+//
 //  LDNetworkLayer.mm
 //  LDVoiceChatMac
 //
@@ -81,38 +81,42 @@
 -(void)listenServer
 {
     Address server = [self targetAddress];
+    void* buffer;
+    NSInteger bytes_read;
+    NSData* receivedData;
+    NSDictionary* parsed;
+    NSString* action;
+    NSArray* userList;
+    NSInteger audioDataLength;
+    NSInteger dictLength;
     while ( true )
     {
-        NSInteger bytes_read;
-        NSMutableData* receivedData = [NSMutableData data];
-        void* buffer = malloc(MAX_BUFF);
-        do {
-            bytes_read = socket.Receive(server,  buffer, MAX_BUFF);
+        
+        buffer = malloc(MAX_BUFF);
+        
+        bytes_read = socket.Receive(server,  buffer, MAX_BUFF);
+        if (bytes_read > 0) {
+            NSLog(@"received packet from (%li bytes)", (long) bytes_read );
             
-            if (bytes_read > 0) {
-                [receivedData appendBytes:buffer length:bytes_read];
-                NSLog(@"received packet from (%li bytes)", (long) bytes_read );
-            } else {
-                wait(0.25f);
+            receivedData = [NSData dataWithBytesNoCopy:buffer length:bytes_read];
+            parsed = [receivedData messagePackParse];
+            action = [parsed objectForKey:@"action"];
+            
+            if ([action isEqualToString:@"list"]) {
+                userList = [parsed objectForKey:@"userList"];
+                [delegate userList:userList];
+            } else if ([action isEqualToString:@"voice"]) {
+                audioDataLength = [[parsed objectForKey:@"audioDataLength"] intValue];
+                dictLength      = [[parsed messagePack] length];
+                
+                [delegate incomingVoiceData: [receivedData subdataWithRange:NSMakeRange(dictLength, audioDataLength)]];
             }
-        } while (!bytes_read);
-        free(buffer);
-        
-        if ([receivedData length] > 0) {
-            NSLog(@"Total received packet from (%li bytes)", [receivedData length] );
-        }
-        
-        NSDictionary* parsed = [receivedData messagePackParse];
-        NSString* action = [parsed objectForKey:@"action"];
-        if ([action isEqualToString:@"list"]) {
-            NSArray* userList = [parsed objectForKey:@"userList"];
-            [delegate userList:userList];
-        } else if ([action isEqualToString:@"voice"]) {
-            NSInteger audioDataLength = [[parsed objectForKey:@"audioDataLength"] intValue];
-            NSInteger dictLength      = [[parsed messagePack] length];
             
-            [delegate incomingVoiceData: [receivedData subdataWithRange:NSMakeRange(dictLength, audioDataLength)]];
+        } else {
+            wait(0.25f);
         }
+        
+        free(buffer);
     }
 }
 

@@ -19,9 +19,9 @@
 #define SAMPLE_RATE        (48000)
 #define MAX_FRAME_SAMP     (5760)
 #define MAX_PACKET         (4000)
-#define SECONDS            (0.5f)
-#define SENDER_DIVIZION    (1)
-#define RECEIVER_DIVIZION  (2)
+#define SECONDS            (0.501f)
+#define SENDER_DIVIZION    (1.5f)
+#define RECEIVER_DIVIZION  (4.5f)
 #define CHANELS            (1)
 #define FRAMES             (480)
 
@@ -40,7 +40,7 @@ typedef struct
     PaStream*          stream;
     PaError            paError;
     
-    void*              userData;
+    RawAudioData*       userData;
 } AudioHandlerStruct;
 
 typedef struct

@@ -11,7 +11,7 @@
 
 #import "LDAudioDefaults.h"
 
-EncodedAudioArr*    encodeAudio(RawAudioData* data);
+EncodedAudioArr     encodeAudio(RawAudioData* data);
 AudioHandlerStruct* LD_InitAudioInputHandler();
 
 void LD_StartRecordingStream(AudioHandlerStruct* audioInputHandler);
