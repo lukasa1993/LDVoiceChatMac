@@ -18,7 +18,6 @@
 @synthesize settingsChangedButton;
 @synthesize userListArray;
 @synthesize incomingVoice;
-@synthesize sineView;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
@@ -108,11 +107,33 @@
     //    [self startVoiceComunication];
 }
 
-- (void)incomingVoiceData:(NSData *)data
+- (void)incomingVoiceData:(NSData *)audio
 {
-    //    [[[NSThread alloc] initWithTarget:self selector:@selector(voiceThread:) object:[NSData dataWithData:data]] start];
-    //    [self voiceThread:data];
-    [incomingVoice addObject:data];
+    LD_Buffer buffer      = {0};
+    buffer.buffer         = (unsigned char*)[audio bytes];
+    buffer.bufferLength   = (int) [audio length];
+    EncodedAudioArr arr   = BufferToEncodedAudioArr(&buffer);
+    RawAudioData* pData   = audioOutputHandler->userData;
+    RawAudioData* data    = decodeAudio(audioOutputHandler, arr);
+    
+    
+    ring_buffer_size_t elementsInBuffer = PaUtil_GetRingBufferWriteAvailable(&pData->ringBuffer);
+    void* ptr[2] = {0};
+    ring_buffer_size_t sizes[2] = {0};
+    
+    PaUtil_GetRingBufferWriteRegions(&pData->ringBuffer, elementsInBuffer, ptr + 0, sizes + 0, ptr + 1, sizes + 1);
+    
+    ring_buffer_size_t itemsReadFromFile = 0;
+    for (int i = 0; i < 2 && ptr[i] != NULL; ++i)
+    {
+        memcpy(ptr[i], data->audioArray  + itemsReadFromFile, pData->ringBuffer.elementSizeBytes * sizes[i]);
+        itemsReadFromFile += sizes[i];
+    }
+    PaUtil_AdvanceRingBufferWriteIndex(&pData->ringBuffer, itemsReadFromFile);
+    
+    
+    free(data->audioArray);
+    free(data);
 }
 
 // Netowork Callbacks  End ----------------------------------------------
@@ -141,7 +162,7 @@
     LD_StartRecordingStream(audioInputHandler);
     LD_StartPlayebackStream(audioOutputHandler);
     [NSThread detachNewThreadSelector:@selector(speakingThread) toTarget:self withObject:nil];
-    [NSThread detachNewThreadSelector:@selector(voiceThread)    toTarget:self withObject:nil];
+    //    [NSThread detachNewThreadSelector:@selector(voiceThread)    toTarget:self withObject:nil];
 }
 
 - (void)stopVoiceComunication
@@ -158,51 +179,47 @@
     RawAudioData*  data;
     RawAudioData*  pData;
     LD_Buffer      buffer;
-    NSMutableData* finalData;
     NSDictionary*  dict;
+    NSData* dictPacked;
+    NSMutableData* finalData = [NSMutableData dataWithCapacity:MAX_BUFF];
     
     while (speaking) {
-        pData   = audioInputHandler->userData;
+        wait(SECONDS / 2);
+        pData                               = audioInputHandler->userData;
         ring_buffer_size_t elementsInBuffer = PaUtil_GetRingBufferReadAvailable(&pData->ringBuffer);
-        if (elementsInBuffer >= pData->ringBuffer.bufferSize / SENDER_DIVIZION)
-        {
-            data                            = initRawAudioData();
-            int pointerPosition             = 0;
-            void* ptr[2]                    = {0};
-            ring_buffer_size_t sizes[2]     = {0};
-            ring_buffer_size_t elementsRead = PaUtil_GetRingBufferReadRegions(&pData->ringBuffer, elementsInBuffer,
+        data                                = initRawAudioData();
+        int pointerPosition                 = 0;
+        void* ptr[2]                        = {0};
+        ring_buffer_size_t sizes[2]         = {0};
+        ring_buffer_size_t elementsRead     = PaUtil_GetRingBufferReadRegions(&pData->ringBuffer, elementsInBuffer,
                                                                               ptr + 0, sizes + 0, ptr + 1, sizes + 1);
-            
-            if (elementsRead > 0)
+        
+        if (elementsRead > 0)
+        {
+            for (int i = 0; i < 2 && ptr[i] != NULL; ++i)
             {
-                for (int i = 0; i < 2 && ptr[i] != NULL; ++i)
-                {
-                    memcpy(data->audioArray + pointerPosition, ptr[i], pData->ringBuffer.elementSizeBytes * sizes[i]);
-                    pointerPosition += sizes[i];
-                }
-                PaUtil_AdvanceRingBufferReadIndex(&pData->ringBuffer, elementsRead);
+                memcpy(data->audioArray + pointerPosition, ptr[i], pData->ringBuffer.elementSizeBytes * sizes[i]);
+                pointerPosition += sizes[i];
             }
-            
-            [sineView setAudioData:data->audioArray :(SAMPLE_RATE * SECONDS * CHANELS) / FRAMES];
-            [sineView setNeedsDisplay:NO];
-            [sineView setNeedsDisplay:YES];
-            
-            
-            buffer    = EncodedAudioArrToBuffer(encodeAudio(data));
-            finalData = [NSMutableData data];
-            dict      = [NSDictionary dictionaryWithObjectsAndKeys:
-                         @"voice", @"action",
-                         [userDefaults objectForKey:@"name"], @"name",
-                         [NSNumber numberWithInt:buffer.bufferLength], @"audioDataLength",
-                         nil];
-            
-            [finalData appendData:[dict messagePack]];
-            [finalData appendBytes:buffer.buffer length:buffer.bufferLength];
-            
-            [networkLayer sendNSDataToServer:finalData];
-            
-            free(buffer.buffer);
+            PaUtil_AdvanceRingBufferReadIndex(&pData->ringBuffer, elementsRead);
+        } else {
+            printf("ak Kofilxar? \n");
         }
+        
+        buffer = EncodedAudioArrToBuffer(encodeAudio(data));
+        dict   = [NSDictionary dictionaryWithObjectsAndKeys:
+                  @"voice", @"action",
+                  [userDefaults objectForKey:@"name"], @"name",
+                  [NSNumber numberWithInt:buffer.bufferLength], @"audioDataLength",
+                  nil];
+        
+        dictPacked = [dict messagePack];
+        [finalData replaceBytesInRange:NSMakeRange(0, [dictPacked length]) withBytes:[dictPacked bytes]];
+        [finalData replaceBytesInRange:NSMakeRange([dictPacked length], buffer.bufferLength) withBytes:buffer.buffer];
+        free(buffer.buffer);
+        
+        [networkLayer sendNSDataToServer:finalData];
+        [finalData resetBytesInRange:NSMakeRange(0, [finalData length])];
     }
 }
 
@@ -210,7 +227,7 @@
 {
     while (speaking) {
         if ([incomingVoice count] == 0) {
-            wait(0.2f);
+            wait(0.02f);
             continue;
         }
         NSData* audio         = [incomingVoice objectAtIndex:0];
@@ -241,7 +258,7 @@
         }
         
         free(data->audioArray);
-        [incomingVoice removeObject:audio];
+        [incomingVoice removeObjectAtIndex:0];
     }
     
 }

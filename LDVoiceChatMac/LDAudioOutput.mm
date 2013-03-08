@@ -19,9 +19,9 @@ static int playCallback(const void *inputBuffer, void *outputBuffer,
     ring_buffer_size_t elementsToRead = MIN(elementsToPlay, (ring_buffer_size_t)(framesPerBuffer * CHANELS));
     float* wptr = (float*)outputBuffer;
     
-    for(int i = 0;i < framesPerBuffer; i++)
+    for(int i = data->ringBuffer.readIndex;i < framesPerBuffer; i++)
     {
-        *(wptr + i) = 0;
+        *(wptr + i) = 0.0f;
     }
     
     PaUtil_ReadRingBuffer(&data->ringBuffer, wptr, elementsToRead);
@@ -29,57 +29,9 @@ static int playCallback(const void *inputBuffer, void *outputBuffer,
     return paContinue;
 }
 
-//static int playCallback(const void *inputBuffer, void *outputBuffer,
-//                        unsigned long framesPerBuffer,
-//                        const PaStreamCallbackTimeInfo* timeInfo,
-//                        PaStreamCallbackFlags statusFlags,
-//                        void *userData)
-//{
-//    RawAudioData *data = (RawAudioData*)userData;
-//    float *rptr = &data->recordedSamples[data->frameIndex * CHANELS];
-//    float *wptr = (float*)outputBuffer;
-//    unsigned int i;
-//    int finished;
-//    unsigned int framesLeft = data->maxFrameIndex - data->frameIndex;
-//
-//    (void) inputBuffer; /* Prevent unused variable warnings. */
-//    (void) timeInfo;
-//    (void) statusFlags;
-//    (void) userData;
-//
-//    if(framesLeft < framesPerBuffer)
-//    {
-//        /* final buffer... */
-//        for(i = 0; i < framesLeft; i++)
-//        {
-//            *wptr++ = *rptr++;  /* left */
-//            if( CHANELS == 2 ) *wptr++ = *rptr++;  /* right */
-//        }
-//        for( ; i < framesPerBuffer; i++)
-//        {
-//            *wptr++ = 0;  /* left */
-//            if( CHANELS == 2 ) *wptr++ = 0;  /* right */
-//        }
-//        data->frameIndex += framesLeft;
-//        finished = paComplete;
-//    }
-//    else
-//    {
-//        for( i=0; i<framesPerBuffer; i++ )
-//        {
-//            *wptr++ = *rptr++;  /* left */
-//            if( CHANELS == 2 ) *wptr++ = *rptr++;  /* right */
-//        }
-//        data->frameIndex += framesPerBuffer;
-//        finished = paContinue;
-//    }
-//
-//    return finished;
-//}
-
 AudioHandlerStruct* LD_InitAudioOutputHandler()
 {
-    AudioHandlerStruct* audioOutputHandler                        = (AudioHandlerStruct*) malloc(sizeof(AudioHandlerStruct));
+    AudioHandlerStruct* audioOutputHandler                         = (AudioHandlerStruct*) malloc(sizeof(AudioHandlerStruct));
     audioOutputHandler->outputParameters.device                    = Pa_GetDefaultOutputDevice();
     audioOutputHandler->outputParameters.channelCount              = CHANELS;
     audioOutputHandler->outputParameters.sampleFormat              = paFloat32;
@@ -89,15 +41,14 @@ AudioHandlerStruct* LD_InitAudioOutputHandler()
     
     audioOutputHandler->userData = initRawAudioData();
     
-    audioOutputHandler->paError = Pa_OpenStream(
-                                               &audioOutputHandler->stream,
-                                               NULL,
-                                               &audioOutputHandler->outputParameters,
-                                               SAMPLE_RATE,
-                                               FRAMES,
-                                               paClipOff,
-                                               playCallback,
-                                               audioOutputHandler->userData);
+    audioOutputHandler->paError = Pa_OpenStream(&audioOutputHandler->stream,
+                                                NULL,
+                                                &audioOutputHandler->outputParameters,
+                                                SAMPLE_RATE,
+                                                FRAMES,
+                                                paClipOff,
+                                                playCallback,
+                                                audioOutputHandler->userData);
     
     
     return audioOutputHandler;

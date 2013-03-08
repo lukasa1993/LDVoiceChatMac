@@ -91,10 +91,9 @@
     NSInteger dictLength;
     while ( true )
     {
-        
         buffer = malloc(MAX_BUFF);
-        
         bytes_read = socket.Receive(server,  buffer, MAX_BUFF);
+        
         if (bytes_read > 0) {
             NSLog(@"received packet from (%li bytes)", (long) bytes_read );
             
@@ -111,9 +110,8 @@
                 
                 [delegate incomingVoiceData: [receivedData subdataWithRange:NSMakeRange(dictLength, audioDataLength)]];
             }
-            
         } else {
-            wait(0.25f);
+            wait(0.1f);
         }
         
         free(buffer);

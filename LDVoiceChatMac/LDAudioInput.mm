@@ -19,67 +19,15 @@ static int recordCallback(const void *inputBuffer, void *outputBuffer,
     ring_buffer_size_t elementsToWrite = MIN(elementsWriteable, (ring_buffer_size_t)(framesPerBuffer * CHANELS));
     const float* rptr = (const float*) inputBuffer;
     
+    for(int i = data->ringBuffer.writeIndex;i < elementsToWrite; i++)
+    {
+        data->audioArray[i] = 0.0f;
+    }
+    
     PaUtil_WriteRingBuffer(&data->ringBuffer, rptr, elementsToWrite);
     
     return paContinue;
 }
-
-//static int recordCallback(const void *inputBuffer, void *outputBuffer,
-//                          unsigned long framesPerBuffer,
-//                          const PaStreamCallbackTimeInfo* timeInfo,
-//                          PaStreamCallbackFlags statusFlags,
-//                          void *userData)
-//{
-//    RawAudioData *data = (RawAudioData*)userData;
-//    const float *rptr  = (const float*)inputBuffer;
-//    float *wptr = &data->recordedSamples[data->frameIndex * CHANELS];
-//    long framesToCalc;
-//    long i;
-//    int finished;
-//    unsigned long framesLeft = data->maxFrameIndex - data->frameIndex;
-//
-//    (void) outputBuffer; /* Prevent unused variable warnings. */
-//    (void) timeInfo;
-//    (void) statusFlags;
-//    (void) userData;
-//
-//    if( framesLeft < framesPerBuffer )
-//    {
-//        framesToCalc = framesLeft;
-//        finished = paComplete;
-//    }
-//    else
-//    {
-//        framesToCalc = framesPerBuffer;
-//        finished = paContinue;
-//    }
-//
-//    if( inputBuffer == NULL )
-//    {
-//        for(i = 0;i < framesToCalc;i++)
-//        {
-//            *wptr++ = 0.0f;  /* left */
-//            if( CHANELS == 2 ) *wptr++ = 0.0f;  /* right */
-//        }
-//    }
-//    else
-//    {
-//        for(i = 0;i < framesToCalc; i++ )
-//        {
-//            *wptr++ = *rptr++;  /* left */
-//            if( CHANELS == 2 ) *wptr++ = *rptr++;  /* right */
-//        }
-//    }
-//    data->frameIndex += framesToCalc;
-//
-//    if (finished == paComplete) {
-//        data->frameIndex   = 0;
-//        data->secondFrameIndex = 0;
-//        finished = paContinue;
-//    }
-//
-//    return finished;
-//}
 
 AudioHandlerStruct* LD_InitAudioInputHandler()
 {
@@ -89,19 +37,19 @@ AudioHandlerStruct* LD_InitAudioInputHandler()
     audioInputHandler->inputParameters.channelCount              = CHANELS;
     audioInputHandler->inputParameters.sampleFormat              = paFloat32;
     audioInputHandler->inputParameters.suggestedLatency          =
-    Pa_GetDeviceInfo(audioInputHandler->inputParameters.device)->defaultHighInputLatency;
+    Pa_GetDeviceInfo(audioInputHandler->inputParameters.device)->defaultLowInputLatency;
     audioInputHandler->inputParameters.hostApiSpecificStreamInfo = NULL;
     
     audioInputHandler->userData = initRawAudioData();
     
     audioInputHandler->paError = Pa_OpenStream(&audioInputHandler->stream,
-                                              &audioInputHandler->inputParameters,
-                                              NULL,
-                                              SAMPLE_RATE,
-                                              FRAMES,
-                                              paClipOff,
-                                              recordCallback,
-                                              audioInputHandler->userData);
+                                               &audioInputHandler->inputParameters,
+                                               NULL,
+                                               SAMPLE_RATE,
+                                               FRAMES,
+                                               paClipOff,
+                                               recordCallback,
+                                               audioInputHandler->userData);
     
     return audioInputHandler;
 }
@@ -120,12 +68,12 @@ EncodedAudioArr encodeAudio(RawAudioData* data)
 {
     int              error = 0;
     OpusEncoder*     enc;
-    EncodedAudioArr arr;
+    EncodedAudioArr  arr;
     
-    enc             = opus_encoder_create(SAMPLE_RATE, CHANELS, OPUS_APPLICATION_VOIP, &error);
-    arr             = {0};
-    arr.dataCount  = (data->audioArrayLength / FRAMES);
-    arr.data       = (EncodedAudio*) malloc(arr.dataCount *  sizeof(EncodedAudio));
+    enc           = opus_encoder_create(SAMPLE_RATE, CHANELS, OPUS_APPLICATION_VOIP, &error);
+    arr           = {0};
+    arr.dataCount = (data->audioArrayLength / FRAMES);
+    arr.data      = (EncodedAudio*) malloc(arr.dataCount *  sizeof(EncodedAudio));
     
     for(int i = 0; i < arr.dataCount; i++){
         EncodedAudio *encodedData = &arr.data[i];

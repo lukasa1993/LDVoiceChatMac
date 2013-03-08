@@ -27,7 +27,7 @@ unsigned NextPowerOf2(unsigned val)
 RawAudioData* initRawAudioData()
 {
 
-    RawAudioData* data        = (RawAudioData*) malloc(sizeof(RawAudioData));
+    RawAudioData* data         = (RawAudioData*) malloc(sizeof(RawAudioData));
     data->audioArrayLength     = NextPowerOf2(SECONDS * SAMPLE_RATE * CHANELS);
     data->audioArrayByteLength = data->audioArrayLength * sizeof(float);
     data->audioArray           = (float *) malloc(data->audioArrayByteLength);
