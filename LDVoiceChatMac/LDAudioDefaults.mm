@@ -30,7 +30,7 @@ RawAudioData* initRawAudioData()
     RawAudioData* data         = (RawAudioData*) malloc(sizeof(RawAudioData));
     data->audioArrayLength     = NextPowerOf2(SECONDS * SAMPLE_RATE * CHANELS);
     data->audioArrayByteLength = data->audioArrayLength * sizeof(float);
-    data->audioArray           = (float *) malloc(data->audioArrayByteLength);
+    data->audioArray           = (float *) calloc(data->audioArrayLength, sizeof(float));
     
     PaUtil_InitializeRingBuffer(&data->ringBuffer, sizeof(float), data->audioArrayLength, data->audioArray);
     

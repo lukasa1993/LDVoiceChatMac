@@ -46,24 +46,32 @@
 -(void)startCommunication
 {
     NSLog(@"Starting Communication");
-    NSString* userName = [[NSUserDefaults standardUserDefaults] objectForKey:@"name"];
-    [self sendNSDataToServer:[[NSDictionary dictionaryWithObjectsAndKeys:
-                               @"init", @"action",
-                               userName, @"name", nil] messagePack]];
     
-    serverLitenerThread = [[NSThread alloc] initWithTarget:self
-                                                  selector:@selector(listenServer)
-                                                    object:nil];
+    listeningToServer         = YES;
+    NSString* userName        = [[NSUserDefaults standardUserDefaults] objectForKey:@"name"];
+    NSDictionary* messageDict = [NSDictionary dictionaryWithObjectsAndKeys:@"init", @"action", userName, @"name", nil];
     
-    [serverLitenerThread start];
+    [self sendNSDataToServer:[messageDict messagePack]];
+    [NSThread detachNewThreadSelector:@selector(startListeningToServer) toTarget:self withObject:nil];
+}
+
+-(void)stopCommunication
+{
+    NSString* userName        = [[NSUserDefaults standardUserDefaults] objectForKey:@"name"];
+    NSDictionary* messageDict = [NSDictionary dictionaryWithObjectsAndKeys:@"disc", @"action", userName, @"name", nil];
+    [self sendNSDataToServer:[messageDict messagePack]];
+    
+    [self stopListeningToServer];
 }
 
 -(void)renameUser:(NSString*)oldName NewName:(NSString*)newName
 {
-    [self sendNSDataToServer:[[NSDictionary dictionaryWithObjectsAndKeys:
-                               @"rename", @"action",
-                               oldName, @"name",
-                               newName, @"newName",nil] messagePack]];
+    NSDictionary* messageDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                                 @"rename", @"action",
+                                 oldName, @"name",
+                                 newName, @"newName",nil];
+    
+    [self sendNSDataToServer:[messageDict messagePack]];
 }
 
 -(void)reconnect
@@ -72,13 +80,16 @@
     port = [[[NSUserDefaults standardUserDefaults] objectForKey:@"port"] intValue];
     
     
-    [serverLitenerThread cancel];
-    serverLitenerThread = nil;
-    
+    [self stopCommunication];
     [self startCommunication];
 }
 
--(void)listenServer
+-(void)stopListeningToServer
+{
+    listeningToServer   = NO;
+}
+
+-(void)startListeningToServer
 {
     Address server = [self targetAddress];
     void* buffer;
@@ -89,7 +100,8 @@
     NSArray* userList;
     NSInteger audioDataLength;
     NSInteger dictLength;
-    while ( true )
+    
+    while (listeningToServer)
     {
         buffer = malloc(MAX_BUFF);
         bytes_read = socket.Receive(server,  buffer, MAX_BUFF);
@@ -98,8 +110,8 @@
             NSLog(@"received packet from (%li bytes)", (long) bytes_read );
             
             receivedData = [NSData dataWithBytesNoCopy:buffer length:bytes_read];
-            parsed = [receivedData messagePackParse];
-            action = [parsed objectForKey:@"action"];
+            parsed       = [receivedData messagePackParse];
+            action       = [parsed objectForKey:@"action"];
             
             if ([action isEqualToString:@"list"]) {
                 userList = [parsed objectForKey:@"userList"];
@@ -108,7 +120,8 @@
                 audioDataLength = [[parsed objectForKey:@"audioDataLength"] intValue];
                 dictLength      = [[parsed messagePack] length];
                 
-                [delegate incomingVoiceData: [receivedData subdataWithRange:NSMakeRange(dictLength, audioDataLength)]];
+                [delegate incomingVoiceData:[parsed objectForKey:@""]
+                                      voice:[receivedData subdataWithRange:NSMakeRange(dictLength, audioDataLength)]];
             }
         } else {
             wait(0.1f);
@@ -116,6 +129,7 @@
         
         free(buffer);
     }
+    
 }
 
 -(void)sendNSDataToServer:(NSData*)data

@@ -12,6 +12,6 @@
 
 -(void)userList:(NSArray*)userList;
 -(void)communicationStarted;
--(void)incomingVoiceData:(NSData*)data;
+-(void)incomingVoiceData:(NSString*)from voice:(NSData*)data;
 
 @end

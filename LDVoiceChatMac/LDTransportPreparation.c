@@ -18,7 +18,7 @@ typedef struct
 
 LD_Buffer EncodedAudioArrToBuffer(EncodedAudioArr encodedData)
 {
-    int pointerPlase           = 0;
+    int pointerPlase          = 0;
     LD_Buffer bufferStruct    = {0};
     bufferStruct.bufferLength = encodedData.dataLength + (sizeof(int) * (encodedData.dataCount + 1)); // + 1 for
     bufferStruct.buffer       = (unsigned char*) malloc(bufferStruct.bufferLength);

@@ -12,6 +12,7 @@
 #import "LDTransportPreparation.c"
 #import "LDAudioInput.h"
 #import "LDAudioOutput.h"
+#import "LDAudioPlot.h"
 
 @interface AppDelegate : NSViewController <NSApplicationDelegate, NSTextFieldDelegate,
 NSTableViewDataSource, NSTableViewDelegate, LDNetworkDataProtocol>
@@ -26,7 +27,9 @@ NSTableViewDataSource, NSTableViewDelegate, LDNetworkDataProtocol>
     
     __weak NSTableView *userListColumn;
     __weak NSUserDefaults *userDefaults;
-        
+    
+    __weak LDAudioPlot *audioPlotView;
+    
     NSMutableArray *userListArray;
     NSMutableArray *incomingVoice;
 
@@ -46,6 +49,7 @@ NSTableViewDataSource, NSTableViewDelegate, LDNetworkDataProtocol>
 @property (weak) IBOutlet NSButton    *settingsChangedButton;
 @property (weak) IBOutlet NSWindow    *settingsWindow;
 @property (weak) IBOutlet NSTableView *userListColumn;
+@property (weak) IBOutlet LDAudioPlot *audioPlotView;
 
 @property (strong) NSMutableArray *userListArray;
 @property (strong) NSMutableArray *incomingVoice;

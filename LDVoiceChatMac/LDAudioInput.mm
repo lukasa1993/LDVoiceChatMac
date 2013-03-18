@@ -56,12 +56,16 @@ AudioHandlerStruct* LD_InitAudioInputHandler()
 
 void LD_StartRecordingStream(AudioHandlerStruct* audioInputHandler)
 {
-    audioInputHandler->paError = Pa_StartStream(audioInputHandler->stream);
+    if (!Pa_IsStreamActive(audioInputHandler->stream)) {
+        audioInputHandler->paError = Pa_StartStream(audioInputHandler->stream);
+    }
 }
 
 void LD_StopRecordingStream(AudioHandlerStruct* audioInputHandler)
 {
-    audioInputHandler->paError = Pa_StopStream(audioInputHandler->stream);
+    if (Pa_IsStreamActive(audioInputHandler->stream)) {
+        audioInputHandler->paError = Pa_StopStream(audioInputHandler->stream);
+    }
 }
 
 EncodedAudioArr encodeAudio(RawAudioData* data)
@@ -79,7 +83,7 @@ EncodedAudioArr encodeAudio(RawAudioData* data)
         EncodedAudio *encodedData = &arr.data[i];
         float* frame = data->audioArray + (FRAMES * i);
         
-        encodedData->data       = (unsigned char*) malloc(MAX_PACKET * sizeof(unsigned char));
+        encodedData->data       = (unsigned char*) calloc(MAX_PACKET, sizeof(unsigned char));
         encodedData->dataLength = opus_encode_float(enc, frame, FRAMES, encodedData->data, MAX_PACKET);
         arr.dataLength         += encodedData->dataLength;
         

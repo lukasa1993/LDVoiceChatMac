@@ -18,6 +18,7 @@
 @synthesize settingsChangedButton;
 @synthesize userListArray;
 @synthesize incomingVoice;
+@synthesize audioPlotView;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
@@ -25,7 +26,7 @@
     self.userListArray = [NSMutableArray array];
     self.incomingVoice = [NSMutableArray array];
     networkLayer       = [LDNetworkLayer networkLayer];
-    
+
     audioInputHandler  = LD_InitAudioInputHandler();
     audioOutputHandler = LD_InitAudioOutputHandler();
     
@@ -51,8 +52,8 @@
 - (void)controlTextDidChange:(NSNotification *)notification
 {
     NSTextField* textField = [notification object];
-    NSString* userName = [textField stringValue];
-    NSString* savedName = [userDefaults objectForKey:@"name"];
+    NSString*    userName  = [textField stringValue];
+    NSString*    savedName = [userDefaults objectForKey:@"name"];
     [userDefaults setObject:userName forKey:@"name"];
     
     if (!savedName) {
@@ -107,19 +108,19 @@
     //    [self startVoiceComunication];
 }
 
-- (void)incomingVoiceData:(NSData *)audio
+-(void)incomingVoiceData:(NSString*)from voice:(NSData*)audio
 {
-    LD_Buffer buffer      = {0};
-    buffer.buffer         = (unsigned char*)[audio bytes];
-    buffer.bufferLength   = (int) [audio length];
-    EncodedAudioArr arr   = BufferToEncodedAudioArr(&buffer);
-    RawAudioData* pData   = audioOutputHandler->userData;
-    RawAudioData* data    = decodeAudio(audioOutputHandler, arr);
+    LD_Buffer buffer    = {0};
+    buffer.buffer       = (unsigned char*)[audio bytes];
+    buffer.bufferLength = (int) [audio length];
+    EncodedAudioArr arr = BufferToEncodedAudioArr(&buffer);
+    RawAudioData* pData = audioOutputHandler->userData;
+    RawAudioData* data  = decodeAudio(audioOutputHandler, arr);
     
     
     ring_buffer_size_t elementsInBuffer = PaUtil_GetRingBufferWriteAvailable(&pData->ringBuffer);
-    void* ptr[2] = {0};
-    ring_buffer_size_t sizes[2] = {0};
+    ring_buffer_size_t sizes[2]         = {0};
+    void* ptr[2]                        = {0};
     
     PaUtil_GetRingBufferWriteRegions(&pData->ringBuffer, elementsInBuffer, ptr + 0, sizes + 0, ptr + 1, sizes + 1);
     
@@ -127,6 +128,7 @@
     for (int i = 0; i < 2 && ptr[i] != NULL; ++i)
     {
         memcpy(ptr[i], data->audioArray  + itemsReadFromFile, pData->ringBuffer.elementSizeBytes * sizes[i]);
+        [audioPlotView addAudio:ptr[i] length:pData->ringBuffer.elementSizeBytes * sizes[i]];
         itemsReadFromFile += sizes[i];
     }
     PaUtil_AdvanceRingBufferWriteIndex(&pData->ringBuffer, itemsReadFromFile);
@@ -182,9 +184,9 @@
     NSDictionary*  dict;
     NSData* dictPacked;
     NSMutableData* finalData = [NSMutableData dataWithCapacity:MAX_BUFF];
-    
+    //    int a = 0;
     while (speaking) {
-        wait(SECONDS / 2);
+        wait(SECONDS / SENDER_DIVIZION);
         pData                               = audioInputHandler->userData;
         ring_buffer_size_t elementsInBuffer = PaUtil_GetRingBufferReadAvailable(&pData->ringBuffer);
         data                                = initRawAudioData();
@@ -219,49 +221,10 @@
         free(buffer.buffer);
         
         [networkLayer sendNSDataToServer:finalData];
-        [finalData resetBytesInRange:NSMakeRange(0, [finalData length])];
+//        [finalData resetBytesInRange:NSMakeRange(0, [finalData length])];
     }
 }
 
-- (void)voiceThread
-{
-    while (speaking) {
-        if ([incomingVoice count] == 0) {
-            wait(0.02f);
-            continue;
-        }
-        NSData* audio         = [incomingVoice objectAtIndex:0];
-        LD_Buffer buffer      = {0};
-        buffer.buffer         = (unsigned char*)[audio bytes];
-        buffer.bufferLength   = (int) [audio length];
-        EncodedAudioArr arr   = BufferToEncodedAudioArr(&buffer);
-        RawAudioData* pData   = audioOutputHandler->userData;
-        RawAudioData* data    = decodeAudio(audioOutputHandler, arr);
-        
-        
-        ring_buffer_size_t elementsInBuffer = PaUtil_GetRingBufferWriteAvailable(&pData->ringBuffer);
-        
-        if (elementsInBuffer >= pData->ringBuffer.bufferSize / RECEIVER_DIVIZION)
-        {
-            void* ptr[2] = {0};
-            ring_buffer_size_t sizes[2] = {0};
-            
-            PaUtil_GetRingBufferWriteRegions(&pData->ringBuffer, elementsInBuffer, ptr + 0, sizes + 0, ptr + 1, sizes + 1);
-            
-            ring_buffer_size_t itemsReadFromFile = 0;
-            for (int i = 0; i < 2 && ptr[i] != NULL; ++i)
-            {
-                memcpy(ptr[i], data->audioArray  + itemsReadFromFile, pData->ringBuffer.elementSizeBytes * sizes[i]);
-                itemsReadFromFile += sizes[i];
-            }
-            PaUtil_AdvanceRingBufferWriteIndex(&pData->ringBuffer, itemsReadFromFile);
-        }
-        
-        free(data->audioArray);
-        [incomingVoice removeObjectAtIndex:0];
-    }
-    
-}
 
 @end
 

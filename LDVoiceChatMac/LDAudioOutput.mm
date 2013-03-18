@@ -21,7 +21,7 @@ static int playCallback(const void *inputBuffer, void *outputBuffer,
     
     for(int i = data->ringBuffer.readIndex;i < framesPerBuffer; i++)
     {
-        *(wptr + i) = 0.0f;
+        wptr[i] = 0.0f;
     }
     
     PaUtil_ReadRingBuffer(&data->ringBuffer, wptr, elementsToRead);

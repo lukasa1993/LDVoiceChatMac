@@ -28,10 +28,10 @@ using namespace net;
     
     id<LDNetworkDataProtocol> delegate;
     
-    NSThread* serverLitenerThread;
-    
     NSString* host;
     NSInteger port;
+    
+    BOOL listeningToServer;
 }
 
 @property (strong) id<LDNetworkDataProtocol> delegate;

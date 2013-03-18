@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		805D777C16F0A52400D1919F /* LittlePlotBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 805D776D16F0A52400D1919F /* LittlePlotBarView.m */; };
+		805D777D16F0A52400D1919F /* LittlePlotLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 805D776F16F0A52400D1919F /* LittlePlotLabelView.m */; };
+		805D777E16F0A52400D1919F /* LittlePlotTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 805D777116F0A52400D1919F /* LittlePlotTableView.m */; };
+		805D777F16F0A52400D1919F /* LP3DBarChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 805D777316F0A52400D1919F /* LP3DBarChartView.m */; };
+		805D778016F0A52400D1919F /* LP3DPieChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 805D777516F0A52400D1919F /* LP3DPieChartView.m */; };
+		805D778116F0A52400D1919F /* LPLineChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 805D777716F0A52400D1919F /* LPLineChartView.m */; };
+		805D778216F0A52400D1919F /* LPPieChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 805D777916F0A52400D1919F /* LPPieChartView.m */; };
+		805D778316F0A52400D1919F /* LPStackerBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 805D777B16F0A52400D1919F /* LPStackerBar.m */; };
+		805D778616F0A55400D1919F /* LPUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 805D778516F0A55400D1919F /* LPUtils.m */; };
 		805DD8B116DF5CBA0001D7A1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 80315D3516D5182400D8060F /* main.m */; };
 		805DD8BD16DF5CBA0001D7A1 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 804A0E1716D63CF30006016E /* AppDelegate.mm */; };
 		805DD8BE16DF5CBA0001D7A1 /* LDNetworkLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8049912916D64C4C007382A7 /* LDNetworkLayer.mm */; };
@@ -60,6 +69,7 @@
 		8075456016E0B7C10066AF5D /* NSDictionary+MessagePack.m in Sources */ = {isa = PBXBuildFile; fileRef = 8075453716E0B7C10066AF5D /* NSDictionary+MessagePack.m */; };
 		8075456116E0B7C10066AF5D /* libopus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8075455416E0B7C10066AF5D /* libopus.a */; };
 		8075456216E0B7C10066AF5D /* libportaudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8075455516E0B7C10066AF5D /* libportaudio.a */; };
+		80CECBF316EF5909004FD6E5 /* LDAudioPlot.m in Sources */ = {isa = PBXBuildFile; fileRef = 80CECBF216EF5909004FD6E5 /* LDAudioPlot.m */; };
 		80EEE3CB16E4997B00EAD0F2 /* LDAudioInput.mm in Sources */ = {isa = PBXBuildFile; fileRef = 80EEE3C816E4997B00EAD0F2 /* LDAudioInput.mm */; };
 		80EEE3CC16E4997B00EAD0F2 /* LDAudioOutput.mm in Sources */ = {isa = PBXBuildFile; fileRef = 80EEE3CA16E4997B00EAD0F2 /* LDAudioOutput.mm */; };
 		80EEE3CE16E4A03200EAD0F2 /* LDAudioDefaults.mm in Sources */ = {isa = PBXBuildFile; fileRef = 80EEE3CD16E4A03200EAD0F2 /* LDAudioDefaults.mm */; };
@@ -78,6 +88,24 @@
 		8049912816D64C4C007382A7 /* LDNetworkLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LDNetworkLayer.h; sourceTree = "<group>"; };
 		8049912916D64C4C007382A7 /* LDNetworkLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LDNetworkLayer.mm; sourceTree = "<group>"; };
 		804A0E1716D63CF30006016E /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
+		805D776C16F0A52400D1919F /* LittlePlotBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LittlePlotBarView.h; sourceTree = "<group>"; };
+		805D776D16F0A52400D1919F /* LittlePlotBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LittlePlotBarView.m; sourceTree = "<group>"; };
+		805D776E16F0A52400D1919F /* LittlePlotLabelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LittlePlotLabelView.h; sourceTree = "<group>"; };
+		805D776F16F0A52400D1919F /* LittlePlotLabelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LittlePlotLabelView.m; sourceTree = "<group>"; };
+		805D777016F0A52400D1919F /* LittlePlotTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LittlePlotTableView.h; sourceTree = "<group>"; };
+		805D777116F0A52400D1919F /* LittlePlotTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LittlePlotTableView.m; sourceTree = "<group>"; };
+		805D777216F0A52400D1919F /* LP3DBarChartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LP3DBarChartView.h; sourceTree = "<group>"; };
+		805D777316F0A52400D1919F /* LP3DBarChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LP3DBarChartView.m; sourceTree = "<group>"; };
+		805D777416F0A52400D1919F /* LP3DPieChartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LP3DPieChartView.h; sourceTree = "<group>"; };
+		805D777516F0A52400D1919F /* LP3DPieChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LP3DPieChartView.m; sourceTree = "<group>"; };
+		805D777616F0A52400D1919F /* LPLineChartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LPLineChartView.h; sourceTree = "<group>"; };
+		805D777716F0A52400D1919F /* LPLineChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LPLineChartView.m; sourceTree = "<group>"; };
+		805D777816F0A52400D1919F /* LPPieChartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LPPieChartView.h; sourceTree = "<group>"; };
+		805D777916F0A52400D1919F /* LPPieChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LPPieChartView.m; sourceTree = "<group>"; };
+		805D777A16F0A52400D1919F /* LPStackerBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LPStackerBar.h; sourceTree = "<group>"; };
+		805D777B16F0A52400D1919F /* LPStackerBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LPStackerBar.m; sourceTree = "<group>"; };
+		805D778416F0A55400D1919F /* LPUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LPUtils.h; sourceTree = "<group>"; };
+		805D778516F0A55400D1919F /* LPUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LPUtils.m; sourceTree = "<group>"; };
 		805DD88516DE01E70001D7A1 /* LDTransportPreparation.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = LDTransportPreparation.c; sourceTree = "<group>"; };
 		805DD8AE16DF59EF0001D7A1 /* LDAudioDefaults.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LDAudioDefaults.h; sourceTree = "<group>"; };
 		805DD8CE16DF5CBA0001D7A1 /* LDVoiceChatMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LDVoiceChatMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -150,6 +178,8 @@
 		8093932516D7A5B900414EF1 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		8093932716D7A5BF00414EF1 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		8093932916D7A5C600414EF1 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
+		80CECBF116EF5909004FD6E5 /* LDAudioPlot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LDAudioPlot.h; sourceTree = "<group>"; };
+		80CECBF216EF5909004FD6E5 /* LDAudioPlot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LDAudioPlot.m; sourceTree = "<group>"; };
 		80EEE3C716E4997B00EAD0F2 /* LDAudioInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LDAudioInput.h; sourceTree = "<group>"; };
 		80EEE3C816E4997B00EAD0F2 /* LDAudioInput.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LDAudioInput.mm; sourceTree = "<group>"; };
 		80EEE3C916E4997B00EAD0F2 /* LDAudioOutput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LDAudioOutput.h; sourceTree = "<group>"; };
@@ -236,6 +266,8 @@
 				80EEE3C916E4997B00EAD0F2 /* LDAudioOutput.h */,
 				80EEE3CA16E4997B00EAD0F2 /* LDAudioOutput.mm */,
 				805DD88516DE01E70001D7A1 /* LDTransportPreparation.c */,
+				80CECBF116EF5909004FD6E5 /* LDAudioPlot.h */,
+				80CECBF216EF5909004FD6E5 /* LDAudioPlot.m */,
 				8000F5AA16D6308000B1D5E5 /* Net.h */,
 				80315D3E16D5182400D8060F /* MainMenu.xib */,
 				80315D3016D5182400D8060F /* Supporting Files */,
@@ -255,9 +287,35 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		805D776B16F0A52400D1919F /* LittlePlotViews */ = {
+			isa = PBXGroup;
+			children = (
+				805D778416F0A55400D1919F /* LPUtils.h */,
+				805D778516F0A55400D1919F /* LPUtils.m */,
+				805D776C16F0A52400D1919F /* LittlePlotBarView.h */,
+				805D776D16F0A52400D1919F /* LittlePlotBarView.m */,
+				805D776E16F0A52400D1919F /* LittlePlotLabelView.h */,
+				805D776F16F0A52400D1919F /* LittlePlotLabelView.m */,
+				805D777016F0A52400D1919F /* LittlePlotTableView.h */,
+				805D777116F0A52400D1919F /* LittlePlotTableView.m */,
+				805D777216F0A52400D1919F /* LP3DBarChartView.h */,
+				805D777316F0A52400D1919F /* LP3DBarChartView.m */,
+				805D777416F0A52400D1919F /* LP3DPieChartView.h */,
+				805D777516F0A52400D1919F /* LP3DPieChartView.m */,
+				805D777616F0A52400D1919F /* LPLineChartView.h */,
+				805D777716F0A52400D1919F /* LPLineChartView.m */,
+				805D777816F0A52400D1919F /* LPPieChartView.h */,
+				805D777916F0A52400D1919F /* LPPieChartView.m */,
+				805D777A16F0A52400D1919F /* LPStackerBar.h */,
+				805D777B16F0A52400D1919F /* LPStackerBar.m */,
+			);
+			path = LittlePlotViews;
+			sourceTree = "<group>";
+		};
 		8075451316E0B7C10066AF5D /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				805D776B16F0A52400D1919F /* LittlePlotViews */,
 				8075451416E0B7C10066AF5D /* includes */,
 				8075455416E0B7C10066AF5D /* libopus.a */,
 				8075455516E0B7C10066AF5D /* libportaudio.a */,
@@ -466,6 +524,16 @@
 				80EEE3CB16E4997B00EAD0F2 /* LDAudioInput.mm in Sources */,
 				80EEE3CC16E4997B00EAD0F2 /* LDAudioOutput.mm in Sources */,
 				80EEE3CE16E4A03200EAD0F2 /* LDAudioDefaults.mm in Sources */,
+				80CECBF316EF5909004FD6E5 /* LDAudioPlot.m in Sources */,
+				805D777C16F0A52400D1919F /* LittlePlotBarView.m in Sources */,
+				805D777D16F0A52400D1919F /* LittlePlotLabelView.m in Sources */,
+				805D777E16F0A52400D1919F /* LittlePlotTableView.m in Sources */,
+				805D777F16F0A52400D1919F /* LP3DBarChartView.m in Sources */,
+				805D778016F0A52400D1919F /* LP3DPieChartView.m in Sources */,
+				805D778116F0A52400D1919F /* LPLineChartView.m in Sources */,
+				805D778216F0A52400D1919F /* LPPieChartView.m in Sources */,
+				805D778316F0A52400D1919F /* LPStackerBar.m in Sources */,
+				805D778616F0A55400D1919F /* LPUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
