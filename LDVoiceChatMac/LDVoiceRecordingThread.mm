@@ -41,9 +41,11 @@
 
 -(void)recordingThreadLoop
 {
+    NSLog(@"Recording Thread Started");
     while (speaking) {
         [self recordingThread];
     }
+    NSLog(@"Recording Thread End");
 }
 
 -(void)recordingThread

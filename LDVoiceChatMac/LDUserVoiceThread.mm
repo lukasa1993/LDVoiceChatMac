@@ -47,9 +47,11 @@
 
 -(void)userSpeakingLoop
 {
+    NSLog(@"User voice Thread Started");
     while (userSpeaks) {
         [self userSpeaking];
     }
+    NSLog(@"User voice Thread End");
 }
 
 -(void)incoingVoice:(NSData*)data
@@ -68,8 +70,18 @@
             NSLog(@"Count: %li", (unsigned long) [userVoice count]);
         }
         
-        NSData *audio = [[userVoice objectAtIndex:0] copy];
-        [userVoice removeObjectAtIndex:0];
+        NSData    *audio;
+        NSInteger i = 0;
+        do {
+            audio = [[userVoice objectAtIndex:i] copy];
+            [userVoice removeObjectAtIndex:i];
+            i++;
+            if (i >= [userVoice count]) {
+                [userVoice removeAllObjects];
+                break;
+            }
+        } while (audio != nil);
+        
         if (!audio) {
             NSLog(@"Shen Shig Xoar AR GAK?");
         } else {
@@ -84,7 +96,7 @@
                 data->audioArrayCurrentIndex = 0;
                 RawAudioData *aData = decodeAudio(audioOutputHandler, arr);
                 memcpy(data->audioArray, aData->audioArray, (size_t) aData->audioArrayByteLength);
-//                [audioPlotView addAudio:aData->audioArray length:aData->audioArrayLength];
+                //                [audioPlotView addAudio:aData->audioArray length:aData->audioArrayLength];
                 free(aData->audioArray);
                 free(aData);
             }

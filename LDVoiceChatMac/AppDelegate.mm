@@ -21,9 +21,10 @@
 @synthesize audioPlotView;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    userDefaults       = [NSUserDefaults standardUserDefaults];
     self.userListArray = [NSMutableArray array];
     self.usersMap      = [NSMutableDictionary dictionary];
+    
+    userDefaults       = [NSUserDefaults standardUserDefaults];
     networkLayer       = [LDNetworkLayer networkLayer];
     voiceRecording     = [LDVoiceRecordingThread recordingThreadWith:networkLayer];
     
@@ -51,11 +52,11 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         if ([self.userListArray count]) {
             [self.userListArray removeAllObjects];
-            [usersMap removeAllObjects];
+            [self.usersMap removeAllObjects];
         }
         
         [self.userListArray addObjectsFromArray:_userList];
-        for (NSDictionary* user in self.userListArray) {
+        for (NSDictionary* user in self.userListArray) { // creating separate audio input thread for each user
             [self.usersMap setObject:[LDUserVoiceThread userVoiceThread] forKey:[user objectForKey:@"name"]];
         }
         [userListColumn reloadData];
@@ -83,7 +84,6 @@
 {
     return [userListArray count];
 }
-
 
 - (void)controlTextDidChange:(NSNotification *)notification {
     NSTextField *textField = [notification object];
