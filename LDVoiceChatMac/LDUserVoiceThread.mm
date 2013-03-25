@@ -70,8 +70,8 @@
             NSLog(@"Count: %li", (unsigned long) [userVoice count]);
         }
         
-        NSData    *audio;
-        NSInteger i = 0;
+        NSData    *audio = nil;
+        NSInteger i      = 0;
         do {
             audio = [[userVoice objectAtIndex:i] copy];
             [userVoice removeObjectAtIndex:i];
