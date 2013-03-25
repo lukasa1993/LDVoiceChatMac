@@ -11,9 +11,12 @@
 
 #import "LDAudioDefaults.h"
 
-AudioHandlerStruct* LD_InitAudioOutputHandler();
+AudioHandlerStruct *LD_InitAudioOutputHandler();
 
-RawAudioData* decodeAudio(AudioHandlerStruct* audioOutputHandler, EncodedAudioArr encoded);
-void LD_StartPlayebackStream(AudioHandlerStruct* audioOutputHandler);
-void LD_StopPlayebackStream(AudioHandlerStruct* audioOutputHandler);
+RawAudioData *decodeAudio(AudioHandlerStruct *audioOutputHandler, EncodedAudioArr encoded);
+
+void LD_StartPlayebackStream(AudioHandlerStruct *audioOutputHandler);
+
+void LD_StopPlayebackStream(AudioHandlerStruct *audioOutputHandler);
+
 #endif

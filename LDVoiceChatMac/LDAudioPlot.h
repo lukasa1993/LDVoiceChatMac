@@ -17,14 +17,13 @@
 #import "LP3DBarChartView.h"
 #import "LP3DPieChartView.h"
 
-@interface LDAudioPlot : NSView
-{
-    NSBezierPath    *path;
-    NSMutableArray  *audioData;
-    NSInteger        prevX;
+@interface LDAudioPlot : NSView {
+    NSBezierPath *path;
+    NSMutableArray *audioData;
+    NSInteger prevX;
     LPLineChartView *lineView;
 }
 
-- (void)addAudio:(void*)data length:(NSInteger)len;
+- (void)addAudio:(void *)data length:(NSInteger)len;
 
 @end

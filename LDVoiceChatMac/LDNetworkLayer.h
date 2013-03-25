@@ -13,7 +13,6 @@
 #include <string>
 #include <vector>
 
-#import "LDNetworkDataProtocol.h"
 #import "MessagePack.h"
 #import "Net.h"
 
@@ -22,25 +21,38 @@
 using namespace std;
 using namespace net;
 
-@interface LDNetworkLayer : NSObject
-{
+@protocol LDNetworkDataProtocol <NSObject>
+
+- (void)userList:(NSArray *)userList;
+
+- (void)communicationStarted;
+
+- (void)incomingVoiceData:(NSString *)from voice:(NSData *)data;
+
+@end
+
+@interface LDNetworkLayer : NSObject {
     Socket socket;
-    
-    id<LDNetworkDataProtocol> delegate;
-    
-    NSString* host;
+
+    id <LDNetworkDataProtocol> delegate;
+
+    NSString *host;
     NSInteger port;
-    
+
     BOOL listeningToServer;
 }
 
-@property (strong) id<LDNetworkDataProtocol> delegate;
+@property(strong) id <LDNetworkDataProtocol> delegate;
 
-+(id)networkLayer;
++ (id)networkLayer;
 
--(void)startCommunication;
--(void)renameUser:(NSString*)oldName NewName:(NSString*)newName;
--(void)reconnect;
--(void)sendNSDataToServer:(NSData*)data;
+- (void)startCommunication;
+
+- (void)renameUser:(NSString *)oldName NewName:(NSString *)newName;
+
+- (void)reconnect;
+
+- (void)sendNSDataToServer:(NSData *)data;
 @end
+
 

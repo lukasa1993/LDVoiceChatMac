@@ -14,8 +14,8 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "806B812216E9F1B800B594CB"
-               BuildableName = "LDVoiceChatMac copy.app"
+               BlueprintIdentifier = "803A5AEB16FCA8BB00F49C6F"
+               BuildableName = "LDVoiceChatMac.app"
                BlueprintName = "LDVoiceChatMac copy"
                ReferencedContainer = "container:LDVoiceChatMac.xcodeproj">
             </BuildableReference>
@@ -32,8 +32,8 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "806B812216E9F1B800B594CB"
-            BuildableName = "LDVoiceChatMac copy.app"
+            BlueprintIdentifier = "803A5AEB16FCA8BB00F49C6F"
+            BuildableName = "LDVoiceChatMac.app"
             BlueprintName = "LDVoiceChatMac copy"
             ReferencedContainer = "container:LDVoiceChatMac.xcodeproj">
          </BuildableReference>
@@ -51,8 +51,8 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "806B812216E9F1B800B594CB"
-            BuildableName = "LDVoiceChatMac copy.app"
+            BlueprintIdentifier = "803A5AEB16FCA8BB00F49C6F"
+            BuildableName = "LDVoiceChatMac.app"
             BlueprintName = "LDVoiceChatMac copy"
             ReferencedContainer = "container:LDVoiceChatMac.xcodeproj">
          </BuildableReference>
@@ -69,8 +69,8 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "806B812216E9F1B800B594CB"
-            BuildableName = "LDVoiceChatMac copy.app"
+            BlueprintIdentifier = "803A5AEB16FCA8BB00F49C6F"
+            BuildableName = "LDVoiceChatMac.app"
             BlueprintName = "LDVoiceChatMac copy"
             ReferencedContainer = "container:LDVoiceChatMac.xcodeproj">
          </BuildableReference>

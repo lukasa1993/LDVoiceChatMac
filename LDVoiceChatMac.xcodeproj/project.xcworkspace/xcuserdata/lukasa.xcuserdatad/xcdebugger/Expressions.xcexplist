@@ -3,6 +3,20 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "-[LDEventManager callSettings:]:LDEventManager.mm">
+         <PersistentStrings>
+            <PersistentString
+               value = "[userDefaults objectForKey:@&quot;host&quot;]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "LD_StartRecordingStream(AudioHandlerStruct*, void (*)(void*)):LDAudioInput.mm">
+      </ContextState>
+      <ContextState
+         contextName = "encodeAudio(RawAudioData*):LDAudioInput.mm">
+      </ContextState>
+      <ContextState
          contextName = "encodedAudio(RawAudioData):LDAudioHandler.mm">
          <PersistentStrings>
             <PersistentString
@@ -11,7 +25,15 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "-[LDEventManager init]:LDEventManager.m">
+         contextName = "decodeAudio(AudioHandlerStruct*, EncodedAudioArr):LDAudioOutput.mm">
+      </ContextState>
+      <ContextState
+         contextName = "-[AppDelegate encodeAndSend:]:AppDelegate.mm">
+         <PersistentStrings>
+            <PersistentString
+               value = "(RawAudioData*) userData)">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "-[AppDelegate applicationDidFinishLaunching:]:AppDelegate.m">
@@ -25,15 +47,25 @@
          contextName = "-[LDEventManager awakeFromNib]:LDEventManager.m">
       </ContextState>
       <ContextState
+         contextName = "-[AppDelegate decodeAndPlay:]:AppDelegate.mm">
+      </ContextState>
+      <ContextState
+         contextName = "-[LDEventManager init]:LDEventManager.m">
+      </ContextState>
+      <ContextState
+         contextName = "playCallback(void const*, void*, unsigned long, PaStreamCallbackTimeInfo const*, unsigned long, void*):LDAudioOutput.mm">
+      </ContextState>
+      <ContextState
          contextName = "startAudioHandler(AudioHandlerStruct*):LDAudioHandler.mm">
       </ContextState>
       <ContextState
-         contextName = "-[LDEventManager callSettings:]:LDEventManager.mm">
-         <PersistentStrings>
-            <PersistentString
-               value = "[userDefaults objectForKey:@&quot;host&quot;]">
-            </PersistentString>
-         </PersistentStrings>
+         contextName = "BufferToEncodedAudioArr(LD_Buffer*):LDTransportPreparation.c">
+      </ContextState>
+      <ContextState
+         contextName = "-[AppDelegate incomingVoiceData:voice:]:AppDelegate.mm">
+      </ContextState>
+      <ContextState
+         contextName = "EncodedAudioArrToBuffer(EncodedAudioArr):LDTransportPreparation.c">
       </ContextState>
    </ContextStates>
 </VariablesViewState>

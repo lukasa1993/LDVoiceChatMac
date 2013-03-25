@@ -24,37 +24,34 @@
 #define CHANELS            (1)
 #define FRAMES             (480)
 
-typedef struct
-{
-    float*  audioArray;
-    int     audioArrayLength;
-    int     audioArrayByteLength;
-    int     audioArrayCurrentIndex;
+typedef struct {
+    float *audioArray;
+    int audioArrayLength;
+    int audioArrayByteLength;
+    int audioArrayCurrentIndex;
 } RawAudioData;
 
-typedef struct
-{
+typedef struct {
     PaStreamParameters inputParameters;
     PaStreamParameters outputParameters;
-    PaStream*          stream;
-    RawAudioData*      userData;
+    PaStream *stream;
+    RawAudioData *userData;
 } AudioHandlerStruct;
 
-typedef struct
-{
-    unsigned char* data;
+typedef struct {
+    unsigned char *data;
     int dataLength;
 } EncodedAudio;
 
-typedef struct
-{
-    EncodedAudio* data;
+typedef struct {
+    EncodedAudio *data;
     int dataCount;
     int dataLength;
 } EncodedAudioArr;
 
 
-RawAudioData* initRawAudioData();
+RawAudioData *initRawAudioData();
+
 void checkError(PaError err);
 
 #endif
