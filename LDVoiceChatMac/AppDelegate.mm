@@ -17,35 +17,71 @@
 @synthesize settingsWindow;
 @synthesize settingsChangedButton;
 @synthesize userListArray;
-@synthesize incomingVoice;
+@synthesize usersMap;
 @synthesize audioPlotView;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    userDefaults = [NSUserDefaults standardUserDefaults];
+    userDefaults       = [NSUserDefaults standardUserDefaults];
     self.userListArray = [NSMutableArray array];
-    self.incomingVoice = [NSMutableArray array];
-    finalData = [NSMutableData dataWithCapacity:MAX_BUFF];;
-    networkLayer = [LDNetworkLayer networkLayer];
-
-    audioInputHandler = LD_InitAudioInputHandler();
-    audioOutputHandler = LD_InitAudioOutputHandler();
-
+    self.usersMap      = [NSMutableDictionary dictionary];
+    networkLayer       = [LDNetworkLayer networkLayer];
+    voiceRecording     = [LDVoiceRecordingThread recordingThreadWith:networkLayer];
+    
     [networkLayer setDelegate:self];
-
+    
     if (![userDefaults objectForKey:@"host"]) {
-        [userDefaults setObject:@"localhost" forKey:@"host"];
+        [userDefaults setObject:@"127.0.0.1" forKey:@"host"];
     }
-
+    
     if (![userDefaults objectForKey:@"port"]) {
         [userDefaults setObject:@"4444" forKey:@"port"];
     }
-
+    
     if ([userDefaults objectForKey:@"name"]) {
         [userNameField setStringValue:[userDefaults objectForKey:@"name"]];
         [networkLayer startCommunication];
     }
-
+    
     [self startVoiceComunication];
+}
+
+// Netowork Callbacks  --------------------------------------------------
+
+- (void)userList:(NSArray *)_userList {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.userListArray count]) {
+            [self.userListArray removeAllObjects];
+            [usersMap removeAllObjects];
+        }
+        
+        [self.userListArray addObjectsFromArray:_userList];
+        for (NSDictionary* user in self.userListArray) {
+            [self.usersMap setObject:[LDUserVoiceThread userVoiceThread] forKey:[user objectForKey:@"name"]];
+        }
+        [userListColumn reloadData];
+    });
+}
+
+- (void)incomingVoiceData:(NSString *)from voice:(NSData *)audio {
+    [[self.usersMap objectForKey:from] incoingVoice:audio];
+}
+
+// UI Callbacks ----------------------------------------------
+
+- (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn
+                  row:(NSInteger)row {
+    NSTableCellView *cellView = [tableView makeViewWithIdentifier:tableColumn.identifier
+                                                            owner:self];
+    NSDictionary *user = [userListArray objectAtIndex:(NSUInteger) row];
+    
+    cellView.textField.stringValue = [user objectForKey:@"name"];
+    
+    return cellView;
+}
+
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
+{
+    return [userListArray count];
 }
 
 
@@ -54,7 +90,7 @@
     NSString *userName = [textField stringValue];
     NSString *savedName = [userDefaults objectForKey:@"name"];
     [userDefaults setObject:userName forKey:@"name"];
-
+    
     if (!savedName) {
         [networkLayer startCommunication];
     } else {
@@ -66,14 +102,14 @@
     if ([[hostField stringValue] isEqualToString:@"localhost"]) {
         [hostField setStringValue:@"127.0.0.1"];
     }
-
+    
     NSString *ip = [[NSHost hostWithName:[hostField stringValue]] address];
     [hostField setStringValue:ip];
-
+    
     [userDefaults setObject:[hostField stringValue] forKey:@"host"];
     [userDefaults setObject:[portField stringValue] forKey:@"port"];
     [settingsWindow setIsVisible:NO];
-
+    
     if ([userDefaults objectForKey:@"name"]) {
         [networkLayer reconnect];
     }
@@ -86,133 +122,18 @@
     NSLog(@"%@", [userDefaults objectForKey:@"host"]);
 }
 
-// Netowork Callbacks  --------------------------------------------------
+// Voice Threads ----------------------------------------------
 
-- (void)userList:(NSArray *)_userList {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self.userListArray count]) {
-            [self.userListArray removeAllObjects];
-        }
-
-        [self.userListArray addObjectsFromArray:_userList];
-        [userListColumn reloadData];
-    });
+- (void)startVoiceComunication
+{
+    [voiceRecording startRecordingThread];
 }
 
-- (void)communicationStarted {
-    //    [self startVoiceComunication];
+- (void)stopVoiceComunication
+{
+    [voiceRecording stopRecordingThread];
 }
 
-- (void)incomingVoiceData:(NSString *)from voice:(NSData *)audio {
-    [incomingVoice addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-            from, @"from",
-            audio, @"audio", nil]];
-}
-
-// Netowork Callbacks  End ----------------------------------------------
-
-- (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn
-                  row:(NSInteger)row {
-    NSTableCellView *cellView = [tableView makeViewWithIdentifier:tableColumn.identifier
-                                                            owner:self];
-    NSDictionary *user = [userListArray objectAtIndex:(NSUInteger) row];
-
-    cellView.textField.stringValue = [user objectForKey:@"name"];
-
-    return cellView;
-}
-
-- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
-    return [userListArray count];
-}
-
-
-- (void)startVoiceComunication {
-    speaking = YES;
-    LD_StartRecordingStream(audioInputHandler);
-    LD_StartPlayebackStream(audioOutputHandler);
-
-    [NSThread detachNewThreadSelector:@selector(recorderLoop) toTarget:self withObject:nil];
-    [NSThread detachNewThreadSelector:@selector(playbackLoop) toTarget:self withObject:nil];
-}
-
-- (void)stopVoiceComunication {
-    speaking = NO;
-    LD_StopRecordingStream(audioInputHandler);
-    LD_StopPlayebackStream(audioOutputHandler);
-}
-
-// Thread Work -------------------------------
-
-- (void)recorderLoop {
-    while (speaking) {
-        [self encodeAndSend];
-    }
-}
-
-- (void)encodeAndSend {
-    wait(SECONDS_TO_WAIT);
-    LD_Buffer buffer = EncodedAudioArrToBuffer(encodeAudio(audioInputHandler->userData));
-    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-            @"voice", @"action",
-            [userDefaults objectForKey:@"name"], @"name",
-            [NSNumber numberWithInt:buffer.bufferLength], @"audioDataLength",
-            nil];
-    NSData *dictPacked = [dict messagePack];
-
-    [finalData replaceBytesInRange:NSMakeRange(0, [dictPacked length]) withBytes:[dictPacked bytes]];
-
-    [finalData replaceBytesInRange:NSMakeRange([dictPacked length], (NSUInteger) buffer.bufferLength)
-                         withBytes:buffer.buffer];
-    free(buffer.buffer);
-
-    [networkLayer sendNSDataToServer:finalData];
-    memset(audioInputHandler->userData->audioArray, 0, (size_t) audioInputHandler->userData->audioArrayByteLength);
-    audioInputHandler->userData->audioArrayCurrentIndex = 0;
-}
-
-- (void)playbackLoop {
-    while (speaking) {
-        [self decodeAndPlay];
-    }
-}
-
-- (void)decodeAndPlay {
-    RawAudioData *data = audioOutputHandler->userData;
-    data->audioArrayCurrentIndex = 0;
-
-    memset(data->audioArray, 0, (size_t) data->audioArrayByteLength);
-    if ([incomingVoice count] > 0) {
-
-        if ([incomingVoice count] > 1) {
-            NSLog(@"Count: %li", (unsigned long) [incomingVoice count]);
-        }
-
-        NSDictionary *incAudioDict = [incomingVoice objectAtIndex:0];
-        if (!incAudioDict) {
-            NSLog(@"Shen Shig Xoar AR GAK?");
-        }
-        NSData *audio = [incAudioDict objectForKey:@"audio"];
-        LD_Buffer buffer = {0};
-        buffer.buffer = (unsigned char *) [audio bytes];
-        buffer.bufferLength = (int) [audio length];
-        EncodedAudioArr arr = BufferToEncodedAudioArr(&buffer);
-
-        if (arr.dataLength < 0 || arr.dataLength > 10000) {
-            printf("Corrupted Data \n");
-        } else {
-            RawAudioData *aData = decodeAudio(audioOutputHandler, arr);
-            memcpy(data->audioArray, aData->audioArray, (size_t) aData->audioArrayByteLength);
-            [audioPlotView addAudio:aData->audioArray length:aData->audioArrayLength];
-            free(aData->audioArray);
-            free(aData);
-        }
-
-        [incomingVoice removeObjectAtIndex:0];
-    }
-
-    wait(SECONDS_TO_WAIT);
-}
 
 @end
 

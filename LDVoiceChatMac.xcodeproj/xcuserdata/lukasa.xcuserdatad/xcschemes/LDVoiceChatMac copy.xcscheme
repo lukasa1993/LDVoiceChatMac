@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "803A5AEB16FCA8BB00F49C6F"
-               BuildableName = "LDVoiceChatMac.app"
+               BuildableName = "LDVoiceChatMac copy.app"
                BlueprintName = "LDVoiceChatMac copy"
                ReferencedContainer = "container:LDVoiceChatMac.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "803A5AEB16FCA8BB00F49C6F"
-            BuildableName = "LDVoiceChatMac.app"
+            BuildableName = "LDVoiceChatMac copy.app"
             BlueprintName = "LDVoiceChatMac copy"
             ReferencedContainer = "container:LDVoiceChatMac.xcodeproj">
          </BuildableReference>
@@ -52,7 +52,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "803A5AEB16FCA8BB00F49C6F"
-            BuildableName = "LDVoiceChatMac.app"
+            BuildableName = "LDVoiceChatMac copy.app"
             BlueprintName = "LDVoiceChatMac copy"
             ReferencedContainer = "container:LDVoiceChatMac.xcodeproj">
          </BuildableReference>
@@ -70,7 +70,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "803A5AEB16FCA8BB00F49C6F"
-            BuildableName = "LDVoiceChatMac.app"
+            BuildableName = "LDVoiceChatMac copy.app"
             BlueprintName = "LDVoiceChatMac copy"
             ReferencedContainer = "container:LDVoiceChatMac.xcodeproj">
          </BuildableReference>

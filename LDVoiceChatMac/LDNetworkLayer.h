@@ -24,9 +24,6 @@ using namespace net;
 @protocol LDNetworkDataProtocol <NSObject>
 
 - (void)userList:(NSArray *)userList;
-
-- (void)communicationStarted;
-
 - (void)incomingVoiceData:(NSString *)from voice:(NSData *)data;
 
 @end

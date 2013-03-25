@@ -83,6 +83,8 @@
 		80EEE3CB16E4997B00EAD0F2 /* LDAudioInput.mm in Sources */ = {isa = PBXBuildFile; fileRef = 80EEE3C816E4997B00EAD0F2 /* LDAudioInput.mm */; };
 		80EEE3CC16E4997B00EAD0F2 /* LDAudioOutput.mm in Sources */ = {isa = PBXBuildFile; fileRef = 80EEE3CA16E4997B00EAD0F2 /* LDAudioOutput.mm */; };
 		80EEE3CE16E4A03200EAD0F2 /* LDAudioDefaults.mm in Sources */ = {isa = PBXBuildFile; fileRef = 80EEE3CD16E4A03200EAD0F2 /* LDAudioDefaults.mm */; };
+		80F4AD01170066DC002CF0AB /* LDUserVoiceThread.mm in Sources */ = {isa = PBXBuildFile; fileRef = 80F4AD00170066DC002CF0AB /* LDUserVoiceThread.mm */; };
+		80F4AD0417006B63002CF0AB /* LDVoiceRecordingThread.mm in Sources */ = {isa = PBXBuildFile; fileRef = 80F4AD0317006B63002CF0AB /* LDVoiceRecordingThread.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -195,6 +197,10 @@
 		80EEE3C916E4997B00EAD0F2 /* LDAudioOutput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LDAudioOutput.h; sourceTree = "<group>"; };
 		80EEE3CA16E4997B00EAD0F2 /* LDAudioOutput.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LDAudioOutput.mm; sourceTree = "<group>"; };
 		80EEE3CD16E4A03200EAD0F2 /* LDAudioDefaults.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LDAudioDefaults.mm; sourceTree = "<group>"; };
+		80F4ACFF170066DC002CF0AB /* LDUserVoiceThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LDUserVoiceThread.h; sourceTree = "<group>"; };
+		80F4AD00170066DC002CF0AB /* LDUserVoiceThread.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LDUserVoiceThread.mm; sourceTree = "<group>"; };
+		80F4AD0217006B63002CF0AB /* LDVoiceRecordingThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LDVoiceRecordingThread.h; sourceTree = "<group>"; };
+		80F4AD0317006B63002CF0AB /* LDVoiceRecordingThread.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LDVoiceRecordingThread.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -276,6 +282,10 @@
 				80EEE3CA16E4997B00EAD0F2 /* LDAudioOutput.mm */,
 				80ABA45D16F7534500D68621 /* LDTransportPreparation.h */,
 				805DD88516DE01E70001D7A1 /* LDTransportPreparation.mm */,
+				80F4ACFF170066DC002CF0AB /* LDUserVoiceThread.h */,
+				80F4AD00170066DC002CF0AB /* LDUserVoiceThread.mm */,
+				80F4AD0217006B63002CF0AB /* LDVoiceRecordingThread.h */,
+				80F4AD0317006B63002CF0AB /* LDVoiceRecordingThread.mm */,
 				80CECBF116EF5909004FD6E5 /* LDAudioPlot.h */,
 				80CECBF216EF5909004FD6E5 /* LDAudioPlot.m */,
 				8000F5AA16D6308000B1D5E5 /* Net.h */,
@@ -579,6 +589,8 @@
 				805D778216F0A52400D1919F /* LPPieChartView.m in Sources */,
 				805D778316F0A52400D1919F /* LPStackerBar.m in Sources */,
 				805D778616F0A55400D1919F /* LPUtils.m in Sources */,
+				80F4AD01170066DC002CF0AB /* LDUserVoiceThread.mm in Sources */,
+				80F4AD0417006B63002CF0AB /* LDVoiceRecordingThread.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

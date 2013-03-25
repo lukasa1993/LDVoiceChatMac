@@ -77,10 +77,11 @@
 
 - (void)stopListeningToServer {
     listeningToServer = NO;
+    wait(0.11f);// to thread stop
 }
 
 - (void)startListeningToServer {
-    Address server = [self targetAddress];
+    Address server;
     void *buffer;
     NSInteger bytes_read;
     NSData *receivedData;
@@ -89,24 +90,25 @@
     NSArray *userList;
     NSInteger audioDataLength;
     NSInteger dictLength;
-
+    
+    NSLog(@"Network Thread Started");
     while (listeningToServer) {
-        buffer = malloc(MAX_BUFF);
+        buffer     = malloc(MAX_BUFF);
         bytes_read = socket.Receive(server, buffer, MAX_BUFF);
 
         if (bytes_read > 0) {
             NSLog(@"received packet from (%li bytes)", (long) bytes_read );
 
             receivedData = [NSData dataWithBytesNoCopy:buffer length:bytes_read];
-            parsed = [receivedData messagePackParse];
-            action = [parsed objectForKey:@"action"];
+            parsed       = [receivedData messagePackParse];
+            action       = [parsed objectForKey:@"action"];
 
             if ([action isEqualToString:@"list"]) {
                 userList = [parsed objectForKey:@"userList"];
                 [delegate userList:userList];
             } else if ([action isEqualToString:@"voice"]) {
                 audioDataLength = [[parsed objectForKey:@"audioDataLength"] intValue];
-                dictLength = [[parsed messagePack] length];
+                dictLength      = [[parsed messagePack] length];
 
                 [delegate incomingVoiceData:[parsed objectForKey:@"name"]
                                       voice:[receivedData subdataWithRange:NSMakeRange(dictLength, audioDataLength)]];
@@ -117,7 +119,7 @@
 
         free(buffer);
     }
-
+    NSLog(@"Network Thread Ended");
 }
 
 - (void)sendNSDataToServer:(NSData *)data {
