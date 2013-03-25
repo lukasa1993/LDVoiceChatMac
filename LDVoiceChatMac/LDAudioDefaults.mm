@@ -8,11 +8,6 @@
 
 #include "LDAudioDefaults.h"
 
-void nulifyRecordedSamples(float* recordedSamples, int length)
-{
-    for(int i=0; i < length; i++) recordedSamples[i] = 0;
-}
-
 unsigned NextPowerOf2(unsigned val)
 {
     val--;
@@ -27,12 +22,22 @@ unsigned NextPowerOf2(unsigned val)
 RawAudioData* initRawAudioData()
 {
 
-    RawAudioData* data         = (RawAudioData*) malloc(sizeof(RawAudioData));
-    data->audioArrayLength     = NextPowerOf2(SECONDS * SAMPLE_RATE * CHANELS);
-    data->audioArrayByteLength = data->audioArrayLength * sizeof(float);
-    data->audioArray           = (float *) calloc(data->audioArrayLength, sizeof(float));
-    
-    PaUtil_InitializeRingBuffer(&data->ringBuffer, sizeof(float), data->audioArrayLength, data->audioArray);
+    RawAudioData* data           = (RawAudioData*) malloc(sizeof(RawAudioData));
+    data->audioArrayLength       = SECONDS * SAMPLE_RATE;
+    data->audioArrayByteLength   = data->audioArrayLength * sizeof(float);
+    data->audioArrayCurrentIndex = 0;
+    data->audioArray             = (float *) calloc(data->audioArrayLength, sizeof(float));
     
     return data;
+}
+
+void checkError(PaError err)
+{
+    if( err != paNoError )
+    {
+        fprintf( stderr, "An error occured while using the portaudio stream\n" );
+        fprintf( stderr, "Error number: %d\n", err );
+        fprintf( stderr, "Error message: %s\n", Pa_GetErrorText( err ) );
+        assert(err == paNoError);
+    }
 }

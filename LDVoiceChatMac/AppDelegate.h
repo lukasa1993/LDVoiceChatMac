@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "LDNetworkLayer.h"
 //#import "LDAudioDefaults.h"
-#import "LDTransportPreparation.c"
+#import "LDTransportPreparation.mm"
 #import "LDAudioInput.h"
 #import "LDAudioOutput.h"
 #import "LDAudioPlot.h"
@@ -32,6 +32,7 @@ NSTableViewDataSource, NSTableViewDelegate, LDNetworkDataProtocol>
     
     NSMutableArray *userListArray;
     NSMutableArray *incomingVoice;
+    NSMutableData  *finalData;
 
     BOOL speaking;
     

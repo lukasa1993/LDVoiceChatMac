@@ -8,25 +8,52 @@
 
 #import "LDAudioOutput.h"
 
-static int playCallback(const void *inputBuffer, void *outputBuffer,
+static int playCallback( const void *inputBuffer, void *outputBuffer,
                         unsigned long framesPerBuffer,
                         const PaStreamCallbackTimeInfo* timeInfo,
                         PaStreamCallbackFlags statusFlags,
-                        void *userData)
+                        void *userData )
 {
-    RawAudioData* data  = (RawAudioData*)userData;
-    ring_buffer_size_t elementsToPlay = PaUtil_GetRingBufferReadAvailable(&data->ringBuffer);
-    ring_buffer_size_t elementsToRead = MIN(elementsToPlay, (ring_buffer_size_t)(framesPerBuffer * CHANELS));
-    float* wptr = (float*)outputBuffer;
+    RawAudioData *data = (RawAudioData*)userData;
+    float *rptr = &data->audioArray[data->audioArrayCurrentIndex * CHANELS];
+    float *wptr = (float*)outputBuffer;
+    unsigned int i;
+    int finished;
+    unsigned int framesLeft = data->audioArrayLength - data->audioArrayCurrentIndex;
     
-    for(int i = data->ringBuffer.readIndex;i < framesPerBuffer; i++)
+    (void) inputBuffer; /* Prevent unused variable warnings. */
+    (void) timeInfo;
+    (void) statusFlags;
+    (void) userData;
+    
+    if( framesLeft < framesPerBuffer )
     {
-        wptr[i] = 0.0f;
+        /* final buffer... */
+        for( i=0; i<framesLeft; i++ )
+        {
+            *wptr++ = *rptr++;  /* left */
+            if( CHANELS == 2 ) *wptr++ = *rptr++;  /* right */
+        }
+        for( ; i<framesPerBuffer; i++ )
+        {
+            *wptr++ = 0;  /* left */
+            if( CHANELS == 2 ) *wptr++ = 0;  /* right */
+        }
+        data->audioArrayCurrentIndex += framesLeft;
+        finished = paContinue;
+    }
+    else
+    {
+        for( i=0; i<framesPerBuffer; i++ )
+        {
+            *wptr++ = *rptr++;  /* left */
+            if( CHANELS == 2 ) *wptr++ = *rptr++;  /* right */
+        }
+        data->audioArrayCurrentIndex += framesPerBuffer;
+        finished = paContinue;
     }
     
-    PaUtil_ReadRingBuffer(&data->ringBuffer, wptr, elementsToRead);
-    
-    return paContinue;
+    return finished;
 }
 
 AudioHandlerStruct* LD_InitAudioOutputHandler()
@@ -41,15 +68,14 @@ AudioHandlerStruct* LD_InitAudioOutputHandler()
     
     audioOutputHandler->userData = initRawAudioData();
     
-    audioOutputHandler->paError = Pa_OpenStream(&audioOutputHandler->stream,
-                                                NULL,
-                                                &audioOutputHandler->outputParameters,
-                                                SAMPLE_RATE,
-                                                FRAMES,
-                                                paClipOff,
-                                                playCallback,
-                                                audioOutputHandler->userData);
-    
+    checkError(Pa_OpenStream(&audioOutputHandler->stream,
+                             NULL,
+                             &audioOutputHandler->outputParameters,
+                             SAMPLE_RATE,
+                             FRAMES,
+                             paClipOff,
+                             playCallback,
+                             audioOutputHandler->userData));
     
     return audioOutputHandler;
 }
@@ -57,22 +83,22 @@ AudioHandlerStruct* LD_InitAudioOutputHandler()
 void LD_StartPlayebackStream(AudioHandlerStruct* audioOutputHandler)
 {
     if (!Pa_IsStreamActive(audioOutputHandler->stream)) {
-        audioOutputHandler->paError = Pa_StartStream(audioOutputHandler->stream);
+        checkError(Pa_StartStream(audioOutputHandler->stream));
     }
 }
 
 void LD_StopPlayebackStream(AudioHandlerStruct* audioOutputHandler)
 {
     if (Pa_IsStreamActive(audioOutputHandler->stream)) {
-        audioOutputHandler->paError = Pa_StopStream(audioOutputHandler->stream);
+        checkError(Pa_StopStream(audioOutputHandler->stream));
     }
 }
 
 RawAudioData* decodeAudio(AudioHandlerStruct* audioOutputHandler, EncodedAudioArr encoded)
 {
-    int           error   = 0;
-    int           index   = 0;
-    OpusDecoder*  dec     = opus_decoder_create(SAMPLE_RATE, CHANELS, &error);
+    int           error    = 0;
+    int           index    = 0;
+    OpusDecoder*  dec      = opus_decoder_create(SAMPLE_RATE, CHANELS, &error);
     RawAudioData*  decoded = initRawAudioData();
     
     for(int i = 0; i < encoded.dataCount; i++){

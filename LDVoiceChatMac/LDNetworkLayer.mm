@@ -120,7 +120,7 @@
                 audioDataLength = [[parsed objectForKey:@"audioDataLength"] intValue];
                 dictLength      = [[parsed messagePack] length];
                 
-                [delegate incomingVoiceData:[parsed objectForKey:@""]
+                [delegate incomingVoiceData:[parsed objectForKey:@"name"]
                                       voice:[receivedData subdataWithRange:NSMakeRange(dictLength, audioDataLength)]];
             }
         } else {

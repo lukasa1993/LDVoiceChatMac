@@ -19,9 +19,8 @@
 #define SAMPLE_RATE        (48000)
 #define MAX_FRAME_SAMP     (5760)
 #define MAX_PACKET         (4000)
-#define SECONDS            (0.75f)
-#define SENDER_DIVIZION    (3)
-#define RECEIVER_DIVIZION  (1)
+#define SECONDS            (1)
+#define SECONDS_TO_WAIT    (0.5f)
 #define CHANELS            (1)
 #define FRAMES             (480)
 
@@ -30,7 +29,7 @@ typedef struct
     float*  audioArray;
     int     audioArrayLength;
     int     audioArrayByteLength;
-    PaUtilRingBuffer    ringBuffer;
+    int     audioArrayCurrentIndex;
 } RawAudioData;
 
 typedef struct
@@ -38,9 +37,7 @@ typedef struct
     PaStreamParameters inputParameters;
     PaStreamParameters outputParameters;
     PaStream*          stream;
-    PaError            paError;
-    
-    RawAudioData*       userData;
+    RawAudioData*      userData;
 } AudioHandlerStruct;
 
 typedef struct
@@ -58,7 +55,7 @@ typedef struct
 
 
 RawAudioData* initRawAudioData();
-void nulifyRecordedSamples(float* recordedSamples, int length);
+void checkError(PaError err);
 
 #endif
 

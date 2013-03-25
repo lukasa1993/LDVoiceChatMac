@@ -25,8 +25,9 @@
     userDefaults       = [NSUserDefaults standardUserDefaults];
     self.userListArray = [NSMutableArray array];
     self.incomingVoice = [NSMutableArray array];
+    finalData          = [NSMutableData dataWithCapacity:MAX_BUFF];;
     networkLayer       = [LDNetworkLayer networkLayer];
-
+    
     audioInputHandler  = LD_InitAudioInputHandler();
     audioOutputHandler = LD_InitAudioOutputHandler();
     
@@ -110,32 +111,9 @@
 
 -(void)incomingVoiceData:(NSString*)from voice:(NSData*)audio
 {
-    LD_Buffer buffer    = {0};
-    buffer.buffer       = (unsigned char*)[audio bytes];
-    buffer.bufferLength = (int) [audio length];
-    EncodedAudioArr arr = BufferToEncodedAudioArr(&buffer);
-    RawAudioData* pData = audioOutputHandler->userData;
-    RawAudioData* data  = decodeAudio(audioOutputHandler, arr);
-    
-    
-    ring_buffer_size_t elementsInBuffer = PaUtil_GetRingBufferWriteAvailable(&pData->ringBuffer);
-    ring_buffer_size_t sizes[2]         = {0};
-    void* ptr[2]                        = {0};
-    
-    PaUtil_GetRingBufferWriteRegions(&pData->ringBuffer, elementsInBuffer, ptr + 0, sizes + 0, ptr + 1, sizes + 1);
-    
-    ring_buffer_size_t itemsReadFromFile = 0;
-    for (int i = 0; i < 2 && ptr[i] != NULL; ++i)
-    {
-        memcpy(ptr[i], data->audioArray  + itemsReadFromFile, pData->ringBuffer.elementSizeBytes * sizes[i]);
-        [audioPlotView addAudio:ptr[i] length:pData->ringBuffer.elementSizeBytes * sizes[i]];
-        itemsReadFromFile += sizes[i];
-    }
-    PaUtil_AdvanceRingBufferWriteIndex(&pData->ringBuffer, itemsReadFromFile);
-    
-    
-    free(data->audioArray);
-    free(data);
+    [incomingVoice addObject:[NSDictionary dictionaryWithObjectsAndKeys:
+                              from, @"from",
+                              audio, @"audio", nil]];
 }
 
 // Netowork Callbacks  End ----------------------------------------------
@@ -163,8 +141,9 @@
     speaking = YES;
     LD_StartRecordingStream(audioInputHandler);
     LD_StartPlayebackStream(audioOutputHandler);
-    [NSThread detachNewThreadSelector:@selector(speakingThread) toTarget:self withObject:nil];
-    //    [NSThread detachNewThreadSelector:@selector(voiceThread)    toTarget:self withObject:nil];
+    
+    [NSThread detachNewThreadSelector:@selector(recorderLoop) toTarget:self withObject:nil];
+    [NSThread detachNewThreadSelector:@selector(playbackLoop) toTarget:self withObject:nil];
 }
 
 - (void)stopVoiceComunication
@@ -176,55 +155,67 @@
 
 // Thread Work -------------------------------
 
-- (void)speakingThread
+- (void)recorderLoop
 {
-    RawAudioData*  data;
-    RawAudioData*  pData;
-    LD_Buffer      buffer;
-    NSDictionary*  dict;
-    NSData* dictPacked;
-    NSMutableData* finalData = [NSMutableData dataWithCapacity:MAX_BUFF];
-    //    int a = 0;
     while (speaking) {
-        wait(SECONDS / SENDER_DIVIZION);
-        pData                               = audioInputHandler->userData;
-        ring_buffer_size_t elementsInBuffer = PaUtil_GetRingBufferReadAvailable(&pData->ringBuffer);
-        data                                = initRawAudioData();
-        int pointerPosition                 = 0;
-        void* ptr[2]                        = {0};
-        ring_buffer_size_t sizes[2]         = {0};
-        ring_buffer_size_t elementsRead     = PaUtil_GetRingBufferReadRegions(&pData->ringBuffer, elementsInBuffer,
-                                                                              ptr + 0, sizes + 0, ptr + 1, sizes + 1);
-        
-        if (elementsRead > 0)
-        {
-            for (int i = 0; i < 2 && ptr[i] != NULL; ++i)
-            {
-                memcpy(data->audioArray + pointerPosition, ptr[i], pData->ringBuffer.elementSizeBytes * sizes[i]);
-                pointerPosition += sizes[i];
-            }
-            PaUtil_AdvanceRingBufferReadIndex(&pData->ringBuffer, elementsRead);
-        } else {
-            printf("ak Kofilxar? \n");
-        }
-        
-        buffer = EncodedAudioArrToBuffer(encodeAudio(data));
-        dict   = [NSDictionary dictionaryWithObjectsAndKeys:
-                  @"voice", @"action",
-                  [userDefaults objectForKey:@"name"], @"name",
-                  [NSNumber numberWithInt:buffer.bufferLength], @"audioDataLength",
-                  nil];
-        
-        dictPacked = [dict messagePack];
-        [finalData replaceBytesInRange:NSMakeRange(0, [dictPacked length]) withBytes:[dictPacked bytes]];
-        [finalData replaceBytesInRange:NSMakeRange([dictPacked length], buffer.bufferLength) withBytes:buffer.buffer];
-        free(buffer.buffer);
-        
-        [networkLayer sendNSDataToServer:finalData];
-//        [finalData resetBytesInRange:NSMakeRange(0, [finalData length])];
+        [self encodeAndSend];
     }
 }
 
+- (void)encodeAndSend
+{
+    wait(SECONDS_TO_WAIT);
+    LD_Buffer      buffer     = EncodedAudioArrToBuffer(encodeAudio(audioInputHandler->userData));
+    NSDictionary*  dict       = [NSDictionary dictionaryWithObjectsAndKeys:
+                                 @"voice", @"action",
+                                 [userDefaults objectForKey:@"name"], @"name",
+                                 [NSNumber numberWithInt:buffer.bufferLength], @"audioDataLength",
+                                 nil];
+    NSData*        dictPacked = [dict messagePack];
+    
+    [finalData replaceBytesInRange:NSMakeRange(0, [dictPacked length]) withBytes:[dictPacked bytes]];
+    [finalData replaceBytesInRange:NSMakeRange([dictPacked length], buffer.bufferLength) withBytes:buffer.buffer];
+    free(buffer.buffer);
+    
+    [networkLayer sendNSDataToServer:finalData];
+    memset(audioInputHandler->userData->audioArray, 0, audioInputHandler->userData->audioArrayCurrentIndex * sizeof(float));
+    audioInputHandler->userData->audioArrayCurrentIndex = 0;
+}
+
+-(void)playbackLoop
+{
+    while (speaking) {
+        [self decodeAndPlay];
+    }
+}
+
+- (void)decodeAndPlay
+{
+    RawAudioData* data           = audioOutputHandler->userData;
+    data->audioArrayCurrentIndex = 0;
+    memset(data->audioArray, 0, data->audioArrayByteLength);
+    
+    if ([incomingVoice count] > 0) {
+        NSDictionary* incAudioDict = [incomingVoice objectAtIndex:0];
+        NSData* audio              = [incAudioDict objectForKey:@"audio"];
+        LD_Buffer buffer           = {0};
+        buffer.buffer              = (unsigned char*)[audio bytes];
+        buffer.bufferLength        = (int) [audio length];
+        EncodedAudioArr arr        = BufferToEncodedAudioArr(&buffer);
+        RawAudioData*  aData       = decodeAudio(audioOutputHandler, arr);
+        
+        memcpy(data->audioArray, aData->audioArray, aData->audioArrayByteLength);
+        [audioPlotView addAudio:aData->audioArray length:aData->audioArrayLength];
+        free(aData->audioArray);
+        free(aData);
+        
+        [incomingVoice removeObjectAtIndex:0];
+    } else {
+        memset(data->audioArray, 0, data->audioArrayByteLength);
+    }
+    
+    wait(SECONDS_TO_WAIT);
+}
 
 @end
 

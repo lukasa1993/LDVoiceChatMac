@@ -21,7 +21,7 @@ LD_Buffer EncodedAudioArrToBuffer(EncodedAudioArr encodedData)
     int pointerPlase          = 0;
     LD_Buffer bufferStruct    = {0};
     bufferStruct.bufferLength = encodedData.dataLength + (sizeof(int) * (encodedData.dataCount + 1)); // + 1 for
-    bufferStruct.buffer       = (unsigned char*) malloc(bufferStruct.bufferLength);
+    bufferStruct.buffer       = (unsigned char*) calloc(bufferStruct.bufferLength, sizeof(unsigned char));
     
     memcpy(bufferStruct.buffer + pointerPlase, &encodedData.dataCount, sizeof(int)); // this
     pointerPlase += sizeof(int);
@@ -55,16 +55,16 @@ EncodedAudioArr BufferToEncodedAudioArr(LD_Buffer* buffer)
     arr.data       = (EncodedAudio*) malloc(arr.dataCount * sizeof(EncodedAudio));
     
     for (int i = 0; i < arr.dataCount; i++) {
-        EncodedAudio  encodedAudio  = {0};
+        EncodedAudio  *encodedAudio  = &arr.data[i];
         
-        memcpy(&encodedAudio.dataLength, buffer->buffer + pointerPlase, sizeof(int));
-        pointerPlase        += sizeof(int);
-        encodedAudio.data   = (unsigned char*) malloc(encodedAudio.dataLength);
+        memcpy(&encodedAudio->dataLength, buffer->buffer + pointerPlase, sizeof(int));
+        pointerPlase       += sizeof(int);
+        encodedAudio->data  = (unsigned char*) calloc(encodedAudio->dataLength, sizeof(unsigned char));
         
-        memcpy(encodedAudio.data, buffer->buffer + pointerPlase, encodedAudio.dataLength);
-        pointerPlase        += encodedAudio.dataLength;
+        memcpy(encodedAudio->data, buffer->buffer + pointerPlase, encodedAudio->dataLength);
+        pointerPlase       += encodedAudio->dataLength;
         
-        arr.data[i] = encodedAudio;
+//        arr.data[i] = encodedAudio;
         
     }
 
