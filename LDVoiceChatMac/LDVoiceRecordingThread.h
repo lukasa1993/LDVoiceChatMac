@@ -15,7 +15,6 @@
 {
     AudioHandlerStruct *audioInputHandler;
     LDNetworkLayer     *networkLayer;
-    NSMutableData      *finalData;
     BOOL                speaking;
 
 }

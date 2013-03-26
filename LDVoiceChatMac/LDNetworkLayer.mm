@@ -101,7 +101,7 @@
         bytes_read = socket.Receive(server, buffer, MAX_BUFF);
         
         if (bytes_read > 0) {
-            NSLog(@"received packet from (%li bytes)", (long) bytes_read );
+//            NSLog(@"Packet Received: %li", (long) bytes_read );
             
             receivedData = [NSData dataWithBytesNoCopy:buffer length:bytes_read];
             parsed       = [receivedData messagePackParse];
@@ -128,7 +128,7 @@
 
 - (void)sendNSDataToServer:(NSData *)data {
     socket.Send([self targetAddress], [data bytes], (int) [data length]);
-    NSLog(@"Packet Sent: %li", (unsigned long) [data length]);
+//    NSLog(@"Packet Sent:     %li", (unsigned long) [data length]);
 }
 
 

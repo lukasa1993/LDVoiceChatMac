@@ -19,16 +19,18 @@
 #define SAMPLE_RATE        (48000)
 #define MAX_FRAME_SAMP     (5760)
 #define MAX_PACKET         (4000)
-#define SECONDS            (1)
-#define SECONDS_TO_WAIT    (0.5f)
+#define SECONDS            (1.5f)
+#define SECONDS_TO_WAIT    (1) // it is 0.5f but - 0.1f network wait time
 #define CHANELS            (1)
 #define FRAMES             (480)
 
 typedef struct {
     float *audioArray;
-    int audioArrayLength;
-    int audioArrayByteLength;
-    int audioArrayCurrentIndex;
+    float audioArrayLength;
+    float audioArrayMaxIndex;
+    float audioArrayByteLength;
+    float audioArrayCurrentIndex;
+    
 } RawAudioData;
 
 typedef struct {
@@ -51,23 +53,8 @@ typedef struct {
 
 
 RawAudioData *initRawAudioData();
-
+void destroyRawAudioData(RawAudioData *data);
 void checkError(PaError err);
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

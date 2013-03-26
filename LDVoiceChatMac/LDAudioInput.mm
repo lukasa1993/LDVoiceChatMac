@@ -36,7 +36,7 @@ static int recordCallback(const void *inputBuffer, void *outputBuffer,
         void *userData) {
     RawAudioData *data = (RawAudioData *) userData;
     const float *rptr = (const float *) inputBuffer;
-    float *wptr = &data->audioArray[data->audioArrayCurrentIndex * CHANELS];
+    float *wptr = &data->audioArray[(int) data->audioArrayCurrentIndex * CHANELS];
     long framesToCalc;
     long i;
     int finished;
@@ -72,7 +72,6 @@ static int recordCallback(const void *inputBuffer, void *outputBuffer,
 
     if (finished == paComplete) {
         finished = paContinue;
-//        data->audioArrayCurrentIndex = 0;
     }
 
     return finished;
@@ -116,23 +115,32 @@ void LD_StopRecordingStream(AudioHandlerStruct *audioInputHandler) {
     }
 }
 
+void LD_DestroyRecordingStream(AudioHandlerStruct *audioInputHandler) {
+    Pa_CloseStream(audioInputHandler->stream);
+    Pa_Terminate();
+    destroyRawAudioData(audioInputHandler->userData);
+    free(audioInputHandler);
+}
+
 EncodedAudioArr encodeAudio(RawAudioData *data) {
-    int error = 0;
-    OpusEncoder *enc;
+    
+    int             error;
+    OpusEncoder    *enc;
     EncodedAudioArr arr;
 
-    enc = opus_encoder_create(SAMPLE_RATE, CHANELS, OPUS_APPLICATION_VOIP, &error);
-    arr = {0};
+    error         = 0;
+    enc           = opus_encoder_create(SAMPLE_RATE, CHANELS, OPUS_APPLICATION_VOIP, &error);
+    arr           = {0};
     arr.dataCount = (data->audioArrayCurrentIndex / FRAMES);
-    arr.data = (EncodedAudio *) malloc(arr.dataCount * sizeof(EncodedAudio));
-
+    arr.data      = (EncodedAudio *) malloc(arr.dataCount * sizeof(EncodedAudio));
+    
     for (int i = 0; i < arr.dataCount; i++) {
         EncodedAudio *encodedData = &arr.data[i];
         float *frame = data->audioArray + (FRAMES * i);
 
-        encodedData->data = (unsigned char *) calloc(MAX_PACKET, sizeof(unsigned char));
+        encodedData->data       = (unsigned char *) calloc(MAX_PACKET, sizeof(unsigned char));
         encodedData->dataLength = opus_encode_float(enc, frame, FRAMES, encodedData->data, MAX_PACKET);
-        arr.dataLength += encodedData->dataLength;
+        arr.dataLength         += encodedData->dataLength;
 
         if (encodedData->dataLength < 0 || encodedData->dataLength > MAX_PACKET) {
             printf("Amis Dedasheveci Encode \n");

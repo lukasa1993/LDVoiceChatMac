@@ -20,7 +20,6 @@
     if (self = [super init]) {
         audioInputHandler = LD_InitAudioInputHandler();
         networkLayer      = _networkLayer;
-        finalData         = [NSMutableData dataWithCapacity:MAX_BUFF];
     }
     
     return self;
@@ -35,8 +34,12 @@
 
 -(void)stopRecordingThread
 {
-    LD_StopRecordingStream(audioInputHandler);
-    speaking = NO;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        LD_StopRecordingStream(audioInputHandler);
+        LD_DestroyRecordingStream(audioInputHandler);
+        speaking = NO;
+        wait(0.1f);
+    });
 }
 
 -(void)recordingThreadLoop
@@ -51,23 +54,28 @@
 -(void)recordingThread
 {
     wait(SECONDS_TO_WAIT);
-    LD_Buffer buffer = EncodedAudioArrToBuffer(encodeAudio(audioInputHandler->userData));
-    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                          @"voice", @"action",
-                          [[NSUserDefaults standardUserDefaults] objectForKey:@"name"], @"name",
-                          [NSNumber numberWithInt:buffer.bufferLength], @"audioDataLength",
-                          nil];
-    NSData *dictPacked = [dict messagePack];
-
-    [finalData replaceBytesInRange:NSMakeRange(0, [dictPacked length]) withBytes:[dictPacked bytes]];
+    NSInteger tmp             = audioInputHandler->userData->audioArrayCurrentIndex;
+    LD_Buffer buffer          = EncodedAudioArrToBuffer(encodeAudio(audioInputHandler->userData));
+    NSDictionary *dict        = [NSDictionary dictionaryWithObjectsAndKeys:
+                                 @"voice", @"action",
+                                 [[NSUserDefaults standardUserDefaults] objectForKey:@"name"], @"name",
+                                 [NSNumber numberWithInt:buffer.bufferLength], @"audioDataLength",
+                                 nil];
+    NSData        *dictPacked = [dict messagePack];
+    unsigned char *sendBuff   = (unsigned char*) malloc([dictPacked length] + buffer.bufferLength);
     
-    [finalData replaceBytesInRange:NSMakeRange([dictPacked length], (NSUInteger) buffer.bufferLength)
-                         withBytes:buffer.buffer];
+    memcpy(sendBuff,  [dictPacked bytes], [dictPacked length]);
+    memcpy(sendBuff + [dictPacked length], buffer.buffer, buffer.bufferLength);
+    
+    [networkLayer sendNSDataToServer:[NSData dataWithBytesNoCopy:sendBuff length:[dictPacked length] + buffer.bufferLength]];
     free(buffer.buffer);
+    free(sendBuff);
     
-    [networkLayer sendNSDataToServer:finalData];
-    memset(audioInputHandler->userData->audioArray, 0, (size_t) audioInputHandler->userData->audioArrayByteLength);
-    audioInputHandler->userData->audioArrayCurrentIndex = 0;
+    audioInputHandler->userData->audioArrayCurrentIndex -= tmp;
+    memcpy(audioInputHandler->userData->audioArray,
+           audioInputHandler->userData->audioArray + tmp,
+           audioInputHandler->userData->audioArrayCurrentIndex * sizeof(float));
+    
 }
 
 @end

@@ -52,7 +52,10 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         if ([self.userListArray count]) {
             [self.userListArray removeAllObjects];
-            [self.usersMap removeAllObjects];
+            for (id key in self.usersMap) {
+                [[self.usersMap objectForKey:key] stopUserVoiceThread];
+                [self.usersMap removeObjectForKey:key];
+            }
         }
         
         [self.userListArray addObjectsFromArray:_userList];
@@ -99,6 +102,14 @@
 }
 
 - (IBAction)settingsChanged:(id)sender {
+    if ([[hostField stringValue] length] < 2) {
+        [hostField becomeFirstResponder];
+        return;
+    } else if([portField integerValue] < 2000){
+        [portField becomeFirstResponder];
+        return;
+    }
+    
     if ([[hostField stringValue] isEqualToString:@"localhost"]) {
         [hostField setStringValue:@"127.0.0.1"];
     }
@@ -114,6 +125,7 @@
         [networkLayer reconnect];
     }
 }
+
 
 - (IBAction)callSettings:(id)sender {
     [settingsWindow setIsVisible:YES];

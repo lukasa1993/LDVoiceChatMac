@@ -14,7 +14,7 @@ static int playCallback(const void *inputBuffer, void *outputBuffer,
         PaStreamCallbackFlags statusFlags,
         void *userData) {
     RawAudioData *data = (RawAudioData *) userData;
-    float *rptr = &data->audioArray[data->audioArrayCurrentIndex * CHANELS];
+    float *rptr = &data->audioArray[(int) data->audioArrayCurrentIndex * CHANELS];
     float *wptr = (float *) outputBuffer;
     unsigned int i;
     int finished;
@@ -49,7 +49,6 @@ static int playCallback(const void *inputBuffer, void *outputBuffer,
 
     if (finished == paComplete) {
         finished = paContinue;
-//        data->audioArrayCurrentIndex = 0;
     }
 
     return finished;
@@ -90,30 +89,36 @@ void LD_StopPlayebackStream(AudioHandlerStruct *audioOutputHandler) {
     }
 }
 
-RawAudioData *decodeAudio(AudioHandlerStruct *audioOutputHandler, EncodedAudioArr encoded) {
-    int error = 0;
-    int index = 0;
-    OpusDecoder *dec = opus_decoder_create(SAMPLE_RATE, CHANELS, &error);
-    RawAudioData *decoded = initRawAudioData();
+void LD_DestroyPlayebackStream(AudioHandlerStruct *audioOutputHandler) {
+    Pa_CloseStream(audioOutputHandler->stream);
+    destroyRawAudioData(audioOutputHandler->userData);
+    free(audioOutputHandler);
+}
 
+RawAudioData *decodeAudio(AudioHandlerStruct *audioOutputHandler, EncodedAudioArr encoded) {
+    int error             = 0;
+    OpusDecoder *dec      = opus_decoder_create(SAMPLE_RATE, CHANELS, &error);
+    RawAudioData *decoded = audioOutputHandler->userData;
+    decoded->audioArrayCurrentIndex = 0;
+    decoded->audioArrayMaxIndex     = 0;
     for (int i = 0; i < encoded.dataCount; i++) {
         EncodedAudio *data = &encoded.data[i];
 
         int decompresed = opus_decode_float(dec,
                 data->data,
                 data->dataLength,
-                decoded->audioArray + index,
+                decoded->audioArray + (int)decoded->audioArrayMaxIndex,
                 MAX_FRAME_SAMP,
                 0);
 
         free(data->data);
         if (decompresed > 0 && decompresed <= MAX_FRAME_SAMP) {
-            index += decompresed;
+            decoded->audioArrayMaxIndex += decompresed;
         } else {
             printf("Amis Dedasheveci Decode \n");
         }
     }
-
+    
     opus_decoder_destroy(dec);
     free(encoded.data);
 

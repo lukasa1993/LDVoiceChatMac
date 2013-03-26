@@ -41,8 +41,12 @@
 
 -(void)stopUserVoiceThread
 {
-    LD_StopPlayebackStream(audioOutputHandler);
-    userSpeaks = NO;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        LD_StopPlayebackStream(audioOutputHandler);
+        LD_DestroyPlayebackStream(audioOutputHandler);
+        userSpeaks = NO;
+        usleep((int) (0.1f * 1000000.0f));
+    });
 }
 
 -(void)userSpeakingLoop
@@ -62,10 +66,8 @@
 -(void)userSpeaking
 {
     RawAudioData *data = audioOutputHandler->userData;
-    
     memset(data->audioArray, 0, (size_t) data->audioArrayByteLength);
     if ([userVoice count] > 0) {
-        
         if ([userVoice count] > 1) {
             NSLog(@"Count: %li", (unsigned long) [userVoice count]);
         }
@@ -85,24 +87,21 @@
         if (!audio) {
             NSLog(@"Shen Shig Xoar AR GAK?");
         } else {
-            LD_Buffer buffer = {0};
-            buffer.buffer = (unsigned char *) [audio bytes];
+            LD_Buffer buffer    = {0};
+            buffer.buffer       = (unsigned char *) [audio bytes];
             buffer.bufferLength = (int) [audio length];
             EncodedAudioArr arr = BufferToEncodedAudioArr(&buffer);
             
             if (arr.dataLength < 0 || arr.dataLength > 10000) {
                 printf("Corrupted Data \n");
             } else {
-                data->audioArrayCurrentIndex = 0;
-                RawAudioData *aData = decodeAudio(audioOutputHandler, arr);
-                memcpy(data->audioArray, aData->audioArray, (size_t) aData->audioArrayByteLength);
-                //                [audioPlotView addAudio:aData->audioArray length:aData->audioArrayLength];
-                free(aData->audioArray);
-                free(aData);
+                decodeAudio(audioOutputHandler, arr);
             }
         }
+        usleep((int) (((data->audioArrayMaxIndex - data->audioArrayCurrentIndex) / SAMPLE_RATE) * 1000000.0f));
+    } else {
+//        usleep((int) ((0.1f) * 1000000.0f));
     }
-    
-    usleep((int) (SECONDS_TO_WAIT * 1000000.0f));
 }
+
 @end
