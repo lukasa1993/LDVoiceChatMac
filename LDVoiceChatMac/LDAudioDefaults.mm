@@ -8,23 +8,6 @@
 
 #include "LDAudioDefaults.h"
 
-RawAudioData *initRawAudioData() {
-    
-    RawAudioData *data           = (RawAudioData *) malloc(sizeof(RawAudioData));
-    data->audioArrayLength       = SECONDS * SAMPLE_RATE;
-    data->audioArrayByteLength   = data->audioArrayLength * sizeof(float);
-    data->audioArrayCurrentIndex = 0;
-    data->audioArrayMaxIndex     = 0;
-    data->audioArray             = (float *) calloc(data->audioArrayLength, sizeof(float));
-    
-    return data;
-}
-
-void destroyRawAudioData(RawAudioData *data) {
-    free(data->audioArray);
-    free(data);
-}
-
 void checkError(PaError err) {
     if (err != paNoError) {
         fprintf(stderr, "An error occured while using the portaudio stream\n");

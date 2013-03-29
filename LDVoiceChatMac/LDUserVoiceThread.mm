@@ -65,8 +65,6 @@
 
 -(void)userSpeaking
 {
-    RawAudioData *data = audioOutputHandler->userData;
-    memset(data->audioArray, 0, (size_t) data->audioArrayByteLength);
     if ([userVoice count] > 0) {
         if ([userVoice count] > 1) {
             NSLog(@"Count: %li", (unsigned long) [userVoice count]);
@@ -87,20 +85,20 @@
         if (!audio) {
             NSLog(@"Shen Shig Xoar AR GAK?");
         } else {
-            LD_Buffer buffer    = {0};
-            buffer.buffer       = (unsigned char *) [audio bytes];
-            buffer.bufferLength = (int) [audio length];
-            EncodedAudioArr arr = BufferToEncodedAudioArr(&buffer);
+            EncodedAudio arr     = {0};
+            arr.data             = (unsigned char *) [audio bytes];
+            arr.dataLength       = (int)             [audio length];
+            int checkDataLength  = 0;
+            memcpy(&checkDataLength, arr.data, sizeof(int));
             
-            if (arr.dataLength < 0 || arr.dataLength > 10000) {
+            if ((arr.dataLength < 0 || arr.dataLength > 10000) && (arr.dataLength != checkDataLength)) {
                 printf("Corrupted Data \n");
             } else {
                 decodeAudio(audioOutputHandler, arr);
             }
         }
-        usleep((int) (((data->audioArrayMaxIndex - data->audioArrayCurrentIndex) / SAMPLE_RATE) * 1000000.0f));
     } else {
-//        usleep((int) ((0.1f) * 1000000.0f));
+        usleep((int) ((0.001f) * 1000000.0f));
     }
 }
 

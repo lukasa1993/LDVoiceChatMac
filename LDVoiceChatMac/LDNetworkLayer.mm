@@ -118,7 +118,7 @@
                                       voice:[receivedData subdataWithRange:NSMakeRange(dictLength, audioDataLength)]];
             }
         } else {
-            wait(0.1f);
+            wait(0.001f);
         }
         
         free(buffer);

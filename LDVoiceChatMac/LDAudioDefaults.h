@@ -13,31 +13,22 @@
 #include <stdio.h>
 #include "portaudio.h"
 #include "opus.h"
-#include "pa_ringbuffer.h"
-#include "pa_util.h"
 
 #define SAMPLE_RATE        (48000)
-#define MAX_FRAME_SAMP     (5760)
-#define MAX_PACKET         (4000)
-#define SECONDS            (1.5f)
-#define SECONDS_TO_WAIT    (1) // it is 0.5f but - 0.1f network wait time
+#define MAX_FRAME_SAMP     (480)
+#define MAX_PACKET         (240)
 #define CHANELS            (1)
 #define FRAMES             (480)
-
-typedef struct {
-    float *audioArray;
-    float audioArrayLength;
-    float audioArrayMaxIndex;
-    float audioArrayByteLength;
-    float audioArrayCurrentIndex;
-    
-} RawAudioData;
+#define FRAMES_COUNT       (6) // 6 means 60 ms
 
 typedef struct {
     PaStreamParameters inputParameters;
     PaStreamParameters outputParameters;
     PaStream *stream;
-    RawAudioData *userData;
+    char *userData;
+    
+    OpusDecoder *dec;
+    OpusEncoder *enc;
 } AudioHandlerStruct;
 
 typedef struct {
@@ -51,9 +42,6 @@ typedef struct {
     int dataLength;
 } EncodedAudioArr;
 
-
-RawAudioData *initRawAudioData();
-void destroyRawAudioData(RawAudioData *data);
 void checkError(PaError err);
 
 #endif

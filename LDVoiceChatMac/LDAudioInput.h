@@ -11,12 +11,10 @@
 
 #import "LDAudioDefaults.h"
 
-EncodedAudioArr encodeAudio(RawAudioData *data);
-
+EncodedAudio encodeAudio(AudioHandlerStruct *audioInputHandler);
 AudioHandlerStruct *LD_InitAudioInputHandler();
 
 void LD_StartRecordingStream(AudioHandlerStruct *audioInputHandler);
 void LD_StopRecordingStream(AudioHandlerStruct *audioInputHandler);
 void LD_DestroyRecordingStream(AudioHandlerStruct *audioInputHandler);
-
 #endif
