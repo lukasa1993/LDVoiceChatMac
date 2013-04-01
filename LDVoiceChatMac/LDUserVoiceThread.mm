@@ -54,7 +54,7 @@
         LD_StopPlayebackStream(audioOutputHandler);
         LD_DestroyPlayebackStream(audioOutputHandler);
         userSpeaks = NO;
-        usleep((int) (0.01f * 1000000.0f));
+        Pa_Sleep(0.01f);
     });
 }
 
@@ -108,7 +108,7 @@
                 }
             }
         } else {
-            usleep((int) ((0.001f) * 1000000.0f));
+            Pa_Sleep(0.001f);
         }
     }
 }

@@ -13,18 +13,18 @@
 
 + (id)networkLayer
 {
-    return [[self alloc] init];
+    return [[LDNetworkLayer alloc] init];
 }
 
 - (id)init
 {
     if (self = [super init]) {
         if (!InitializeSockets()) {
-            printf("failed to initialize sockets\n");
+            NSLog(@"failed to initialize sockets");
         }
         
         if (!socket.Open(0)) {
-            printf("failed to create socket!\n");
+            NSLog(@"failed to create socket!");
         }
         userDefaults = [NSUserDefaults standardUserDefaults];
         host = [userDefaults objectForKey:@"host"];
@@ -87,10 +87,8 @@
     NSDictionary *messageDict = @{@"action": @"init", @"name": userName};
     
     NSData       *data        = [messageDict messagePack];
-    [self sendData:[data bytes] length:[data length]];
     
-    //    [self stopCommunication];
-    //    [self startCommunication];
+    [self sendData:[data bytes] length:[data length]];
 }
 
 - (void)stopListeningToServer

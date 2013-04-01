@@ -34,28 +34,6 @@ AudioHandlerStruct *LD_InitAudioOutputHandler()
     return audioOutputHandler;
 }
 
-void LD_StartPlayebackStream(AudioHandlerStruct *audioOutputHandler)
-{
-    if (!Pa_IsStreamActive(audioOutputHandler->stream)) {
-        checkError(Pa_StartStream(audioOutputHandler->stream));
-    }
-}
-
-void LD_StopPlayebackStream(AudioHandlerStruct *audioOutputHandler)
-{
-    if (Pa_IsStreamActive(audioOutputHandler->stream)) {
-        checkError(Pa_StopStream(audioOutputHandler->stream));
-    }
-}
-
-void LD_DestroyPlayebackStream(AudioHandlerStruct *audioOutputHandler)
-{
-    opus_decoder_destroy(audioOutputHandler->dec);
-    Pa_CloseStream(audioOutputHandler->stream);
-    free(audioOutputHandler->userData);
-    free(audioOutputHandler);
-}
-
 void decodeAudio(AudioHandlerStruct *audioOutputHandler, EncodedAudio encoded)
 {
     int encodedLength = 0, dataPointer = sizeof(int);
@@ -89,5 +67,24 @@ void decodeAudio(AudioHandlerStruct *audioOutputHandler, EncodedAudio encoded)
     }
 }
 
+void LD_StartPlayebackStream(AudioHandlerStruct *audioOutputHandler)
+{
+    if (!Pa_IsStreamActive(audioOutputHandler->stream)) {
+        checkError(Pa_StartStream(audioOutputHandler->stream));
+    }
+}
 
+void LD_StopPlayebackStream(AudioHandlerStruct *audioOutputHandler)
+{
+    if (Pa_IsStreamActive(audioOutputHandler->stream)) {
+        checkError(Pa_StopStream(audioOutputHandler->stream));
+    }
+}
 
+void LD_DestroyPlayebackStream(AudioHandlerStruct *audioOutputHandler)
+{
+    opus_decoder_destroy(audioOutputHandler->dec);
+    Pa_CloseStream(audioOutputHandler->stream);
+    free(audioOutputHandler->userData);
+    free(audioOutputHandler);
+}

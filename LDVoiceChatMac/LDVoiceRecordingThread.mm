@@ -48,7 +48,7 @@
         LD_StopRecordingStream(audioInputHandler);
         LD_DestroyRecordingStream(audioInputHandler);
         speaking = NO;
-        wait(0.1f);
+        Pa_Sleep(0.1f);
     });
 }
 
@@ -62,7 +62,7 @@
     NSLog(@"Recording Thread Started");
     while (speaking) {
         if (silent) {
-            wait(0.1f);
+            Pa_Sleep(0.1f);
         } else {
             [self recordingThread];
         }

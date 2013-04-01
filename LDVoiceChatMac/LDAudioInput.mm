@@ -36,29 +36,6 @@ AudioHandlerStruct *LD_InitAudioInputHandler()
     return audioInputHandler;
 }
 
-void LD_StartRecordingStream(AudioHandlerStruct *audioInputHandler)
-{
-    if (!Pa_IsStreamActive(audioInputHandler->stream) && Pa_IsStreamStopped(audioInputHandler->stream)) {
-        checkError(Pa_StartStream(audioInputHandler->stream));
-    }
-}
-
-void LD_StopRecordingStream(AudioHandlerStruct *audioInputHandler)
-{
-    if (Pa_IsStreamActive(audioInputHandler->stream)) {
-        checkError(Pa_StopStream(audioInputHandler->stream));
-    }
-}
-
-void LD_DestroyRecordingStream(AudioHandlerStruct *audioInputHandler)
-{
-    opus_encoder_destroy(audioInputHandler->enc);
-    Pa_CloseStream(audioInputHandler->stream);
-    Pa_Terminate();
-    free(audioInputHandler->userData);
-    free(audioInputHandler);
-}
-
 EncodedAudio encodeAudio(AudioHandlerStruct *audioInputHandler)
 {
     EncodedAudio   encoded       = {0};
@@ -87,4 +64,25 @@ EncodedAudio encodeAudio(AudioHandlerStruct *audioInputHandler)
     return encoded;
 }
 
+void LD_StartRecordingStream(AudioHandlerStruct *audioInputHandler)
+{
+    if (!Pa_IsStreamActive(audioInputHandler->stream) && Pa_IsStreamStopped(audioInputHandler->stream)) {
+        checkError(Pa_StartStream(audioInputHandler->stream));
+    }
+}
 
+void LD_StopRecordingStream(AudioHandlerStruct *audioInputHandler)
+{
+    if (Pa_IsStreamActive(audioInputHandler->stream)) {
+        checkError(Pa_StopStream(audioInputHandler->stream));
+    }
+}
+
+void LD_DestroyRecordingStream(AudioHandlerStruct *audioInputHandler)
+{
+    opus_encoder_destroy(audioInputHandler->enc);
+    Pa_CloseStream(audioInputHandler->stream);
+    Pa_Terminate();
+    free(audioInputHandler->userData);
+    free(audioInputHandler);
+}
