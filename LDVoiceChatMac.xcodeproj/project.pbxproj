@@ -39,7 +39,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		8000F5AA16D6308000B1D5E5 /* Net.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Net.h; sourceTree = "<group>"; };
+		8000F5AA16D6308000B1D5E5 /* Net.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Net.h; path = ../Net.h; sourceTree = "<group>"; };
 		80315D2916D5182400D8060F /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		80315D3316D5182400D8060F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		80315D3516D5182400D8060F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -181,21 +181,15 @@
 		80315D2F16D5182400D8060F /* LDVoiceChatMac */ = {
 			isa = PBXGroup;
 			children = (
+				8094C94B1709937C00D70B5A /* Audio Stuff */,
 				80315D3B16D5182400D8060F /* AppDelegate.h */,
 				804A0E1716D63CF30006016E /* AppDelegate.mm */,
 				8049912816D64C4C007382A7 /* LDNetworkLayer.h */,
 				8049912916D64C4C007382A7 /* LDNetworkLayer.mm */,
-				805DD8AE16DF59EF0001D7A1 /* LDAudioDefaults.h */,
-				80EEE3CD16E4A03200EAD0F2 /* LDAudioDefaults.mm */,
-				80EEE3C716E4997B00EAD0F2 /* LDAudioInput.h */,
-				80EEE3C816E4997B00EAD0F2 /* LDAudioInput.mm */,
-				80EEE3C916E4997B00EAD0F2 /* LDAudioOutput.h */,
-				80EEE3CA16E4997B00EAD0F2 /* LDAudioOutput.mm */,
 				80F4ACFF170066DC002CF0AB /* LDUserVoiceThread.h */,
 				80F4AD00170066DC002CF0AB /* LDUserVoiceThread.mm */,
 				80F4AD0217006B63002CF0AB /* LDVoiceRecordingThread.h */,
 				80F4AD0317006B63002CF0AB /* LDVoiceRecordingThread.mm */,
-				8000F5AA16D6308000B1D5E5 /* Net.h */,
 				80315D3E16D5182400D8060F /* MainMenu.xib */,
 				80315D3016D5182400D8060F /* Supporting Files */,
 			);
@@ -227,6 +221,7 @@
 		8075451416E0B7C10066AF5D /* includes */ = {
 			isa = PBXGroup;
 			children = (
+				8000F5AA16D6308000B1D5E5 /* Net.h */,
 				8075451516E0B7C10066AF5D /* messagepack */,
 				8075453816E0B7C10066AF5D /* opus.h */,
 				8075453916E0B7C10066AF5D /* opus_custom.h */,
@@ -313,6 +308,19 @@
 				8075452B16E0B7C10066AF5D /* zone.h */,
 			);
 			path = msgpack;
+			sourceTree = "<group>";
+		};
+		8094C94B1709937C00D70B5A /* Audio Stuff */ = {
+			isa = PBXGroup;
+			children = (
+				805DD8AE16DF59EF0001D7A1 /* LDAudioDefaults.h */,
+				80EEE3CD16E4A03200EAD0F2 /* LDAudioDefaults.mm */,
+				80EEE3C716E4997B00EAD0F2 /* LDAudioInput.h */,
+				80EEE3C816E4997B00EAD0F2 /* LDAudioInput.mm */,
+				80EEE3C916E4997B00EAD0F2 /* LDAudioOutput.h */,
+				80EEE3CA16E4997B00EAD0F2 /* LDAudioOutput.mm */,
+			);
+			name = "Audio Stuff";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

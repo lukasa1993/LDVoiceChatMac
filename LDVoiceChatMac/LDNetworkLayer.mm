@@ -11,11 +11,13 @@
 @implementation LDNetworkLayer
 @synthesize delegate;
 
-+ (id)networkLayer {
++ (id)networkLayer
+{
     return [[self alloc] init];
 }
 
-- (id)init {
+- (id)init
+{
     if (self = [super init]) {
         if (!InitializeSockets()) {
             printf("failed to initialize sockets\n");
@@ -33,14 +35,16 @@
     return self;
 }
 
-- (Address)targetAddress {
+- (Address)targetAddress
+{
     @autoreleasepool {
         NSArray *hostArr = [host componentsSeparatedByString:@"."];
         return Address([hostArr[0] intValue], [hostArr[1] intValue], [hostArr[2] intValue], [hostArr[3] intValue], port);
     }
 }
 
-- (void)startCommunication {
+- (void)startCommunication
+{
     NSLog(@"Starting Communication");
     
     listeningToServer = YES;
@@ -53,7 +57,8 @@
     [NSThread detachNewThreadSelector:@selector(startListeningToServer) toTarget:self withObject:nil];
 }
 
-- (void)stopCommunication {
+- (void)stopCommunication
+{
     NSString     *userName    = [userDefaults objectForKey:@"name"];
     NSDictionary *messageDict = @{@"action": @"disc",
                                   @"name": userName};
@@ -63,7 +68,8 @@
     [self stopListeningToServer];
 }
 
-- (void)renameUser:(NSString *)oldName NewName:(NSString *)newName {
+- (void)renameUser:(NSString *)oldName NewName:(NSString *)newName
+{
     NSDictionary *messageDict = @{@"action": @"rename",
                                   @"name": oldName,
                                   @"currentName": newName};
@@ -72,7 +78,8 @@
     [self sendData:[data bytes] length:[data length]];
 }
 
-- (void)reconnect {
+- (void)reconnect
+{
     host = [userDefaults objectForKey:@"host"];
     port = [[userDefaults objectForKey:@"port"] intValue];
     
@@ -86,14 +93,15 @@
     //    [self startCommunication];
 }
 
-- (void)stopListeningToServer {
+- (void)stopListeningToServer
+{
     listeningToServer = NO;
     memset(buffer, 0, MAX_BUFF);
     wait(0.01f);// to thread stop
 }
 
-- (void)startListeningToServer {
-    
+- (void)startListeningToServer
+{
     NSLog(@"Network Thread Started");
     while (listeningToServer) {
         [self serverListener];
@@ -101,7 +109,8 @@
     NSLog(@"Network Thread Ended");
 }
 
-- (void)serverListener {
+- (void)serverListener
+{
     @autoreleasepool {
         Address      server;
         NSInteger    bytes_read = socket.Receive(server, buffer, MAX_BUFF);
@@ -126,7 +135,8 @@
     }
 }
 
-- (void)sendData:(const void *)data length:(NSInteger)length {
+- (void)sendData:(const void *)data length:(NSInteger)length
+{
     socket.Send([self targetAddress], data, length);
 }
 

@@ -19,7 +19,8 @@
 @synthesize userListArray;
 @synthesize usersMap;
 
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
+{
     self.userListArray = [NSMutableArray array];
     self.usersMap      = [NSMutableDictionary dictionary];
     networkLayer       = [LDNetworkLayer networkLayer];
@@ -46,7 +47,8 @@
 
 // Netowork Callbacks  --------------------------------------------------
 
-- (void)userList:(NSArray *)_userList {
+- (void)userList:(NSArray *)_userList
+{
     dispatch_async(dispatch_get_main_queue(), ^{
         if ([self.userListArray count]) {
             [self.userListArray removeAllObjects];
@@ -64,14 +66,16 @@
     });
 }
 
-- (void)incomingVoiceData:(NSString *)from voice:(NSData *)audio {
+- (void)incomingVoiceData:(NSString *)from voice:(NSData *)audio
+{
     [(self.usersMap)[from] incomingVoice:audio];
 }
 
 // UI Callbacks ----------------------------------------------
 
 - (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn
-                  row:(NSInteger)row {
+                  row:(NSInteger)row
+{
     NSTableCellView *cellView = [tableView makeViewWithIdentifier:tableColumn.identifier
                                                             owner:self];
     @autoreleasepool {
@@ -87,7 +91,8 @@
     return [userListArray count];
 }
 
-- (void)controlTextDidChange:(NSNotification *)notification {
+- (void)controlTextDidChange:(NSNotification *)notification
+{
     NSTextField *textField = [notification object];
     @autoreleasepool {
         NSString *userName = [textField stringValue];
@@ -104,7 +109,8 @@
     }
 }
 
-- (IBAction)settingsChanged:(id)sender {
+- (IBAction)settingsChanged:(id)sender
+{
     if ([[hostField stringValue] length] < 2) {
         [hostField becomeFirstResponder];
         return;
@@ -130,8 +136,8 @@
     }
 }
 
-
-- (IBAction)callSettings:(id)sender {
+- (IBAction)callSettings:(id)sender
+{
     [settingsWindow setIsVisible:YES];
     [hostField setStringValue:[userDefaults objectForKey:@"host"]];
     [portField setStringValue:[userDefaults objectForKey:@"port"]];

@@ -8,7 +8,8 @@
 
 #include "LDAudioDefaults.h"
 
-void checkError(PaError err) {
+void checkError(PaError err)
+{
     if (err != paNoError) {
         fprintf(stderr, "An error occured while using the portaudio stream\n");
         fprintf(stderr, "Error number: %d\n", err);
