@@ -22,10 +22,8 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     self.userListArray = [NSMutableArray array];
     self.usersMap      = [NSMutableDictionary dictionary];
-    
-    userDefaults       = [NSUserDefaults standardUserDefaults];
     networkLayer       = [LDNetworkLayer networkLayer];
-    voiceRecording     = [LDVoiceRecordingThread recordingThreadWith:networkLayer];
+    userDefaults       = [NSUserDefaults standardUserDefaults];
     
     [networkLayer setDelegate:self];
     
@@ -40,9 +38,10 @@
     if ([userDefaults objectForKey:@"name"]) {
         [userNameField setStringValue:[userDefaults objectForKey:@"name"]];
         [networkLayer startCommunication];
+        
+        [self startVoiceComunication];
     }
     
-    [self startVoiceComunication];
 }
 
 // Netowork Callbacks  --------------------------------------------------
@@ -75,9 +74,10 @@
                   row:(NSInteger)row {
     NSTableCellView *cellView = [tableView makeViewWithIdentifier:tableColumn.identifier
                                                             owner:self];
-    NSDictionary *user = userListArray[(NSUInteger) row];
-    
-    cellView.textField.stringValue = user[@"name"];
+    @autoreleasepool {
+        NSDictionary *user = userListArray[(NSUInteger) row];
+        cellView.textField.stringValue = user[@"name"];
+    }
     
     return cellView;
 }
@@ -89,14 +89,18 @@
 
 - (void)controlTextDidChange:(NSNotification *)notification {
     NSTextField *textField = [notification object];
-    NSString *userName = [textField stringValue];
-    NSString *savedName = [userDefaults objectForKey:@"name"];
-    [userDefaults setObject:userName forKey:@"name"];
-    
-    if (!savedName) {
-        [networkLayer startCommunication];
-    } else {
-        [networkLayer renameUser:savedName NewName:userName];
+    @autoreleasepool {
+        NSString *userName = [textField stringValue];
+        NSString *savedName = [userDefaults objectForKey:@"name"];
+        [userDefaults setObject:userName forKey:@"name"];
+        
+        if (!savedName) {
+            [networkLayer startCommunication];
+            [self startVoiceComunication];
+        } else {
+            [networkLayer renameUser:savedName NewName:userName];
+            [voiceRecording renameUser:userName];
+        }
     }
 }
 
@@ -113,9 +117,10 @@
         [hostField setStringValue:@"127.0.0.1"];
     }
     
-    NSString *ip = [[NSHost hostWithName:[hostField stringValue]] address];
-    [hostField setStringValue:ip];
-    
+    @autoreleasepool {
+        NSString *ip = [[NSHost hostWithName:[hostField stringValue]] address];
+        [hostField setStringValue:ip];
+    }
     [userDefaults setObject:[hostField stringValue] forKey:@"host"];
     [userDefaults setObject:[portField stringValue] forKey:@"port"];
     [settingsWindow setIsVisible:NO];
@@ -137,6 +142,7 @@
 
 - (void)startVoiceComunication
 {
+    voiceRecording     = [LDVoiceRecordingThread recordingThreadWith:networkLayer with:[userDefaults objectForKey:@"name"]];
     [voiceRecording startRecordingThread];
 }
 

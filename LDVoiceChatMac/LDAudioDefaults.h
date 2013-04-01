@@ -19,7 +19,7 @@
 #define MAX_PACKET         (240)
 #define CHANELS            (1)
 #define FRAMES             (480)
-#define FRAMES_COUNT       (6) // 6 means 60 ms
+#define FRAMES_COUNT       (3) // 6 means 60 ms
 
 typedef struct {
     PaStreamParameters inputParameters;

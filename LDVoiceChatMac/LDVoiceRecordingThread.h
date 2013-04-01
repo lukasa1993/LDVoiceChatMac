@@ -16,12 +16,16 @@
     AudioHandlerStruct *audioInputHandler;
     LDNetworkLayer     *networkLayer;
     
+    NSString           *userName;
+    
     BOOL                speaking;
     BOOL                silent;
 }
 
-+(id)recordingThreadWith:(LDNetworkLayer*)networkLayer;
 
++(id)recordingThreadWith:(LDNetworkLayer*)networkLayer with:(NSString*)userName;
+
+-(void)renameUser:(NSString*)_userName;
 -(void)startRecordingThread;
 -(void)stopRecordingThread;
 

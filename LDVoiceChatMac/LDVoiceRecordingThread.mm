@@ -10,16 +10,17 @@
 
 @implementation LDVoiceRecordingThread
 
-+(id)recordingThreadWith:(LDNetworkLayer*)networkLayer
++(id)recordingThreadWith:(LDNetworkLayer*)networkLayer with:(NSString*)userName
 {
-    return [[LDVoiceRecordingThread alloc] initWith:networkLayer];
+    return [[LDVoiceRecordingThread alloc] initWith:networkLayer with:userName];
 }
 
--(id)initWith:(LDNetworkLayer*)_networkLayer
+-(id)initWith:(LDNetworkLayer*)_networkLayer with:(NSString*)_userName
 {
     if (self = [super init]) {
         audioInputHandler  = LD_InitAudioInputHandler();
         networkLayer       = _networkLayer;
+        userName           = _userName;
     }
     
     return self;
@@ -51,6 +52,11 @@
     });
 }
 
+-(void)renameUser:(NSString*)_userName
+{
+    userName = _userName;
+}
+
 -(void)recordingThreadLoop
 {
     NSLog(@"Recording Thread Started");
@@ -58,9 +64,6 @@
         if (silent) {
             wait(0.1f);
         } else {
-            if (audioInputHandler->inputParameters.device != Pa_GetDefaultInputDevice()) {
-                [self restartRecording];
-            }
             [self recordingThread];
         }
     }
@@ -69,20 +72,22 @@
 
 -(void)recordingThread
 {
-    EncodedAudio buffer       = encodeAudio(audioInputHandler);
-    NSDictionary *dict        = @{@"action": @"voice",
-                                  @"name": [[NSUserDefaults standardUserDefaults] objectForKey:@"name"],
-                                  @"audioDataLength": @(buffer.dataLength)};
-    NSData        *dictPacked = [dict messagePack];
-    unsigned char *sendBuff   = (unsigned char*) malloc([dictPacked length] + buffer.dataLength);
-    
-    memcpy(sendBuff,  [dictPacked bytes], [dictPacked length]);
-    memcpy(sendBuff + [dictPacked length], buffer.data, buffer.dataLength);
-    
-    [networkLayer sendNSDataToServer:[NSData dataWithBytesNoCopy:sendBuff
-                                                          length:[dictPacked length] + buffer.dataLength]];
-    free(buffer.data);
-    free(sendBuff);
+    @autoreleasepool {
+        EncodedAudio buffer       = encodeAudio(audioInputHandler);
+        NSDictionary *dict        = @{@"action": @"voice",
+                                      @"name": userName,
+                                      @"audioDataLength": @(buffer.dataLength)};
+        NSData        *dictPacked = [dict messagePack];
+        unsigned char *sendBuff   = (unsigned char*) malloc([dictPacked length] + buffer.dataLength);
+        
+        memcpy(sendBuff,  [dictPacked bytes], [dictPacked length]);
+        memcpy(sendBuff + [dictPacked length], buffer.data, buffer.dataLength);
+        
+        [networkLayer sendData:sendBuff length:[dictPacked length] + buffer.dataLength];
+        
+        free(buffer.data);
+        free(sendBuff);
+    }
 }
 
 @end

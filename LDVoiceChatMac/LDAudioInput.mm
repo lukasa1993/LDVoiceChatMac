@@ -20,7 +20,7 @@ AudioHandlerStruct *LD_InitAudioInputHandler() {
     
     int error = 0;
     audioInputHandler->enc      = opus_encoder_create(SAMPLE_RATE, CHANELS, OPUS_APPLICATION_AUDIO, &error);
-    audioInputHandler->userData = (char*) malloc(FRAMES * FRAMES_COUNT);
+    audioInputHandler->userData = (char*) malloc(FRAMES * FRAMES_COUNT * 10);
     
     checkError(Pa_OpenStream(&audioInputHandler->stream,
                              &audioInputHandler->inputParameters,
@@ -58,8 +58,8 @@ EncodedAudio encodeAudio(AudioHandlerStruct *audioInputHandler) {
     EncodedAudio   encoded       = {0};
     encoded.data                 = (unsigned char*) malloc(sizeof(int) + FRAMES_COUNT * (sizeof(int) + MAX_PACKET));
     encoded.dataLength           = sizeof(int);
-    
-    for (int i = 0; i <  FRAMES_COUNT; i++) {
+
+    for (int i = 0; i < FRAMES_COUNT; i++) {
         Pa_ReadStream(audioInputHandler->stream, audioInputHandler->userData, FRAMES);
         encoded.dataLength += sizeof(int); // for datalength
         int dataLength      = opus_encode_float(audioInputHandler->enc,
@@ -67,7 +67,7 @@ EncodedAudio encodeAudio(AudioHandlerStruct *audioInputHandler) {
                                                 FRAMES,
                                                 encoded.data + encoded.dataLength,
                                                 MAX_PACKET);
-        
+
         memcpy(encoded.data + encoded.dataLength - sizeof(int), &dataLength, sizeof(int));
         
         encoded.dataLength += dataLength;

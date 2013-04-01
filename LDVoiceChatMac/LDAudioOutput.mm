@@ -9,17 +9,17 @@
 #import "LDAudioOutput.h"
 
 AudioHandlerStruct *LD_InitAudioOutputHandler() {
-    AudioHandlerStruct *audioOutputHandler = (AudioHandlerStruct *) malloc(sizeof(AudioHandlerStruct));
-    audioOutputHandler->outputParameters.device = Pa_GetDefaultOutputDevice();
-    audioOutputHandler->outputParameters.channelCount = CHANELS;
-    audioOutputHandler->outputParameters.sampleFormat = paFloat32;
+    AudioHandlerStruct *audioOutputHandler                = (AudioHandlerStruct *) malloc(sizeof(AudioHandlerStruct));
+    audioOutputHandler->outputParameters.device           = Pa_GetDefaultOutputDevice();
+    audioOutputHandler->outputParameters.channelCount     = CHANELS;
+    audioOutputHandler->outputParameters.sampleFormat     = paFloat32;
     audioOutputHandler->outputParameters.suggestedLatency =
     Pa_GetDeviceInfo(audioOutputHandler->outputParameters.device)->defaultLowOutputLatency;
     audioOutputHandler->outputParameters.hostApiSpecificStreamInfo = NULL;
     
-    int error = 0;
-    audioOutputHandler->dec = opus_decoder_create(SAMPLE_RATE, CHANELS, &error);
-    audioOutputHandler->userData = (char*) malloc(FRAMES * FRAMES_COUNT);
+    int error                    = 0;
+    audioOutputHandler->dec      = opus_decoder_create(SAMPLE_RATE, CHANELS, &error);
+    audioOutputHandler->userData = (char*) malloc(FRAMES * FRAMES_COUNT * 10);
     
     checkError(Pa_OpenStream(&audioOutputHandler->stream,
                              NULL,

@@ -62,9 +62,6 @@
 {
     NSLog(@"User voice Thread Started");
     while (userSpeaks) {
-        if (audioOutputHandler->outputParameters.device != Pa_GetDefaultOutputDevice()) {
-            [self restartUserVoice];
-        }
         [self userSpeaking];
     }
     NSLog(@"User voice Thread End");
@@ -77,40 +74,42 @@
 
 -(void)userSpeaking
 {
-    if ([userVoice count] > 0) {
-        if ([userVoice count] > 1) {
-            NSLog(@"Count: %li", (unsigned long) [userVoice count]);
-        }
-        
-        NSData    *audio = nil;
-        NSInteger i      = 0;
-        do {
-            audio = [userVoice[i] copy];
-            [userVoice removeObjectAtIndex:i];
-            i++;
-            if (i >= [userVoice count]) {
-                [userVoice removeAllObjects];
-                break;
+    @autoreleasepool {        
+        if ([userVoice count] > 0) {
+            if ([userVoice count] > 1) {
+                NSLog(@"Count: %li", (unsigned long) [userVoice count]);
             }
-        } while (audio != nil);
-        
-        if (!audio) {
-            NSLog(@"Shen Shig Xoar AR GAK?");
-        } else {
-            EncodedAudio arr     = {0};
-            arr.data             = (unsigned char *) [audio bytes];
-            arr.dataLength       = (int)             [audio length];
-            int checkDataLength  = 0;
-            memcpy(&checkDataLength, arr.data, sizeof(int));
             
-            if ((arr.dataLength < 0 || arr.dataLength > 10000) && (arr.dataLength != checkDataLength)) {
-                printf("Received Corrupted Data \n");
+            NSData    *audio = nil;
+            NSInteger i      = 0;
+            do {
+                audio = [userVoice[i] copy];
+                [userVoice removeObjectAtIndex:i];
+                i++;
+                if (i >= [userVoice count]) {
+                    [userVoice removeAllObjects];
+                    break;
+                }
+            } while (audio != nil);
+            
+            if (!audio) {
+                NSLog(@"Shen Shig Xoar AR GAK?");
             } else {
-                decodeAudio(audioOutputHandler, arr);
+                EncodedAudio arr     = {0};
+                arr.data             = (unsigned char *) [audio bytes];
+                arr.dataLength       = (int)             [audio length];
+                int checkDataLength  = 0;
+                memcpy(&checkDataLength, arr.data, sizeof(int));
+                
+                if ((arr.dataLength < 0 || arr.dataLength > 10000) && (arr.dataLength != checkDataLength)) {
+                    printf("Received Corrupted Data \n");
+                } else {
+                    decodeAudio(audioOutputHandler, arr);
+                }
             }
+        } else {
+            usleep((int) ((0.001f) * 1000000.0f));
         }
-    } else {
-        usleep((int) ((0.001f) * 1000000.0f));
     }
 }
 

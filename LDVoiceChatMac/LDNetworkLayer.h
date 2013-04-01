@@ -16,7 +16,7 @@
 #import "MessagePack.h"
 #import "Net.h"
 
-#define MAX_BUFF 1024 * 10
+#define MAX_BUFF 1024
 
 using namespace std;
 using namespace net;
@@ -47,12 +47,10 @@ using namespace net;
 + (id)networkLayer;
 
 - (void)startCommunication;
-
 - (void)renameUser:(NSString *)oldName NewName:(NSString *)newName;
-
 - (void)reconnect;
+- (void)sendData:(const void *)data length:(NSInteger)length;
 
-- (void)sendNSDataToServer:(NSData *)data;
 @end
 
 
