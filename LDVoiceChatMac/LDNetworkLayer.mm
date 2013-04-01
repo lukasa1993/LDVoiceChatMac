@@ -45,25 +45,27 @@
 
 - (void)startCommunication
 {
-    NSLog(@"Starting Communication");
+    NSLog(@"Start Communication");
     
     listeningToServer = YES;
     NSString     *userName    = [userDefaults objectForKey:@"name"];
     NSDictionary *messageDict = @{@"action": @"init",
                                   @"name": userName};
-    
     NSData       *data        = [messageDict messagePack];
+    
     [self sendData:[data bytes] length:[data length]];
     [NSThread detachNewThreadSelector:@selector(startListeningToServer) toTarget:self withObject:nil];
 }
 
 - (void)stopCommunication
 {
+    NSLog(@"Stop Communication");
+    
     NSString     *userName    = [userDefaults objectForKey:@"name"];
     NSDictionary *messageDict = @{@"action": @"disc",
                                   @"name": userName};
-    
     NSData       *data        = [messageDict messagePack];
+    
     [self sendData:[data bytes] length:[data length]];
     [self stopListeningToServer];
 }
@@ -73,8 +75,8 @@
     NSDictionary *messageDict = @{@"action": @"rename",
                                   @"name": oldName,
                                   @"currentName": newName};
-    
     NSData       *data        = [messageDict messagePack];
+    
     [self sendData:[data bytes] length:[data length]];
 }
 
@@ -85,7 +87,6 @@
     
     NSString     *userName    = [userDefaults objectForKey:@"name"];
     NSDictionary *messageDict = @{@"action": @"init", @"name": userName};
-    
     NSData       *data        = [messageDict messagePack];
     
     [self sendData:[data bytes] length:[data length]];

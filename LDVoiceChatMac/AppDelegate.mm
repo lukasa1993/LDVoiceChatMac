@@ -141,14 +141,13 @@
     [settingsWindow setIsVisible:YES];
     [hostField setStringValue:[userDefaults objectForKey:@"host"]];
     [portField setStringValue:[userDefaults objectForKey:@"port"]];
-    NSLog(@"%@", [userDefaults objectForKey:@"host"]);
 }
 
 // Voice Threads ----------------------------------------------
 
 - (void)startVoiceComunication
 {
-    voiceRecording     = [LDVoiceRecordingThread recordingThreadWith:networkLayer with:[userDefaults objectForKey:@"name"]];
+    voiceRecording = [LDVoiceRecordingThread recordingThreadWith:networkLayer with:[userDefaults objectForKey:@"name"]];
     [voiceRecording startRecordingThread];
 }
 
