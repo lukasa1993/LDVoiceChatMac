@@ -9,40 +9,36 @@
 #import <Cocoa/Cocoa.h>
 
 #import "LDNetworkLayer.h"
-#import "LDAudioPlot.h"
 #import "LDUserVoiceThread.h"
 #import "LDVoiceRecordingThread.h"
 
 @interface AppDelegate : NSViewController <NSApplicationDelegate, NSTextFieldDelegate,
 NSTableViewDataSource, NSTableViewDelegate, LDNetworkDataProtocol> {
-    __weak NSButton *settingsButton;
-    __weak NSButton *settingsChangedButton;
-    __weak NSWindow *settingsWindow;
+    NSButton *settingsButton;
+    NSButton *settingsChangedButton;
+    NSWindow *settingsWindow;
     
-    __weak NSTextField *userNameField;
-    __weak NSTextField *hostField;
-    __weak NSTextField *portField;
+    NSTextField *userNameField;
+    NSTextField *hostField;
+    NSTextField *portField;
     
-    __weak NSTableView *userListColumn;
-    __weak NSUserDefaults *userDefaults;
-    
-    __weak LDAudioPlot *audioPlotView;
-    
+    NSTableView *userListColumn;
+    NSUserDefaults *userDefaults;
+        
     NSMutableDictionary    *usersMap;
     NSMutableArray         *userListArray;
     LDNetworkLayer         *networkLayer;
     LDVoiceRecordingThread *voiceRecording;
 }
 
-@property(weak) IBOutlet NSWindow *window;
-@property(weak) IBOutlet NSTextField *userNameField;
-@property(weak) IBOutlet NSTextField *hostField;
-@property(weak) IBOutlet NSTextField *portField;
-@property(weak) IBOutlet NSButton *settingsButton;
-@property(weak) IBOutlet NSButton *settingsChangedButton;
-@property(weak) IBOutlet NSWindow *settingsWindow;
-@property(weak) IBOutlet NSTableView *userListColumn;
-@property(weak) IBOutlet LDAudioPlot *audioPlotView;
+@property(strong) IBOutlet NSWindow *window;
+@property(strong) IBOutlet NSTextField *userNameField;
+@property(strong) IBOutlet NSTextField *hostField;
+@property(strong) IBOutlet NSTextField *portField;
+@property(strong) IBOutlet NSButton *settingsButton;
+@property(strong) IBOutlet NSButton *settingsChangedButton;
+@property(strong) IBOutlet NSWindow *settingsWindow;
+@property(strong) IBOutlet NSTableView *userListColumn;
 
 @property(strong) NSMutableArray      *userListArray;
 @property(strong) NSMutableDictionary *usersMap;

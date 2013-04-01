@@ -55,11 +55,19 @@ void LD_DestroyPlayebackStream(AudioHandlerStruct *audioOutputHandler) {
 void decodeAudio(AudioHandlerStruct *audioOutputHandler, EncodedAudio encoded) {
     int encodedLength = 0, dataPointer = sizeof(int);
     memcpy(&encodedLength, encoded.data, sizeof(int));
-
+    if (encodedLength < 1 || encodedLength > 1000) {
+        NSLog(@"Corrupted Data Place: 1");
+        return;
+    }
+    
     for (int i = 0; i < FRAMES_COUNT; i++) {
         int encFrameLength = 0;
         memcpy(&encFrameLength, encoded.data + dataPointer, sizeof(int));
         dataPointer += sizeof(int);
+        if (encFrameLength < 1 || encFrameLength > FRAMES) {
+            NSLog(@"Corrupted Data Place: 2");
+            return;
+        }
         
         int decompresed = opus_decode_float(audioOutputHandler->dec,
                                             encoded.data + dataPointer,

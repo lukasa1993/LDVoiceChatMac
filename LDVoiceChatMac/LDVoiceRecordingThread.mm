@@ -18,9 +18,8 @@
 -(id)initWith:(LDNetworkLayer*)_networkLayer
 {
     if (self = [super init]) {
-        audioInputHandler = LD_InitAudioInputHandler();
-        audioOutPutHandler = LD_InitAudioOutputHandler();
-        networkLayer      = _networkLayer;
+        audioInputHandler  = LD_InitAudioInputHandler();
+        networkLayer       = _networkLayer;
     }
     
     return self;
@@ -30,8 +29,16 @@
 {
     speaking = YES;
     LD_StartRecordingStream(audioInputHandler);
-    LD_StartPlayebackStream(audioOutPutHandler);
     [NSThread detachNewThreadSelector:@selector(recordingThreadLoop) toTarget:self withObject:nil];
+}
+
+-(void)restartRecording // in case default input changed
+{
+    LD_StopRecordingStream(audioInputHandler);
+    LD_DestroyRecordingStream(audioInputHandler);
+    
+    audioInputHandler  = LD_InitAudioInputHandler();
+    LD_StartRecordingStream(audioInputHandler);
 }
 
 -(void)stopRecordingThread
@@ -48,33 +55,34 @@
 {
     NSLog(@"Recording Thread Started");
     while (speaking) {
-        [self recordingThread];
+        if (silent) {
+            wait(0.1f);
+        } else {
+            if (audioInputHandler->inputParameters.device != Pa_GetDefaultInputDevice()) {
+                [self restartRecording];
+            }
+            [self recordingThread];
+        }
     }
     NSLog(@"Recording Thread End");
 }
 
 -(void)recordingThread
 {
-//    decodeAudio(audioOutPutHandler, encodeAudio(audioInputHandler));
-//    
-//    return;
-    
     EncodedAudio buffer       = encodeAudio(audioInputHandler);
-    NSDictionary *dict        = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 @"voice", @"action",
-                                 [[NSUserDefaults standardUserDefaults] objectForKey:@"name"], @"name",
-                                 [NSNumber numberWithInt:buffer.dataLength], @"audioDataLength",
-                                 nil];
+    NSDictionary *dict        = @{@"action": @"voice",
+                                  @"name": [[NSUserDefaults standardUserDefaults] objectForKey:@"name"],
+                                  @"audioDataLength": @(buffer.dataLength)};
     NSData        *dictPacked = [dict messagePack];
     unsigned char *sendBuff   = (unsigned char*) malloc([dictPacked length] + buffer.dataLength);
     
     memcpy(sendBuff,  [dictPacked bytes], [dictPacked length]);
     memcpy(sendBuff + [dictPacked length], buffer.data, buffer.dataLength);
     
-    [networkLayer sendNSDataToServer:[NSData dataWithBytesNoCopy:sendBuff length:[dictPacked length] + buffer.dataLength]];
+    [networkLayer sendNSDataToServer:[NSData dataWithBytesNoCopy:sendBuff
+                                                          length:[dictPacked length] + buffer.dataLength]];
     free(buffer.data);
     free(sendBuff);
-    
 }
 
 @end

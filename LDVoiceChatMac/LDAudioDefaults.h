@@ -36,12 +36,6 @@ typedef struct {
     int dataLength;
 } EncodedAudio;
 
-typedef struct {
-    EncodedAudio *data;
-    int dataCount;
-    int dataLength;
-} EncodedAudioArr;
-
 void checkError(PaError err);
 
 #endif

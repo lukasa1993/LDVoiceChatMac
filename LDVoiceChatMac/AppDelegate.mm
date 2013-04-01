@@ -18,7 +18,6 @@
 @synthesize settingsChangedButton;
 @synthesize userListArray;
 @synthesize usersMap;
-@synthesize audioPlotView;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     self.userListArray = [NSMutableArray array];
@@ -53,21 +52,21 @@
         if ([self.userListArray count]) {
             [self.userListArray removeAllObjects];
             for (id key in self.usersMap) {
-                [[self.usersMap objectForKey:key] stopUserVoiceThread];
+                [(self.usersMap)[key] stopUserVoiceThread];
                 [self.usersMap removeObjectForKey:key];
             }
         }
         
-        [self.userListArray addObjectsFromArray:_userList];
-        for (NSDictionary* user in self.userListArray) { // creating separate audio input thread for each user
-            [self.usersMap setObject:[LDUserVoiceThread userVoiceThread] forKey:[user objectForKey:@"name"]];
+        for (NSDictionary* user in _userList) { // creating separate audio input thread for each user
+            (self.usersMap)[user[@"name"]] = [LDUserVoiceThread userVoiceThread];
+            [self.userListArray addObject:user];
         }
         [userListColumn reloadData];
     });
 }
 
 - (void)incomingVoiceData:(NSString *)from voice:(NSData *)audio {
-    [[self.usersMap objectForKey:from] incoingVoice:audio];
+    [(self.usersMap)[from] incomingVoice:audio];
 }
 
 // UI Callbacks ----------------------------------------------
@@ -76,9 +75,9 @@
                   row:(NSInteger)row {
     NSTableCellView *cellView = [tableView makeViewWithIdentifier:tableColumn.identifier
                                                             owner:self];
-    NSDictionary *user = [userListArray objectAtIndex:(NSUInteger) row];
+    NSDictionary *user = userListArray[(NSUInteger) row];
     
-    cellView.textField.stringValue = [user objectForKey:@"name"];
+    cellView.textField.stringValue = user[@"name"];
     
     return cellView;
 }

@@ -21,13 +21,13 @@
             printf("failed to initialize sockets\n");
         }
         
-        
         if (!socket.Open(0)) {
             printf("failed to create socket!\n");
         }
-        
-        host = [[NSUserDefaults standardUserDefaults] objectForKey:@"host"];
-        port = [[[NSUserDefaults standardUserDefaults] objectForKey:@"port"] intValue];
+        userDefaults = [NSUserDefaults standardUserDefaults];
+        host = [userDefaults objectForKey:@"host"];
+        port = [[userDefaults objectForKey:@"port"] intValue];
+        buffer = malloc(MAX_BUFF);
     }
     
     return self;
@@ -42,94 +42,85 @@
     NSLog(@"Starting Communication");
     
     listeningToServer = YES;
-    NSString     *userName    = [[NSUserDefaults standardUserDefaults] objectForKey:@"name"];
-    NSDictionary *messageDict = [NSDictionary dictionaryWithObjectsAndKeys:@"init", @"action", userName, @"name", nil];
+    NSString     *userName    = [userDefaults objectForKey:@"name"];
+    NSDictionary *messageDict = @{@"action": @"init",
+                                  @"name": userName};
     
     [self sendNSDataToServer:[messageDict messagePack]];
     [NSThread detachNewThreadSelector:@selector(startListeningToServer) toTarget:self withObject:nil];
 }
 
 - (void)stopCommunication {
-    NSString     *userName    = [[NSUserDefaults standardUserDefaults] objectForKey:@"name"];
-    NSDictionary *messageDict = [NSDictionary dictionaryWithObjectsAndKeys:@"disc", @"action", userName, @"name", nil];
+    NSString     *userName    = [userDefaults objectForKey:@"name"];
+    NSDictionary *messageDict = @{@"action": @"disc",
+                                  @"name": userName};
     [self sendNSDataToServer:[messageDict messagePack]];
     
     [self stopListeningToServer];
 }
 
 - (void)renameUser:(NSString *)oldName NewName:(NSString *)newName {
-    NSDictionary *messageDict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 @"rename", @"action",
-                                 oldName, @"name",
-                                 newName, @"currentName", nil];
+    NSDictionary *messageDict = @{@"action": @"rename",
+                                  @"name": oldName,
+                                  @"currentName": newName};
     
     [self sendNSDataToServer:[messageDict messagePack]];
 }
 
 - (void)reconnect {
-    host = [[NSUserDefaults standardUserDefaults] objectForKey:@"host"];
-    port = [[[NSUserDefaults standardUserDefaults] objectForKey:@"port"] intValue];
+    host = [userDefaults objectForKey:@"host"];
+    port = [[userDefaults objectForKey:@"port"] intValue];
     
-    NSString     *userName    = [[NSUserDefaults standardUserDefaults] objectForKey:@"name"];
-    NSDictionary *messageDict = [NSDictionary dictionaryWithObjectsAndKeys:@"init", @"action", userName, @"name", nil];
+    NSString     *userName    = [userDefaults objectForKey:@"name"];
+    NSDictionary *messageDict = @{@"action": @"init", @"name": userName};
     
     [self sendNSDataToServer:[messageDict messagePack]];
-
+    
     //    [self stopCommunication];
     //    [self startCommunication];
 }
 
 - (void)stopListeningToServer {
     listeningToServer = NO;
-    //    wait(0.1f);// to thread stop
+    memset(buffer, 0, MAX_BUFF);
+    wait(0.01f);// to thread stop
 }
 
 - (void)startListeningToServer {
-    void         *buffer;
-    NSDictionary *parsed;
-    NSString     *action;
-    NSArray      *userList;
-    NSData       *receivedData;
-    NSInteger    bytes_read;
-    NSInteger    audioDataLength;
-    NSInteger    dictLength;
-    Address      server;
     
     NSLog(@"Network Thread Started");
     while (listeningToServer) {
-        buffer     = malloc(MAX_BUFF);
-        bytes_read = socket.Receive(server, buffer, MAX_BUFF);
-        
-        if (bytes_read > 0) {
-//            NSLog(@"Packet Received: %li", (long) bytes_read );
-            
-            receivedData = [NSData dataWithBytesNoCopy:buffer length:bytes_read];
-            parsed       = [receivedData messagePackParse];
-            action       = [parsed objectForKey:@"action"];
-            
-            if ([action isEqualToString:@"list"]) {
-                userList = [parsed objectForKey:@"userList"];
-                [delegate userList:userList];
-            } else if ([action isEqualToString:@"voice"]) {
-                audioDataLength = [[parsed objectForKey:@"audioDataLength"] intValue];
-                dictLength      = [[parsed messagePack] length];
-                
-                [delegate incomingVoiceData:[parsed objectForKey:@"name"]
-                                      voice:[receivedData subdataWithRange:NSMakeRange(dictLength, audioDataLength)]];
-            }
-        } else {
-            wait(0.001f);
-        }
-        
-        free(buffer);
+        [self serverListener];
     }
     NSLog(@"Network Thread Ended");
 }
 
-- (void)sendNSDataToServer:(NSData *)data {
-    socket.Send([self targetAddress], [data bytes], (int) [data length]);
-//    NSLog(@"Packet Sent:     %li", (unsigned long) [data length]);
+- (void)serverListener {
+    Address      server;
+    NSInteger    bytes_read = socket.Receive(server, buffer, MAX_BUFF);
+    
+    if (bytes_read > 0) {
+        NSData       *receivedData = [NSData dataWithBytesNoCopy:buffer length:bytes_read];
+        NSDictionary *parsed       = [receivedData messagePackParse];
+        NSString     *action       = parsed[@"action"];
+        
+        if ([action isEqualToString:@"list"]) {
+            [delegate userList:parsed[@"userList"]];
+        } else if ([action isEqualToString:@"voice"]) {
+            NSInteger audioDataLength = [parsed[@"audioDataLength"] intValue];
+            NSInteger dictLength      = [[parsed messagePack] length];
+            
+            [delegate incomingVoiceData:parsed[@"name"]
+                                  voice:[receivedData subdataWithRange:NSMakeRange(dictLength, audioDataLength)]];
+        }
+    } else {
+        wait(0.001f);
+    }
 }
 
+- (void)sendNSDataToServer:(NSData *)data {
+    socket.Send([self targetAddress], [data bytes], (int) [data length]);
+    //    NSLog(@"Packet Sent:     %li", (unsigned long) [data length]);
+}
 
 @end

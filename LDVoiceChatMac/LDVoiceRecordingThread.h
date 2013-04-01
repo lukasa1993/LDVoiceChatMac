@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "LDTransportPreparation.h"
 #import "LDAudioInput.h"
 #import "LDAudioOutput.h"
 #import "LDNetworkLayer.h"
@@ -15,10 +14,10 @@
 @interface LDVoiceRecordingThread : NSObject
 {
     AudioHandlerStruct *audioInputHandler;
-    AudioHandlerStruct *audioOutPutHandler;
     LDNetworkLayer     *networkLayer;
+    
     BOOL                speaking;
-
+    BOOL                silent;
 }
 
 +(id)recordingThreadWith:(LDNetworkLayer*)networkLayer;

@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "LDAudioOutput.h"
-#import "LDTransportPreparation.h"
 
 @interface LDUserVoiceThread : NSObject
 {
@@ -23,6 +22,6 @@
 
 -(void)startUserVoiceThread;
 -(void)stopUserVoiceThread;
--(void)incoingVoice:(NSData*)data;
+-(void)incomingVoice:(NSData*)data;
 
 @end

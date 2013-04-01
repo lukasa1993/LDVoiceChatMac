@@ -35,7 +35,10 @@ using namespace net;
 
     NSString *host;
     NSInteger port;
+    NSUserDefaults *userDefaults;
 
+    void *buffer;
+    
     BOOL listeningToServer;
 }
 

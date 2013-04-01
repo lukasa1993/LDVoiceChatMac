@@ -39,13 +39,22 @@
     [NSThread detachNewThreadSelector:@selector(userSpeakingLoop) toTarget:self withObject:nil];
 }
 
+-(void)restartUserVoice
+{
+    LD_StopPlayebackStream(audioOutputHandler);
+    LD_DestroyPlayebackStream(audioOutputHandler);
+    
+    audioOutputHandler = LD_InitAudioOutputHandler();
+    LD_StartPlayebackStream(audioOutputHandler);
+}
+
 -(void)stopUserVoiceThread
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         LD_StopPlayebackStream(audioOutputHandler);
         LD_DestroyPlayebackStream(audioOutputHandler);
         userSpeaks = NO;
-        usleep((int) (0.1f * 1000000.0f));
+        usleep((int) (0.01f * 1000000.0f));
     });
 }
 
@@ -53,12 +62,15 @@
 {
     NSLog(@"User voice Thread Started");
     while (userSpeaks) {
+        if (audioOutputHandler->outputParameters.device != Pa_GetDefaultOutputDevice()) {
+            [self restartUserVoice];
+        }
         [self userSpeaking];
     }
     NSLog(@"User voice Thread End");
 }
 
--(void)incoingVoice:(NSData*)data
+-(void)incomingVoice:(NSData*)data
 {
     [userVoice addObject:data];
 }
@@ -73,7 +85,7 @@
         NSData    *audio = nil;
         NSInteger i      = 0;
         do {
-            audio = [[userVoice objectAtIndex:i] copy];
+            audio = [userVoice[i] copy];
             [userVoice removeObjectAtIndex:i];
             i++;
             if (i >= [userVoice count]) {
@@ -92,7 +104,7 @@
             memcpy(&checkDataLength, arr.data, sizeof(int));
             
             if ((arr.dataLength < 0 || arr.dataLength > 10000) && (arr.dataLength != checkDataLength)) {
-                printf("Corrupted Data \n");
+                printf("Received Corrupted Data \n");
             } else {
                 decodeAudio(audioOutputHandler, arr);
             }

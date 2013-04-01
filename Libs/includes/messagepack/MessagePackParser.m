@@ -14,16 +14,16 @@
 +(id) createUnpackedObject:(msgpack_object)obj {
     switch (obj.type) {
         case MSGPACK_OBJECT_BOOLEAN:
-            return [[NSNumber alloc] initWithBool:obj.via.boolean];
+            return @(obj.via.boolean);
             break;
         case MSGPACK_OBJECT_POSITIVE_INTEGER:
-            return [[NSNumber alloc] initWithUnsignedLongLong:obj.via.u64];
+            return @(obj.via.u64);
             break;
         case MSGPACK_OBJECT_NEGATIVE_INTEGER:
-            return [[NSNumber alloc] initWithLongLong:obj.via.i64];
+            return @(obj.via.i64);
             break;
         case MSGPACK_OBJECT_DOUBLE:
-            return [[NSNumber alloc] initWithDouble:obj.via.dec];
+            return @(obj.via.dec);
             break;
         case MSGPACK_OBJECT_RAW:
             return [[NSString alloc] initWithBytes:obj.via.raw.ptr length:obj.via.raw.size encoding:NSUTF8StringEncoding];
