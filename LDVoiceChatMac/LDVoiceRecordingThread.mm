@@ -10,12 +10,12 @@
 
 @implementation LDVoiceRecordingThread
 
-+(id)recordingThreadWith:(LDNetworkLayer*)networkLayer with:(NSString*)userName
++ (id)recordingThreadWith:(LDNetworkLayer*)networkLayer with:(NSString*)userName
 {
     return [[LDVoiceRecordingThread alloc] initWith:networkLayer with:userName];
 }
 
--(id)initWith:(LDNetworkLayer*)_networkLayer with:(NSString*)_userName
+- (id)initWith:(LDNetworkLayer*)_networkLayer with:(NSString*)_userName
 {
     if (self = [super init]) {
         audioInputHandler  = LD_InitAudioInputHandler();
@@ -26,14 +26,14 @@
     return self;
 }
 
--(void)startRecordingThread
+- (void)startRecordingThread
 {
     speaking = YES;
     LD_StartRecordingStream(audioInputHandler);
     [NSThread detachNewThreadSelector:@selector(recordingThreadLoop) toTarget:self withObject:nil];
 }
 
--(void)restartRecording // in case default input changed
+- (void)restartRecording // in case default input changed
 {
     LD_StopRecordingStream(audioInputHandler);
     LD_DestroyRecordingStream(audioInputHandler);
@@ -42,7 +42,7 @@
     LD_StartRecordingStream(audioInputHandler);
 }
 
--(void)stopRecordingThread
+- (void)stopRecordingThread
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         LD_StopRecordingStream(audioInputHandler);
@@ -52,12 +52,12 @@
     });
 }
 
--(void)renameUser:(NSString*)_userName
+- (void)renameUser:(NSString*)_userName
 {
     userName = _userName;
 }
 
--(void)recordingThreadLoop
+- (void)recordingThreadLoop
 {
     NSLog(@"Recording Thread Started");
     while (speaking) {
@@ -70,7 +70,7 @@
     NSLog(@"Recording Thread End");
 }
 
--(void)recordingThread
+- (void)recordingThread
 {
     @autoreleasepool {
         EncodedAudio buffer       = encodeAudio(audioInputHandler);

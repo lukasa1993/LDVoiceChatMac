@@ -12,12 +12,12 @@
 @synthesize userVoice;
 
 
-+(id)userVoiceThread
++ (id)userVoiceThread
 {
     return [[LDUserVoiceThread alloc] init];
 }
 
--(id)init
+- (id)init
 {
     if (self = [super init]) {
         audioOutputHandler = LD_InitAudioOutputHandler();
@@ -28,7 +28,7 @@
     return self;
 }
 
--(void)startUserVoiceThread
+- (void)startUserVoiceThread
 {
     if (userSpeaks) {
         NSLog(@"Thread Already Running");
@@ -39,7 +39,7 @@
     [NSThread detachNewThreadSelector:@selector(userSpeakingLoop) toTarget:self withObject:nil];
 }
 
--(void)restartUserVoice
+- (void)restartUserVoice
 {
     LD_StopPlayebackStream(audioOutputHandler);
     LD_DestroyPlayebackStream(audioOutputHandler);
@@ -48,7 +48,7 @@
     LD_StartPlayebackStream(audioOutputHandler);
 }
 
--(void)stopUserVoiceThread
+- (void)stopUserVoiceThread
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         LD_StopPlayebackStream(audioOutputHandler);
@@ -58,7 +58,7 @@
     });
 }
 
--(void)userSpeakingLoop
+- (void)userSpeakingLoop
 {
     NSLog(@"User voice Thread Started");
     while (userSpeaks) {
@@ -67,12 +67,12 @@
     NSLog(@"User voice Thread End");
 }
 
--(void)incomingVoice:(NSData*)data
+- (void)incomingVoice:(NSData*)data
 {
     [userVoice addObject:data];
 }
 
--(void)userSpeaking
+- (void)userSpeaking
 {
     @autoreleasepool {        
         if ([userVoice count] > 0) {
