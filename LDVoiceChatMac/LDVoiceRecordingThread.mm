@@ -10,17 +10,19 @@
 
 @implementation LDVoiceRecordingThread
 
-+ (id)recordingThreadWith:(LDNetworkLayer*)networkLayer with:(NSString*)userName
++ (id)recordingThreadWith:(LDNetworkLayer*)networkLayer
 {
-    return [[LDVoiceRecordingThread alloc] initWith:networkLayer with:userName];
+    return [[LDVoiceRecordingThread alloc] initWith:networkLayer];
 }
 
-- (id)initWith:(LDNetworkLayer*)_networkLayer with:(NSString*)_userName
+- (id)initWith:(LDNetworkLayer*)_networkLayer
 {
     if (self = [super init]) {
         audioInputHandler  = LD_InitAudioInputHandler();
         networkLayer       = _networkLayer;
-        userName           = _userName;
+        silent             = YES;
+        
+        [self notifyChanges];
     }
     
     return self;
@@ -28,54 +30,67 @@
 
 - (void)startRecordingThread
 {
+    if (speaking) {
+        NSLog(@"Voice Thread Already Running");
+    }
     speaking = YES;
     LD_StartRecordingStream(audioInputHandler);
-    [NSThread detachNewThreadSelector:@selector(recordingThreadLoop) toTarget:self withObject:nil];
-}
-
-- (void)restartRecording // in case default input changed
-{
-    LD_StopRecordingStream(audioInputHandler);
-    LD_DestroyRecordingStream(audioInputHandler);
-    
-    audioInputHandler  = LD_InitAudioInputHandler();
-    LD_StartRecordingStream(audioInputHandler);
+    [self recordingThreadLoop];
 }
 
 - (void)stopRecordingThread
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         LD_StopRecordingStream(audioInputHandler);
         LD_DestroyRecordingStream(audioInputHandler);
         speaking = NO;
-        Pa_Sleep(0.1f);
+        usleep((int) (0.01f * 1000000.0f));
     });
 }
 
-- (void)renameUser:(NSString*)_userName
+- (void)notifyChanges
 {
-    userName = _userName;
+    userName = [[NSUserDefaults standardUserDefaults] objectForKey:@"name"];
+    channel  = [[NSUserDefaults standardUserDefaults] objectForKey:@"channel"];
+}
+
+- (void)mute
+{
+    silent = YES;
+}
+
+- (BOOL)isMute
+{
+    return silent;
+}
+
+- (void)unMute
+{
+    silent = NO;
 }
 
 - (void)recordingThreadLoop
 {
-    NSLog(@"Recording Thread Started");
-    while (speaking) {
-        if (silent) {
-            Pa_Sleep(0.1f);
-        } else {
-            [self recordingThread];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSLog(@"Recording Thread Started");
+        while (speaking) {
+            if (silent) {
+                usleep((int) (0.1f * 1000000.0f));
+            } else {
+                [self recordingThread];
+            }
         }
-    }
-    NSLog(@"Recording Thread End");
+        NSLog(@"Recording Thread End");
+    });
 }
 
 - (void)recordingThread
 {
     @autoreleasepool {
         EncodedAudio buffer       = encodeAudio(audioInputHandler);
-        NSDictionary *dict        = @{@"action": @"voice",
-                                      @"name": userName,
+        NSDictionary *dict        = @{@"action"         : @"voice",
+                                      @"name"           : userName,
+                                      @"channel"        : channel,
                                       @"audioDataLength": @(buffer.dataLength)};
         NSData        *dictPacked = [dict messagePack];
         unsigned char *sendBuff   = (unsigned char*) malloc([dictPacked length] + buffer.dataLength);

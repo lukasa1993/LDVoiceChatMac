@@ -7,6 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		80424A3F170B02FD00FE864C /* PopoverController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 80424A3E170B02FD00FE864C /* PopoverController.xib */; };
+		80424A45170B04AB00FE864C /* PTMenubarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 80424A42170B04AB00FE864C /* PTMenubarController.m */; };
+		80424A46170B04AB00FE864C /* PTStatusItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 80424A44170B04AB00FE864C /* PTStatusItemView.m */; };
+		80424A49170B059000FE864C /* drive.png in Resources */ = {isa = PBXBuildFile; fileRef = 80424A47170B059000FE864C /* drive.png */; };
+		80424A4A170B059000FE864C /* drive@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 80424A48170B059000FE864C /* drive@2x.png */; };
+		80424A4D170B068300FE864C /* PopoverController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 80424A4C170B068300FE864C /* PopoverController.mm */; };
+		80424A50170B075600FE864C /* drivesel.png in Resources */ = {isa = PBXBuildFile; fileRef = 80424A4E170B075600FE864C /* drivesel.png */; };
+		80424A51170B075600FE864C /* drivesel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 80424A4F170B075600FE864C /* drivesel@2x.png */; };
+		80424A56170B07D900FE864C /* gear.png in Resources */ = {isa = PBXBuildFile; fileRef = 80424A52170B07D900FE864C /* gear.png */; };
+		80424A57170B07D900FE864C /* gear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 80424A53170B07D900FE864C /* gear@2x.png */; };
+		80424A58170B07D900FE864C /* gearsel.png in Resources */ = {isa = PBXBuildFile; fileRef = 80424A54170B07D900FE864C /* gearsel.png */; };
+		80424A59170B07D900FE864C /* gearsel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 80424A55170B07D900FE864C /* gearsel@2x.png */; };
+		80424A5C170B30B200FE864C /* LDCustomeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 80424A5B170B30B200FE864C /* LDCustomeButton.m */; };
 		805DD8B116DF5CBA0001D7A1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 80315D3516D5182400D8060F /* main.m */; };
 		805DD8BD16DF5CBA0001D7A1 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 804A0E1716D63CF30006016E /* AppDelegate.mm */; };
 		805DD8BE16DF5CBA0001D7A1 /* LDNetworkLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8049912916D64C4C007382A7 /* LDNetworkLayer.mm */; };
@@ -47,6 +60,23 @@
 		80315D3916D5182400D8060F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		80315D3B16D5182400D8060F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		80315D3F16D5182500D8060F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		80424A3E170B02FD00FE864C /* PopoverController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PopoverController.xib; sourceTree = "<group>"; };
+		80424A41170B04AB00FE864C /* PTMenubarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTMenubarController.h; sourceTree = "<group>"; };
+		80424A42170B04AB00FE864C /* PTMenubarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTMenubarController.m; sourceTree = "<group>"; };
+		80424A43170B04AB00FE864C /* PTStatusItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTStatusItemView.h; sourceTree = "<group>"; };
+		80424A44170B04AB00FE864C /* PTStatusItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTStatusItemView.m; sourceTree = "<group>"; };
+		80424A47170B059000FE864C /* drive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = drive.png; path = images/drive.png; sourceTree = "<group>"; };
+		80424A48170B059000FE864C /* drive@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "drive@2x.png"; path = "images/drive@2x.png"; sourceTree = "<group>"; };
+		80424A4B170B068300FE864C /* PopoverController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoverController.h; sourceTree = "<group>"; };
+		80424A4C170B068300FE864C /* PopoverController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PopoverController.mm; sourceTree = "<group>"; };
+		80424A4E170B075600FE864C /* drivesel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = drivesel.png; path = images/drivesel.png; sourceTree = "<group>"; };
+		80424A4F170B075600FE864C /* drivesel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "drivesel@2x.png"; path = "images/drivesel@2x.png"; sourceTree = "<group>"; };
+		80424A52170B07D900FE864C /* gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = gear.png; path = images/gear.png; sourceTree = "<group>"; };
+		80424A53170B07D900FE864C /* gear@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "gear@2x.png"; path = "images/gear@2x.png"; sourceTree = "<group>"; };
+		80424A54170B07D900FE864C /* gearsel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = gearsel.png; path = images/gearsel.png; sourceTree = "<group>"; };
+		80424A55170B07D900FE864C /* gearsel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "gearsel@2x.png"; path = "images/gearsel@2x.png"; sourceTree = "<group>"; };
+		80424A5A170B30B200FE864C /* LDCustomeButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LDCustomeButton.h; sourceTree = "<group>"; };
+		80424A5B170B30B200FE864C /* LDCustomeButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LDCustomeButton.m; sourceTree = "<group>"; };
 		8049912816D64C4C007382A7 /* LDNetworkLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LDNetworkLayer.h; sourceTree = "<group>"; };
 		8049912916D64C4C007382A7 /* LDNetworkLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LDNetworkLayer.mm; sourceTree = "<group>"; };
 		804A0E1716D63CF30006016E /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
@@ -181,6 +211,7 @@
 		80315D2F16D5182400D8060F /* LDVoiceChatMac */ = {
 			isa = PBXGroup;
 			children = (
+				80424A40170B04AB00FE864C /* Views */,
 				8094C94B1709937C00D70B5A /* Audio Stuff */,
 				80315D3B16D5182400D8060F /* AppDelegate.h */,
 				804A0E1716D63CF30006016E /* AppDelegate.mm */,
@@ -191,6 +222,7 @@
 				80F4AD0217006B63002CF0AB /* LDVoiceRecordingThread.h */,
 				80F4AD0317006B63002CF0AB /* LDVoiceRecordingThread.mm */,
 				80315D3E16D5182400D8060F /* MainMenu.xib */,
+				80424A3E170B02FD00FE864C /* PopoverController.xib */,
 				80315D3016D5182400D8060F /* Supporting Files */,
 			);
 			path = LDVoiceChatMac;
@@ -199,6 +231,14 @@
 		80315D3016D5182400D8060F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				80424A52170B07D900FE864C /* gear.png */,
+				80424A53170B07D900FE864C /* gear@2x.png */,
+				80424A54170B07D900FE864C /* gearsel.png */,
+				80424A55170B07D900FE864C /* gearsel@2x.png */,
+				80424A4E170B075600FE864C /* drivesel.png */,
+				80424A4F170B075600FE864C /* drivesel@2x.png */,
+				80424A47170B059000FE864C /* drive.png */,
+				80424A48170B059000FE864C /* drive@2x.png */,
 				805DD8CF16DF5CBA0001D7A1 /* LDVoiceChatMac-Info.plist */,
 				80315D3216D5182400D8060F /* InfoPlist.strings */,
 				80315D3516D5182400D8060F /* main.m */,
@@ -206,6 +246,21 @@
 				80315D3816D5182400D8060F /* Credits.rtf */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		80424A40170B04AB00FE864C /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				80424A4B170B068300FE864C /* PopoverController.h */,
+				80424A4C170B068300FE864C /* PopoverController.mm */,
+				80424A41170B04AB00FE864C /* PTMenubarController.h */,
+				80424A42170B04AB00FE864C /* PTMenubarController.m */,
+				80424A43170B04AB00FE864C /* PTStatusItemView.h */,
+				80424A44170B04AB00FE864C /* PTStatusItemView.m */,
+				80424A5A170B30B200FE864C /* LDCustomeButton.h */,
+				80424A5B170B30B200FE864C /* LDCustomeButton.m */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		8075451316E0B7C10066AF5D /* Libs */ = {
@@ -377,6 +432,15 @@
 				805DD8C716DF5CBA0001D7A1 /* InfoPlist.strings in Resources */,
 				805DD8C816DF5CBA0001D7A1 /* Credits.rtf in Resources */,
 				805DD8C916DF5CBA0001D7A1 /* MainMenu.xib in Resources */,
+				80424A3F170B02FD00FE864C /* PopoverController.xib in Resources */,
+				80424A49170B059000FE864C /* drive.png in Resources */,
+				80424A4A170B059000FE864C /* drive@2x.png in Resources */,
+				80424A50170B075600FE864C /* drivesel.png in Resources */,
+				80424A51170B075600FE864C /* drivesel@2x.png in Resources */,
+				80424A56170B07D900FE864C /* gear.png in Resources */,
+				80424A57170B07D900FE864C /* gear@2x.png in Resources */,
+				80424A58170B07D900FE864C /* gearsel.png in Resources */,
+				80424A59170B07D900FE864C /* gearsel@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -406,6 +470,10 @@
 				80EEE3CE16E4A03200EAD0F2 /* LDAudioDefaults.mm in Sources */,
 				80F4AD01170066DC002CF0AB /* LDUserVoiceThread.mm in Sources */,
 				80F4AD0417006B63002CF0AB /* LDVoiceRecordingThread.mm in Sources */,
+				80424A45170B04AB00FE864C /* PTMenubarController.m in Sources */,
+				80424A46170B04AB00FE864C /* PTStatusItemView.m in Sources */,
+				80424A4D170B068300FE864C /* PopoverController.mm in Sources */,
+				80424A5C170B30B200FE864C /* LDCustomeButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

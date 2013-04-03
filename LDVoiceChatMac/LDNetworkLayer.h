@@ -50,7 +50,8 @@ using namespace net;
 - (void)renameUser:(NSString *)oldName NewName:(NSString *)newName;
 - (void)reconnect;
 - (void)sendData:(const void *)data length:(NSInteger)length;
-
+- (void)muteUser:(NSString *)userName;
+- (void)UnMuteUser:(NSString *)userName;
 @end
 
 

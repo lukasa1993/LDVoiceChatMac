@@ -9,9 +9,7 @@
 #import "LDAudioInput.h"
 
 AudioHandlerStruct *LD_InitAudioInputHandler()
-{
-    checkError(Pa_Initialize()); // Yeaaa
-    
+{   
     AudioHandlerStruct *audioInputHandler               = (AudioHandlerStruct *) malloc(sizeof(AudioHandlerStruct));
     audioInputHandler->inputParameters.device           = Pa_GetDefaultInputDevice();
     audioInputHandler->inputParameters.channelCount     = CHANELS;
@@ -82,7 +80,6 @@ void LD_DestroyRecordingStream(AudioHandlerStruct *audioInputHandler)
 {
     opus_encoder_destroy(audioInputHandler->enc);
     Pa_CloseStream(audioInputHandler->stream);
-    Pa_Terminate();
     free(audioInputHandler->userData);
     free(audioInputHandler);
 }

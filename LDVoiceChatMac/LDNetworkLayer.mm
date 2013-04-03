@@ -48,33 +48,56 @@
     NSLog(@"Start Communication");
     
     listeningToServer = YES;
-    NSString     *userName    = [userDefaults objectForKey:@"name"];
-    NSDictionary *messageDict = @{@"action": @"init",
-                                  @"name": userName};
+    NSDictionary *messageDict = @{@"action"  : @"init",
+                                  @"name"    : [userDefaults objectForKey:@"name"],
+                                  @"channel" : [userDefaults objectForKey:@"channel"]};
     NSData       *data        = [messageDict messagePack];
     
     [self sendData:[data bytes] length:[data length]];
-    [NSThread detachNewThreadSelector:@selector(startListeningToServer) toTarget:self withObject:nil];
+    [self startListeningToServer];
 }
 
 - (void)stopCommunication
 {
     NSLog(@"Stop Communication");
     
-    NSString     *userName    = [userDefaults objectForKey:@"name"];
-    NSDictionary *messageDict = @{@"action": @"disc",
-                                  @"name": userName};
+    NSDictionary *messageDict = @{@"action"  : @"disc",
+                                  @"name"    : [userDefaults objectForKey:@"name"],
+                                  @"channel" : [userDefaults objectForKey:@"channel"]};
     NSData       *data        = [messageDict messagePack];
     
     [self sendData:[data bytes] length:[data length]];
     [self stopListeningToServer];
 }
 
+- (void)muteUser:(NSString *)userName
+{
+    NSDictionary *messageDict = @{@"action"  : @"mute",
+                                  @"villain"  : userName,
+                                  @"name"    : [userDefaults objectForKey:@"name"],
+                                  @"channel" : [userDefaults objectForKey:@"channel"]};
+    NSData       *data        = [messageDict messagePack];
+    
+    [self sendData:[data bytes] length:[data length]];
+}
+
+- (void)UnMuteUser:(NSString *)userName
+{
+    NSDictionary *messageDict = @{@"action"  : @"unmute",
+                                  @"villain"  : userName,
+                                  @"name"    : [userDefaults objectForKey:@"name"],
+                                  @"channel" : [userDefaults objectForKey:@"channel"]};
+    NSData       *data        = [messageDict messagePack];
+    
+    [self sendData:[data bytes] length:[data length]];
+}
+
 - (void)renameUser:(NSString *)oldName NewName:(NSString *)newName
 {
-    NSDictionary *messageDict = @{@"action": @"rename",
-                                  @"name": oldName,
-                                  @"currentName": newName};
+    NSDictionary *messageDict = @{@"action"      : @"rename",
+                                  @"name"        : oldName,
+                                  @"currentName" : newName,
+                                  @"channel"     : [userDefaults objectForKey:@"channel"]};
     NSData       *data        = [messageDict messagePack];
     
     [self sendData:[data bytes] length:[data length]];
@@ -85,8 +108,9 @@
     host = [userDefaults objectForKey:@"host"];
     port = [[userDefaults objectForKey:@"port"] intValue];
     
-    NSString     *userName    = [userDefaults objectForKey:@"name"];
-    NSDictionary *messageDict = @{@"action": @"init", @"name": userName};
+    NSDictionary *messageDict = @{@"action"  : @"init",
+                                  @"name"    : [userDefaults objectForKey:@"name"] ,
+                                  @"channel" : [userDefaults objectForKey:@"channel"]};
     NSData       *data        = [messageDict messagePack];
     
     [self sendData:[data bytes] length:[data length]];
@@ -101,11 +125,13 @@
 
 - (void)startListeningToServer
 {
-    NSLog(@"Network Thread Started");
-    while (listeningToServer) {
-        [self serverListener];
-    }
-    NSLog(@"Network Thread Ended");
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSLog(@"Network Thread Started");
+        while (listeningToServer) {
+            [self serverListener];
+        }
+        NSLog(@"Network Thread Ended");
+    });
 }
 
 - (void)serverListener
@@ -120,6 +146,7 @@
             NSString     *action       = parsed[@"action"];
             
             if ([action isEqualToString:@"list"]) {
+                NSLog(@"%@", parsed);
                 [delegate userList:parsed[@"userList"]];
             } else if ([action isEqualToString:@"voice"]) {
                 NSInteger audioDataLength = [parsed[@"audioDataLength"] intValue];
@@ -129,7 +156,7 @@
                                       voice:[receivedData subdataWithRange:NSMakeRange(dictLength, audioDataLength)]];
             }
         } else {
-            wait(0.001f);
+            wait(0.01f);
         }
     }
 }

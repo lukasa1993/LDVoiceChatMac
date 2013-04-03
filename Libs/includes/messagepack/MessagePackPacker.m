@@ -68,7 +68,7 @@
 		msgpack_pack_map(pk, (int) ((NSDictionary*)obj).count);
 		for(id key in obj) {
 			[self packObject:key into:pk];
-			[self packObject:[obj objectForKey:key] into:pk];
+			[self packObject:obj[key] into:pk];
 		}
 	} else if ([obj isKindOfClass:[NSString class]]) {
 		const char *str = ((NSString*)obj).UTF8String;

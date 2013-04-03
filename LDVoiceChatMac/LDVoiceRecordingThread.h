@@ -17,16 +17,21 @@
     LDNetworkLayer     *networkLayer;
     
     NSString           *userName;
+    NSString           *channel;
     
     BOOL                speaking;
     BOOL                silent;
 }
 
 
-+(id)recordingThreadWith:(LDNetworkLayer*)networkLayer with:(NSString*)userName;
++ (id)recordingThreadWith:(LDNetworkLayer*)networkLayer;
 
--(void)renameUser:(NSString*)_userName;
--(void)startRecordingThread;
--(void)stopRecordingThread;
+- (void)mute;
+- (BOOL)isMute;
+- (void)unMute;
+
+- (void)notifyChanges;
+- (void)startRecordingThread;
+- (void)stopRecordingThread;
 
 @end

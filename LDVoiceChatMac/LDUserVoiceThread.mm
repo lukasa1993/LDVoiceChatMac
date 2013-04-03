@@ -20,11 +20,8 @@
 - (id)init
 {
     if (self = [super init]) {
-        audioOutputHandler = LD_InitAudioOutputHandler();
         userVoice          = [NSMutableArray array];
     }
-    
-    [self startUserVoiceThread];
     return self;
 }
 
@@ -35,46 +32,47 @@
         return;
     }
     userSpeaks = YES;
-    LD_StartPlayebackStream(audioOutputHandler);
-    [NSThread detachNewThreadSelector:@selector(userSpeakingLoop) toTarget:self withObject:nil];
-}
-
-- (void)restartUserVoice
-{
-    LD_StopPlayebackStream(audioOutputHandler);
-    LD_DestroyPlayebackStream(audioOutputHandler);
-    
     audioOutputHandler = LD_InitAudioOutputHandler();
     LD_StartPlayebackStream(audioOutputHandler);
+    [self userSpeakingLoop];
+}
+
+- (BOOL)isUserSpeaking
+{
+    return userSpeaks;
 }
 
 - (void)stopUserVoiceThread
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        LD_StopPlayebackStream(audioOutputHandler);
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         LD_DestroyPlayebackStream(audioOutputHandler);
         userSpeaks = NO;
-        Pa_Sleep(0.01f);
+        usleep((int) (0.01f * 1000000.0f));
     });
 }
 
 - (void)userSpeakingLoop
 {
-    NSLog(@"User voice Thread Started");
-    while (userSpeaks) {
-        [self userSpeaking];
-    }
-    NSLog(@"User voice Thread End");
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSLog(@"User voice Thread Started");
+        while (userSpeaks) {
+            [self userSpeaking];
+        }
+        NSLog(@"User voice Thread End");
+    });
+    [userVoice removeAllObjects];
 }
 
 - (void)incomingVoice:(NSData*)data
 {
-    [userVoice addObject:data];
+    if (userSpeaks) {
+        [userVoice addObject:data];
+    }
 }
 
 - (void)userSpeaking
 {
-    @autoreleasepool {        
+    @autoreleasepool {
         if ([userVoice count] > 0) {
             if ([userVoice count] > 1) {
                 NSLog(@"Count: %li", (unsigned long) [userVoice count]);
@@ -108,7 +106,7 @@
                 }
             }
         } else {
-            Pa_Sleep(0.001f);
+            usleep((int) (0.01f * 1000000.0f));
         }
     }
 }

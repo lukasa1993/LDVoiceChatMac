@@ -8,42 +8,16 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "LDNetworkLayer.h"
-#import "LDUserVoiceThread.h"
-#import "LDVoiceRecordingThread.h"
+#import "PTMenubarController.h"
+#import "PopoverController.h"
 
-@interface AppDelegate : NSViewController <NSApplicationDelegate, NSTextFieldDelegate,
-NSTableViewDataSource, NSTableViewDelegate, LDNetworkDataProtocol> {
-    NSButton *settingsButton;
-    NSButton *settingsChangedButton;
-    NSWindow *settingsWindow;
-    
-    NSTextField *userNameField;
-    NSTextField *hostField;
-    NSTextField *portField;
-    
-    NSTableView *userListColumn;
-    NSUserDefaults *userDefaults;
-        
-    NSMutableDictionary    *usersMap;
-    NSMutableArray         *userListArray;
-    LDNetworkLayer         *networkLayer;
-    LDVoiceRecordingThread *voiceRecording;
+@interface AppDelegate : NSViewController <NSApplicationDelegate>
+{
+    id popoverTransiencyMonitor;
 }
 
-@property(strong) IBOutlet NSWindow *window;
-@property(strong) IBOutlet NSTextField *userNameField;
-@property(strong) IBOutlet NSTextField *hostField;
-@property(strong) IBOutlet NSTextField *portField;
-@property(strong) IBOutlet NSButton *settingsButton;
-@property(strong) IBOutlet NSButton *settingsChangedButton;
-@property(strong) IBOutlet NSWindow *settingsWindow;
-@property(strong) IBOutlet NSTableView *userListColumn;
-
-@property(strong) NSMutableArray      *userListArray;
-@property(strong) NSMutableDictionary *usersMap;
-
-- (IBAction)settingsChanged:(id)sender;
-- (IBAction)callSettings:(id)sender;
+@property (nonatomic, strong) PTMenubarController *menubarController;
+@property (nonatomic, assign) BOOL active;
+@property (nonatomic, strong) NSPopover *popover;
 
 @end

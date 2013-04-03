@@ -16,11 +16,11 @@
     NSMutableArray     *userVoice;
 }
 
-@property(strong) NSMutableArray *userVoice;
-
+@property(strong)          NSMutableArray *userVoice;
 +(id)userVoiceThread;
 
 -(void)startUserVoiceThread;
+-(BOOL)isUserSpeaking;
 -(void)stopUserVoiceThread;
 -(void)incomingVoice:(NSData*)data;
 
