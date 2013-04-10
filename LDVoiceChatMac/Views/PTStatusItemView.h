@@ -33,7 +33,6 @@
 }
 
 - (id)initWithStatusItem:(NSStatusItem *)statusItem;
--(void) activity:(BOOL)enabled;
 
 @property (nonatomic, strong, readonly) NSStatusItem *statusItem;
 @property (nonatomic, strong) NSImage *image;

@@ -18,7 +18,6 @@
 - (id)initWith:(LDNetworkLayer*)_networkLayer
 {
     if (self = [super init]) {
-        audioInputHandler  = LD_InitAudioInputHandler();
         networkLayer       = _networkLayer;
         silent             = YES;
         
@@ -34,18 +33,19 @@
         NSLog(@"Voice Thread Already Running");
     }
     speaking = YES;
+    audioInputHandler  = LD_InitAudioInputHandler();
     LD_StartRecordingStream(audioInputHandler);
     [self recordingThreadLoop];
 }
 
 - (void)stopRecordingThread
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         LD_StopRecordingStream(audioInputHandler);
         LD_DestroyRecordingStream(audioInputHandler);
         speaking = NO;
-        usleep((int) (0.01f * 1000000.0f));
-    });
+        usleep((int) (0.1f * 1000000.0f));
+//    });
 }
 
 - (void)notifyChanges

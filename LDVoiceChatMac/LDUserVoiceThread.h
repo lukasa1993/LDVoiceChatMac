@@ -14,9 +14,12 @@
     BOOL userSpeaks;
     AudioHandlerStruct *audioOutputHandler;
     NSMutableArray     *userVoice;
+    NSString           *userId;
 }
 
-@property(strong)          NSMutableArray *userVoice;
+@property(strong) NSMutableArray *userVoice;
+@property(strong) NSString       *userId;
+
 +(id)userVoiceThread;
 
 -(void)startUserVoiceThread;

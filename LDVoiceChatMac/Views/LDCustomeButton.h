@@ -10,8 +10,8 @@
 
 @protocol LDCustomeButtonEvents <NSObject>
 
-- (void)mouseDown;
-- (void)mouseUp;
+- (void)mouseDown:(id)sender;
+- (void)mouseUp:(id)sender;
 
 @end
 

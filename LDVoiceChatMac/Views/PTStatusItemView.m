@@ -38,41 +38,17 @@
 
 - (id)initWithStatusItem:(NSStatusItem *)statusItem
 {
-    CGFloat itemWidth = [statusItem length];
+    CGFloat itemWidth  = [statusItem length];
     CGFloat itemHeight = [[NSStatusBar systemStatusBar] thickness];
-    NSRect itemRect = NSMakeRect(0.0, 0.0, itemWidth, itemHeight);
-    self = [super initWithFrame:itemRect];
-    
+    NSRect itemRect    = NSMakeRect(0.0, 0.0, itemWidth, itemHeight);
+    self               = [super initWithFrame:itemRect];
+
     if (self != nil) {
-        _statusItem = statusItem;
+        _statusItem      = statusItem;
         _statusItem.view = self;
-
-        activityTimer = [NSTimer timerWithTimeInterval:0.5
-                                                target:self
-                                              selector:@selector(activityAction:)
-                                              userInfo:nil
-                                               repeats:YES];
     }
+    
     return self;
-}
-
-// -----------------------------------------------------------------------
-
--(void) activityAction:(id)sender
-{
-    self.isActivity = !self.isActivity;
-    [self setNeedsDisplay:YES];
-}
-
-// -----------------------------------------------------------------------
-
--(void) activity:(BOOL)enabled
-{
-    if(enabled) {
-        [activityTimer fire];
-    } else {
-        [activityTimer invalidate];
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -95,7 +71,7 @@
     CGFloat iconX = roundf((NSWidth(bounds) - iconSize.width) / 2);
     CGFloat iconY = roundf((NSHeight(bounds) - iconSize.height) / 2);
     NSPoint iconPoint = NSMakePoint(iconX, iconY);
-    
+
 	[icon drawAtPoint:iconPoint fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
 }
 
@@ -106,6 +82,7 @@
 
 - (void)mouseDown:(NSEvent *)theEvent
 {
+    NSLog(@"Mouse Down StatusItem");
     [NSApp sendAction:self.action to:self.target from:self];
 }
 

@@ -25,11 +25,10 @@
 #import "LDUserVoiceThread.h"
 #import "LDVoiceRecordingThread.h"
 #import "LDCustomeButton.h"
-
-@class MainWindowController;
+#import "LDDeviceChangedProtocol.h"
 
 @interface PopoverController : NSViewController <NSPopoverDelegate, NSTextFieldDelegate,
-NSTableViewDataSource, NSTableViewDelegate, LDNetworkDataProtocol, LDCustomeButtonEvents>
+NSTableViewDataSource, NSTableViewDelegate, LDNetworkDataProtocol, LDCustomeButtonEvents, LDDeviceChangedProtocol>
 {
     IBOutlet NSImageView   *imageView;
     
@@ -42,27 +41,26 @@ NSTableViewDataSource, NSTableViewDelegate, LDNetworkDataProtocol, LDCustomeButt
     
     LDVoiceRecordingThread *voiceRecording;
     LDNetworkLayer         *networkLayer;
-
-    MainWindowController  *mainWindowController;
     
     IBOutlet LDCustomeButton *speakButton;
+    IBOutlet LDCustomeButton *lockSpeaking;
     
     IBOutlet NSTextField *userNameField;
     IBOutlet NSTextField *channelField;
     IBOutlet NSTextField *hostField;
     IBOutlet NSTextField *portField;
-    IBOutlet NSView      *settingsChangedButton;
-    IBOutlet NSView      *lockSpeaking;
+    IBOutlet NSButton    *settingsChangedButton;
     IBOutlet NSWindow    *settingsWindow;
     IBOutlet NSTableView *userListColumn;
-    
+    IBOutlet NSView      *statusView;
 }
 
-- (IBAction)speakingLockButton:(id)sender;
 - (IBAction)columnChangeSelected:(id)sender;
+- (void)applicationWillTerminate;
 
 @property (nonatomic, assign) BOOL hasActivePanel;
-@property (nonatomic, weak) NSMutableDictionary    *usersMap;
-@property (nonatomic, weak) NSMutableArray         *userListArray;
+@property (nonatomic, strong) NSWindow               *controllerWindow;
+@property (nonatomic, weak)   NSMutableDictionary    *usersMap;
+@property (nonatomic, weak)   NSMutableArray         *userListArray;
 
 @end

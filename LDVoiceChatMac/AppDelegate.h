@@ -7,17 +7,19 @@
 //
 
 #import <Cocoa/Cocoa.h>
-
 #import "PTMenubarController.h"
-#import "PopoverController.h"
+#import "LDDeviceChangedProtocol.h"
 
-@interface AppDelegate : NSViewController <NSApplicationDelegate>
+@interface AppDelegate : NSObject <NSApplicationDelegate>
 {
+    PTMenubarController *menubarController;
     id popoverTransiencyMonitor;
+    id<LDDeviceChangedProtocol> deviceChangedDelegate;
 }
+
 
 @property (nonatomic, strong) PTMenubarController *menubarController;
 @property (nonatomic, assign) BOOL active;
 @property (nonatomic, strong) NSPopover *popover;
-
+@property (assign) IBOutlet NSWindow *window;
 @end

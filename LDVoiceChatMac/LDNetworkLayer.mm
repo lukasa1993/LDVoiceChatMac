@@ -47,7 +47,7 @@
 {
     NSLog(@"Start Communication");
     
-    listeningToServer = YES;
+    listeningToServer         = YES;
     NSDictionary *messageDict = @{@"action"  : @"init",
                                   @"name"    : [userDefaults objectForKey:@"name"],
                                   @"channel" : [userDefaults objectForKey:@"channel"]};
@@ -73,7 +73,7 @@
 - (void)muteUser:(NSString *)userName
 {
     NSDictionary *messageDict = @{@"action"  : @"mute",
-                                  @"villain"  : userName,
+                                  @"villain" : userName,
                                   @"name"    : [userDefaults objectForKey:@"name"],
                                   @"channel" : [userDefaults objectForKey:@"channel"]};
     NSData       *data        = [messageDict messagePack];
@@ -84,7 +84,7 @@
 - (void)UnMuteUser:(NSString *)userName
 {
     NSDictionary *messageDict = @{@"action"  : @"unmute",
-                                  @"villain"  : userName,
+                                  @"villain" : userName,
                                   @"name"    : [userDefaults objectForKey:@"name"],
                                   @"channel" : [userDefaults objectForKey:@"channel"]};
     NSData       *data        = [messageDict messagePack];
@@ -103,6 +103,17 @@
     [self sendData:[data bytes] length:[data length]];
 }
 
+- (void)switchChannel:(NSString *)channel
+{
+    NSDictionary *messageDict = @{@"action"         : @"switchchannel",
+                                  @"currentchannel" : channel,
+                                  @"name"           : [userDefaults objectForKey:@"name"] ,
+                                  @"channel"        : [userDefaults objectForKey:@"channel"]};
+    NSData       *data        = [messageDict messagePack];
+    
+    [self sendData:[data bytes] length:[data length]];
+}
+
 - (void)reconnect
 {
     host = [userDefaults objectForKey:@"host"];
@@ -113,6 +124,15 @@
                                   @"channel" : [userDefaults objectForKey:@"channel"]};
     NSData       *data        = [messageDict messagePack];
     
+    [self sendData:[data bytes] length:[data length]];
+}
+
+- (void)notifyServerThatIamNotDead
+{
+    NSDictionary *messageDict = @{@"action"  : @"alive",
+                                  @"name"    : [userDefaults objectForKey:@"name"] ,
+                                  @"channel" : [userDefaults objectForKey:@"channel"]};
+    NSData       *data        = [messageDict messagePack];
     [self sendData:[data bytes] length:[data length]];
 }
 
@@ -157,6 +177,10 @@
             }
         } else {
             wait(0.01f);
+            
+            if (fabs([aliveDate timeIntervalSinceNow]) > 55) {
+                [self notifyServerThatIamNotDead];
+            }
         }
     }
 }
@@ -164,6 +188,7 @@
 - (void)sendData:(const void *)data length:(NSInteger)length
 {
     socket.Send([self targetAddress], data, length);
+    aliveDate = [NSDate date];
 }
 
 @end

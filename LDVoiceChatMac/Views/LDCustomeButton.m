@@ -14,15 +14,22 @@
 - (void)mouseDown:(NSEvent *)theEvent
 {
     if (delegate) {
-        [delegate mouseDown];
+        [delegate mouseDown:self];
     }
 }
 
 - (void)mouseUp:(NSEvent *)theEvent
 {
     if (delegate) {
-        [delegate mouseUp];
+        [delegate mouseUp:self];
     }
+}
+
+- (void)setState:(NSInteger)value
+{
+    NSImage* tmpImage = [self image];
+    [self setImage:[self alternateImage]];
+    [self setAlternateImage:tmpImage];
 }
 
 @end

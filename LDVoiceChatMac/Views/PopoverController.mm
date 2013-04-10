@@ -27,7 +27,8 @@
 
 // -----------------------------------------------------------------------
 
-- (void) initialize{
+- (void)initialize
+{
     checkError(Pa_Initialize()); // Yeaaa
     
     userListArray      = [NSMutableArray array];
@@ -49,60 +50,96 @@
         [networkLayer startCommunication];
         [self startVoiceComunication];
     }
-    
 }
 
 // -----------------------------------------------------------------------
 
-- (id) initWithCoder:(NSCoder *)aCoder{
+- (id)initWithCoder:(NSCoder *)aCoder
+{
     if(self = [super initWithCoder:aCoder]){
         [self initialize];
     }
     return self;
 }
 
-// -----------------------------------------------------------------------
-
-- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
     if(self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         [self initialize];
     }
     return self;
 }
-
 // -----------------------------------------------------------------------
 
-- (void)awakeFromNib {
+- (void)awakeFromNib
+{
     NSLog(@"Awake");
-    
-    if ([userDefaults objectForKey:@"name"]) {
-        [userNameField setStringValue:[userDefaults objectForKey:@"name"]];
-    }
-    
-    if ([userDefaults objectForKey:@"channel"]) {
-        [channelField setStringValue:[userDefaults objectForKey:@"channel"]];
-    }
-    
+
     [speakButton setDelegate:self];
+    [lockSpeaking setDelegate:self];
+}
+
+- (void)popoverWillShow:(NSNotification *)notification
+{
+    NSString* currentName    = [userDefaults objectForKey:@"name"];
+    NSString* currentChannel = [userDefaults objectForKey:@"channel"];
+    
+    if (currentName && [currentName length] > 0) {
+        [userNameField setStringValue:currentName];
+        [self.controllerWindow makeFirstResponder:channelField];
+    }
+    
+    if (currentChannel && [currentChannel length] > 0) {
+        [channelField setStringValue:currentChannel];
+        [self.controllerWindow makeFirstResponder:speakButton];
+    }
+    
+    [self.controllerWindow recalculateKeyViewLoop];
 }
 
 // UI Callbacks ----------------------------------------------------------
 
-- (void)mouseDown
+- (void)mouseDown:(id)sender
 {
-    NSLog(@"Mouse Down");
-    [voiceRecording isMute] ? [voiceRecording unMute] : [voiceRecording mute];
+    if ([sender isKindOfClass:[NSButton class]]) {
+        NSButton* button = (NSButton*) sender;
+        if ([button tag] == 400) {
+            [voiceRecording isMute] ? [voiceRecording unMute] : [voiceRecording mute];
+            [button setState:1];
+        }
+    }
 }
 
-- (void)mouseUp
+- (void)mouseUp:(id)sender
 {
-    NSLog(@"Mouse Up");
-    [voiceRecording isMute] ? [voiceRecording unMute] : [voiceRecording mute];
+    if ([sender isKindOfClass:[NSButton class]]) {
+        NSButton* button = (NSButton*) sender;
+        if ([button tag] == 400) {
+            [button setState:0];
+        } else if ([sender tag] == 300) {
+            NSInteger state = ![button state];
+            [button setState:state];
+            [speakButton setState:state];
+        }
+        
+        [voiceRecording isMute] ? [voiceRecording unMute] : [voiceRecording mute];
+    }
 }
 
-- (IBAction)speakingLockButton:(id)sender
+// -----------------------------------------------------------------------
+
+- (void)applicationWillTerminate
 {
-    [voiceRecording isMute] ? [voiceRecording unMute] : [voiceRecording mute];
+    [networkLayer stopCommunication];
+    [voiceRecording stopRecordingThread];
+    
+    for (id key in usersMap) {
+        [(usersMap)[key] stopUserVoiceThread];
+    }
+    
+    // -------------------
+    
+    checkError(Pa_Terminate());
 }
 
 // -----------------------------------------------------------------------
@@ -137,7 +174,7 @@
             NSString          *userName = [[cellView textField] stringValue];
             LDUserVoiceThread *user     = (usersMap)[userName];
             
-            [user isUserSpeaking] ? [networkLayer muteUser:userName] : [networkLayer UnMuteUser:userName];
+            [user isUserSpeaking] ? [networkLayer muteUser:[user userId]] : [networkLayer UnMuteUser:[user userId]];
             [user isUserSpeaking] ? [user stopUserVoiceThread]       : [user startUserVoiceThread];
         }
     }
@@ -156,7 +193,7 @@
 {
     NSTextField *textField = [notification object];
     @autoreleasepool {
-        NSString *text  = [textField stringValue];
+        NSString *text      = [textField stringValue];
         NSString *savedName = [userDefaults objectForKey:@"name"];
         NSString *channel   = [userDefaults objectForKey:@"channel"];
         
@@ -166,11 +203,16 @@
                 [networkLayer startCommunication];
                 [self startVoiceComunication];
             } else {
-                [networkLayer renameUser:savedName NewName:text];
+                [networkLayer switchChannel:text];
             }
         } else if (textField.tag == 200) {
             [userDefaults setObject:text forKey:@"name"];
-            [networkLayer reconnect];
+            if (!savedName && !channel) {
+                [networkLayer startCommunication];
+                [self startVoiceComunication];
+            } else {
+                [networkLayer renameUser:savedName NewName:text];
+            }
         }
         [voiceRecording notifyChanges];
     }
@@ -225,8 +267,10 @@
         [userListArray removeAllObjects];
         [usersMap removeAllObjects];
     }
+    
     for (NSDictionary* user in _userList) { // creating separate audio input thread for each user
         LDUserVoiceThread *userObjcect = [LDUserVoiceThread userVoiceThread];
+        [userObjcect setUserId:user[@"userID"]];
         [user[@"muted"] intValue] ? [userObjcect stopUserVoiceThread] : [userObjcect startUserVoiceThread];
         (usersMap)[user[@"name"]]      = userObjcect;
         
@@ -234,6 +278,8 @@
     }
     
     [userListColumn reloadData];
+    
+    [textFieldStatusInfo setStringValue:[NSString stringWithFormat:@"%li Users On Channel", (unsigned long)[_userList count]]];
 }
 
 // -----------------------------------------------------------------------
@@ -261,5 +307,31 @@
 }
 
 // -----------------------------------------------------------------------
+
+- (void)deviceChanged
+{
+    NSLog(@"Device Changed");
+    [voiceRecording stopRecordingThread];
+
+    for (id key in usersMap) {
+        [(usersMap)[key] stopUserVoiceThread];
+    }
+    
+    // -------------------
+    
+    checkError(Pa_Terminate());
+    checkError(Pa_Initialize());
+    
+    // -------------------
+    
+    [voiceRecording startRecordingThread];
+
+    for (id key in usersMap) {
+        [(usersMap)[key] startUserVoiceThread];
+    }
+}
+
+// -----------------------------------------------------------------------
+
 
 @end

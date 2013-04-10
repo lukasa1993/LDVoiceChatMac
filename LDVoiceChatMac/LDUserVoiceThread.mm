@@ -10,7 +10,7 @@
 
 @implementation LDUserVoiceThread
 @synthesize userVoice;
-
+@synthesize userId;
 
 + (id)userVoiceThread
 {
@@ -44,11 +44,13 @@
 
 - (void)stopUserVoiceThread
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        LD_DestroyPlayebackStream(audioOutputHandler);
-        userSpeaks = NO;
-        usleep((int) (0.01f * 1000000.0f));
-    });
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        if (userSpeaks) {
+            LD_DestroyPlayebackStream(audioOutputHandler);
+            userSpeaks = NO;
+            usleep((int) (0.1f * 1000000.0f));
+        }
+//    });
 }
 
 - (void)userSpeakingLoop

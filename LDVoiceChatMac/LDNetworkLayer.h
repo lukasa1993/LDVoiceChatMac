@@ -33,8 +33,9 @@ using namespace net;
 
     id <LDNetworkDataProtocol> delegate;
 
-    NSString *host;
-    NSInteger port;
+    NSInteger       port;
+    NSDate         *aliveDate;
+    NSString       *host;
     NSUserDefaults *userDefaults;
 
     void *buffer;
@@ -47,7 +48,9 @@ using namespace net;
 + (id)networkLayer;
 
 - (void)startCommunication;
+- (void)stopCommunication;
 - (void)renameUser:(NSString *)oldName NewName:(NSString *)newName;
+- (void)switchChannel:(NSString *)channel;
 - (void)reconnect;
 - (void)sendData:(const void *)data length:(NSInteger)length;
 - (void)muteUser:(NSString *)userName;
