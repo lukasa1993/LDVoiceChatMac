@@ -27,7 +27,6 @@
     NSStatusItem *_statusItem;
     BOOL _isHighlighted;
     BOOL _isActivity;
-    NSTimer *activityTimer;
     SEL _action;
     __unsafe_unretained id _target;
 }

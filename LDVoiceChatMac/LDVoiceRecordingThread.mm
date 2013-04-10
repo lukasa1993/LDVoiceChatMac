@@ -40,12 +40,12 @@
 
 - (void)stopRecordingThread
 {
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        LD_StopRecordingStream(audioInputHandler);
-        LD_DestroyRecordingStream(audioInputHandler);
-        speaking = NO;
-        usleep((int) (0.1f * 1000000.0f));
-//    });
+    //    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    speaking = NO;
+    usleep((int) (0.1f * 1000000.0f));
+    LD_StopRecordingStream(audioInputHandler);
+    LD_DestroyRecordingStream(audioInputHandler);
+    //    });
 }
 
 - (void)notifyChanges
