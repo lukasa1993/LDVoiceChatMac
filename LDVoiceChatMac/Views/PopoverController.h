@@ -39,6 +39,8 @@ NSTableViewDataSource, NSTableViewDelegate, LDNetworkDataProtocol, LDCustomeButt
     NSMutableDictionary    *usersMap;
     NSMutableArray         *userListArray;
     
+    NSLock                 *deviceChangedLock;
+    
     LDVoiceRecordingThread *voiceRecording;
     LDNetworkLayer         *networkLayer;
     

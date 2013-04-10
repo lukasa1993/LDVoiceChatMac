@@ -35,7 +35,7 @@
     usersMap           = [NSMutableDictionary dictionary];
     networkLayer       = [LDNetworkLayer networkLayer];
     userDefaults       = [NSUserDefaults standardUserDefaults];
-    
+    deviceChangedLock  = [[NSLock alloc] init];
     [networkLayer setDelegate:self];
     
     if (![userDefaults objectForKey:@"host"]) {
@@ -74,7 +74,7 @@
 - (void)awakeFromNib
 {
     NSLog(@"Awake");
-
+    
     [speakButton setDelegate:self];
     [lockSpeaking setDelegate:self];
 }
@@ -310,25 +310,33 @@
 
 - (void)deviceChanged
 {
-    NSLog(@"Device Changed");
-    [voiceRecording stopRecordingThread];
-
-    for (id key in usersMap) {
-        [(usersMap)[key] stopUserVoiceThread];
-    }
-    
-    // -------------------
-    
-    checkError(Pa_Terminate());
-    checkError(Pa_Initialize());
-    
-    // -------------------
-    
-    [voiceRecording startRecordingThread];
-
-    for (id key in usersMap) {
-        [(usersMap)[key] startUserVoiceThread];
-    }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [deviceChangedLock lock];
+        [textFieldStatusInfo setStringValue:@"Swiching Audio Devices..."];
+         
+        NSLog(@"Device Changed");
+        [voiceRecording stopRecordingThread];
+        
+        for (id key in usersMap) {
+            [(usersMap)[key] stopUserVoiceThread];
+        }
+        
+        // -------------------
+        
+        checkError(Pa_Terminate());
+        checkError(Pa_Initialize());
+        
+        // -------------------
+        
+        [voiceRecording startRecordingThread];
+        
+        for (id key in usersMap) {
+            [(usersMap)[key] startUserVoiceThread];
+        }
+        
+        [textFieldStatusInfo setStringValue:[NSString stringWithFormat:@"%li Users On Channel", (unsigned long)[userListArray count]]];
+        [deviceChangedLock unlock];
+    });
 }
 
 // -----------------------------------------------------------------------
