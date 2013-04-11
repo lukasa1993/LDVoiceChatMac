@@ -175,7 +175,10 @@
             LDUserVoiceThread *user     = (usersMap)[userName];
             
             [user isUserSpeaking] ? [networkLayer muteUser:[user userId]] : [networkLayer UnMuteUser:[user userId]];
-            [user isUserSpeaking] ? [user stopUserVoiceThread]       : [user startUserVoiceThread];
+            [user isUserSpeaking] ? [user stopUserVoiceThread]            : [user startUserVoiceThread];
+            cellView.imageView.image = [user isUserSpeaking] ?
+            [NSImage imageNamed:NSImageNameLockUnlockedTemplate] :
+            [NSImage imageNamed:NSImageNameLockLockedTemplate];
         }
     }
 }
@@ -313,7 +316,7 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [deviceChangedLock lock];
         [textFieldStatusInfo setStringValue:@"Swiching Audio Devices..."];
-         
+        
         NSLog(@"Device Changed");
         [voiceRecording stopRecordingThread];
         

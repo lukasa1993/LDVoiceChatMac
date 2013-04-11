@@ -1074,7 +1074,7 @@
 										<int key="NSCellFlags2">33554432</int>
 										<object class="NSCustomResource" key="NSContents">
 											<string key="NSClassName">NSImage</string>
-											<string key="NSResourceName">NSActionTemplate</string>
+											<string key="NSResourceName">NSLockUnlockedTemplate</string>
 										</object>
 										<string key="NSCellIdentifier">_NS:11</string>
 										<int key="NSAlign">0</int>
@@ -1718,7 +1718,7 @@
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
-			<string key="NSActionTemplate">{15, 15}</string>
+			<string key="NSLockUnlockedTemplate">{9, 12}</string>
 			<string key="NSMenuCheckmark">{11, 11}</string>
 			<string key="NSMenuMixedState">{10, 3}</string>
 			<string key="bg.png">{128, 128}</string>
