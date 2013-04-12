@@ -37,6 +37,8 @@
 		805DD8C716DF5CBA0001D7A1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 80315D3216D5182400D8060F /* InfoPlist.strings */; };
 		805DD8C816DF5CBA0001D7A1 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 80315D3816D5182400D8060F /* Credits.rtf */; };
 		805DD8C916DF5CBA0001D7A1 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 80315D3E16D5182400D8060F /* MainMenu.xib */; };
+		80734AC517184FCD0095F75D /* speaker_off.png in Resources */ = {isa = PBXBuildFile; fileRef = 80734AC317184FCD0095F75D /* speaker_off.png */; };
+		80734AC617184FCD0095F75D /* speaker_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 80734AC417184FCD0095F75D /* speaker_on.png */; };
 		807544AF16DF9E930066AF5D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8093932516D7A5B900414EF1 /* AudioToolbox.framework */; };
 		807544B016DF9E9D0066AF5D /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8093932916D7A5C600414EF1 /* CoreServices.framework */; };
 		807544B116DF9E9D0066AF5D /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8093932716D7A5BF00414EF1 /* AudioUnit.framework */; };
@@ -107,6 +109,8 @@
 		805DD8AE16DF59EF0001D7A1 /* LDAudioDefaults.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LDAudioDefaults.h; sourceTree = "<group>"; };
 		805DD8CE16DF5CBA0001D7A1 /* LDVoiceChatMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LDVoiceChatMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		805DD8CF16DF5CBA0001D7A1 /* LDVoiceChatMac-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "LDVoiceChatMac-Info.plist"; path = "/Users/lukasa/Xcode projects/LDVoiceChatMac/LDVoiceChatMac-Info.plist"; sourceTree = "<absolute>"; };
+		80734AC317184FCD0095F75D /* speaker_off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = speaker_off.png; sourceTree = "<group>"; };
+		80734AC417184FCD0095F75D /* speaker_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = speaker_on.png; sourceTree = "<group>"; };
 		8075451616E0B7C10066AF5D /* MessagePack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessagePack.h; sourceTree = "<group>"; };
 		8075451716E0B7C10066AF5D /* MessagePackPacker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessagePackPacker.h; sourceTree = "<group>"; };
 		8075451816E0B7C10066AF5D /* MessagePackPacker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessagePackPacker.m; sourceTree = "<group>"; };
@@ -270,6 +274,8 @@
 		80369484170F1BCF005E003C /* images */ = {
 			isa = PBXGroup;
 			children = (
+				80734AC317184FCD0095F75D /* speaker_off.png */,
+				80734AC417184FCD0095F75D /* speaker_on.png */,
 				80369485170F1BCF005E003C /* bg.png */,
 				80369486170F1BCF005E003C /* drive.png */,
 				80369487170F1BCF005E003C /* drive@2x.png */,
@@ -495,6 +501,8 @@
 				803694A2170F1BCF005E003C /* scr_b.png in Resources */,
 				803694A3170F1BCF005E003C /* scr_l.png in Resources */,
 				803694A4170F1BCF005E003C /* scr_r.png in Resources */,
+				80734AC517184FCD0095F75D /* speaker_off.png in Resources */,
+				80734AC617184FCD0095F75D /* speaker_on.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -177,8 +177,8 @@
             [user isUserSpeaking] ? [networkLayer muteUser:[user userId]] : [networkLayer UnMuteUser:[user userId]];
             [user isUserSpeaking] ? [user stopUserVoiceThread]            : [user startUserVoiceThread];
             cellView.imageView.image = [user isUserSpeaking] ?
-            [NSImage imageNamed:NSImageNameLockUnlockedTemplate] :
-            [NSImage imageNamed:NSImageNameLockLockedTemplate];
+            [NSImage imageNamed:@"speaker_on.png"] :
+            [NSImage imageNamed:@"speaker_off.png"];
         }
     }
 }
